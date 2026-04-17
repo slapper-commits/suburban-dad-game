@@ -423,12 +423,17 @@ export class GameScene extends Phaser.Scene {
       this.hideDialogue();
       this.checkWifeTexts();
       this.checkGameFlow();
-      if (this.forcedBBQ) return;
+      // Minigames are always allowed — including at BBQ time. Grilling
+      // IS the BBQ activity; gating it behind forcedBBQ made GrillGame
+      // unlaunchable exactly when the player needs it most.
       if (sceneId.startsWith('MINIGAME:')) {
         const gameId = sceneId.substring('MINIGAME:'.length);
         this.launchMinigame(gameId);
         return;
       }
+      // Scene transitions are still blocked once BBQ has started —
+      // no wandering off to the gas station while guests are hungry.
+      if (this.forcedBBQ) return;
       this.loadLocation(sceneId);
     });
 

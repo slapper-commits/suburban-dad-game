@@ -76,11 +76,11 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         action: { type: 'scene', sceneId: 'kitchen', timeCost: 3 },
       },
       {
-        id: 'dougs_house',
-        label: "Doug's House",
-        x: 700,
-        radius: 35,
-        action: { type: 'scene', sceneId: 'dougs', timeCost: 10 },
+        id: 'detached_garage',
+        label: 'Garage',
+        x: 660,
+        radius: 50,
+        action: { type: 'scene', sceneId: 'garage', timeCost: 2 },
       },
     ],
     edges: {

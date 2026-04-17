@@ -510,51 +510,146 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
     }
   }
 
-  // Tree behind fence
-  gfx.fillStyle(0x6b4c2a);
-  gfx.fillRect(740, GROUND_Y - 80, 8, 80);
-  gfx.fillStyle(0x3a8a3a);
-  gfx.fillEllipse(744, GROUND_Y - 100, 50, 40);
-
-  // Fence section at far right
-  gfx.fillStyle(0x8b6914);
-  gfx.fillRect(760, GROUND_Y - 60, 6, 60);
-
-  // House
+  // ── Main house ─────────────────────────────────────────────
+  // Shadow
+  gfx.fillStyle(0x000000, 0.15);
+  gfx.fillRect(30, GROUND_Y - 2, 170, 4);
+  // Siding
   gfx.fillStyle(0xe8d4b8);
   gfx.fillRect(30, GROUND_Y - 120, 170, 120);
-
-  // Roof
-  gfx.fillStyle(0x8b4513);
-  gfx.fillRect(20, GROUND_Y - 140, 190, 25);
-
+  // Roof (gable triangle above the rect)
+  gfx.fillStyle(0x7a3a14);
+  gfx.fillTriangle(15, GROUND_Y - 118, 205, GROUND_Y - 118, 110, GROUND_Y - 158);
+  // Roof fascia
+  gfx.fillStyle(0x5a2a0a);
+  gfx.fillRect(15, GROUND_Y - 122, 190, 6);
   // Door
   gfx.fillStyle(0x654321);
-  gfx.fillRect(90, GROUND_Y - 48, 30, 48);
+  gfx.fillRect(90, GROUND_Y - 50, 30, 50);
+  // Door glass
+  gfx.fillStyle(0xaad4f0, 0.6);
+  gfx.fillRect(95, GROUND_Y - 46, 10, 14);
+  gfx.fillRect(109, GROUND_Y - 46, 10, 14);
+  // Doorknob
   gfx.fillStyle(0xd4a020);
-  gfx.fillCircle(113, GROUND_Y - 24, 3);
-
+  gfx.fillCircle(116, GROUND_Y - 24, 2.5);
+  // Door step
+  gfx.fillStyle(0xb0966e);
+  gfx.fillRect(86, GROUND_Y - 2, 38, 4);
   // Windows
   gfx.fillStyle(0x87ceeb);
   gfx.fillRect(45, GROUND_Y - 95, 30, 25);
-  gfx.fillRect(140, GROUND_Y - 95, 30, 25);
-  gfx.lineStyle(1, 0xffffff);
+  gfx.fillRect(145, GROUND_Y - 95, 26, 25);
+  gfx.lineStyle(1, 0xffffff, 0.9);
   gfx.strokeRect(45, GROUND_Y - 95, 30, 25);
-  gfx.strokeRect(140, GROUND_Y - 95, 30, 25);
-
-  // Karen in window
+  gfx.strokeRect(145, GROUND_Y - 95, 26, 25);
+  // Window cross mullions
+  gfx.lineStyle(1, 0xffffff, 0.6);
+  gfx.lineBetween(60, GROUND_Y - 95, 60, GROUND_Y - 70);
+  gfx.lineBetween(45, GROUND_Y - 82, 75, GROUND_Y - 82);
+  gfx.lineBetween(158, GROUND_Y - 95, 158, GROUND_Y - 70);
+  gfx.lineBetween(145, GROUND_Y - 82, 171, GROUND_Y - 82);
+  // Karen in right window
   const karenHome = state.currentLocation !== 'kitchen';
   if (karenHome) {
     gfx.fillStyle(0xf0c89a);
-    gfx.fillRect(150, GROUND_Y - 92, 10, 12);
+    gfx.fillRect(151, GROUND_Y - 92, 10, 12);
     gfx.fillStyle(0x000000);
-    gfx.fillCircle(153, GROUND_Y - 87, 1);
-    gfx.fillCircle(157, GROUND_Y - 87, 1);
+    gfx.fillCircle(154, GROUND_Y - 87, 1);
+    gfx.fillCircle(158, GROUND_Y - 87, 1);
+  }
+  // Shutters
+  gfx.fillStyle(0x3d5a28);
+  gfx.fillRect(36, GROUND_Y - 97, 7, 27);
+  gfx.fillRect(73, GROUND_Y - 97, 7, 27);
+  gfx.fillRect(137, GROUND_Y - 97, 7, 27);
+  gfx.fillRect(171, GROUND_Y - 97, 7, 27);
+
+  // ── Concrete driveway ──────────────────────────────────────
+  gfx.fillStyle(0xc8bfa8, 0.6);
+  gfx.fillRect(240, GROUND_Y - 2, 420, 20);   // driveway slab runs toward garage
+
+  // ── Mailbox ──────────────────────────────────────────────
+  gfx.fillStyle(0x555555);
+  gfx.fillRect(218, GROUND_Y - 28, 2, 28);     // post
+  gfx.fillStyle(0x4a6fa5);
+  gfx.fillRect(210, GROUND_Y - 38, 18, 12);    // box
+  gfx.fillStyle(0x6a8fc5);
+  gfx.fillRect(210, GROUND_Y - 38, 18, 3);     // lid highlight
+
+  // ── Trees (property side, not neighbor side) ───────────────
+  gfx.fillStyle(0x6b4c2a);
+  gfx.fillRect(236, GROUND_Y - 65, 7, 65);
+  gfx.fillStyle(0x3a8a3a);
+  gfx.fillEllipse(240, GROUND_Y - 82, 38, 32);
+  gfx.fillStyle(0x2a7a2a, 0.5);
+  gfx.fillEllipse(250, GROUND_Y - 75, 22, 20);
+
+  // ── Detached garage ───────────────────────────────────────
+  // Sits set back in scale (slightly smaller, higher up), right side of yard
+  const gx = 560;   // left edge of garage
+  const gy = GROUND_Y - 100; // top of garage walls
+  const gw = 190;
+  const gh = 100;
+
+  // Shadow
+  gfx.fillStyle(0x000000, 0.18);
+  gfx.fillRect(gx + 4, GROUND_Y - 2, gw, 5);
+  // Siding — same beige as main house
+  gfx.fillStyle(0xe2cfa8);
+  gfx.fillRect(gx, gy, gw, gh);
+  // Gable roof (triangle peak)
+  gfx.fillStyle(0x7a3a14);
+  gfx.fillTriangle(gx - 8, gy + 2, gx + gw + 8, gy + 2, gx + gw / 2, gy - 44);
+  // Roof fascia
+  gfx.fillStyle(0x5a2a0a);
+  gfx.fillRect(gx - 8, gy - 2, gw + 16, 5);
+  // Roof shingles (horizontal lines)
+  gfx.lineStyle(1, 0x5a2a0a, 0.4);
+  for (let r = 0; r < 4; r++) {
+    const rowY = gy - 8 - r * 10;
+    const halfW = (gw / 2 + 8) * ((gy - rowY) / 44);
+    gfx.lineBetween(gx + gw / 2 - halfW, rowY, gx + gw / 2 + halfW, rowY);
   }
 
-  // Mailbox
-  gfx.fillStyle(0x4a6fa5);
-  gfx.fillRect(650, GROUND_Y - 30, 15, 30);
+  // Garage door — double-wide overhead panel door, slightly inset
+  const gdx = gx + 18;
+  const gdw = gw - 36;
+  const gdh = 60;
+  const gdy = GROUND_Y - gdh;
+  // Door frame
+  gfx.fillStyle(0x888888);
+  gfx.fillRect(gdx - 2, gdy - 2, gdw + 4, gdh + 2);
+  // Door panels (4 horizontal rows)
+  const panelColors = [0xdddddd, 0xcccccc, 0xdddddd, 0xcccccc];
+  const panelH = gdh / 4;
+  for (let p = 0; p < 4; p++) {
+    gfx.fillStyle(panelColors[p]);
+    gfx.fillRect(gdx, gdy + p * panelH, gdw, panelH - 1);
+    // Vertical ribs
+    gfx.fillStyle(0xbbbbbb, 0.5);
+    gfx.fillRect(gdx + Math.floor(gdw / 3), gdy + p * panelH, 1, panelH - 1);
+    gfx.fillRect(gdx + Math.floor(gdw * 2 / 3), gdy + p * panelH, 1, panelH - 1);
+  }
+  // Center handle
+  gfx.fillStyle(0x888888);
+  gfx.fillRect(gdx + gdw / 2 - 8, gdy + gdh - 12, 16, 4);
+  // Door track side rails
+  gfx.fillStyle(0x777777);
+  gfx.fillRect(gdx - 2, gdy - 2, 3, gdh + 2);
+  gfx.fillRect(gdx + gdw - 1, gdy - 2, 3, gdh + 2);
+
+  // Small window above garage door
+  gfx.fillStyle(0x87ceeb, 0.85);
+  gfx.fillRect(gx + gw / 2 - 14, gy + 8, 28, 18);
+  gfx.lineStyle(1, 0xffffff, 0.6);
+  gfx.lineBetween(gx + gw / 2, gy + 8, gx + gw / 2, gy + 26);
+  gfx.lineBetween(gx + gw / 2 - 14, gy + 16, gx + gw / 2 + 14, gy + 16);
+  // Side service door (right side of garage)
+  gfx.fillStyle(0x7a6a5a);
+  gfx.fillRect(gx + gw - 22, GROUND_Y - 42, 16, 42);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(gx + gw - 10, GROUND_Y - 20, 2);
 
   // Minivan in driveway (aligned with the 'car' interaction zone at x=287)
   drawMinivan(gfx, 287, GROUND_Y);

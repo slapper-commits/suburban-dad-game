@@ -565,31 +565,10 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillRect(137, GROUND_Y - 97, 7, 27);
   gfx.fillRect(171, GROUND_Y - 97, 7, 27);
 
-  // ── Concrete driveway ──────────────────────────────────────
-  gfx.fillStyle(0xc8bfa8, 0.6);
-  gfx.fillRect(240, GROUND_Y - 2, 420, 20);   // driveway slab runs toward garage
-
-  // ── Mailbox ──────────────────────────────────────────────
-  gfx.fillStyle(0x555555);
-  gfx.fillRect(218, GROUND_Y - 28, 2, 28);     // post
-  gfx.fillStyle(0x4a6fa5);
-  gfx.fillRect(210, GROUND_Y - 38, 18, 12);    // box
-  gfx.fillStyle(0x6a8fc5);
-  gfx.fillRect(210, GROUND_Y - 38, 18, 3);     // lid highlight
-
-  // ── Trees (property side, not neighbor side) ───────────────
-  gfx.fillStyle(0x6b4c2a);
-  gfx.fillRect(236, GROUND_Y - 65, 7, 65);
-  gfx.fillStyle(0x3a8a3a);
-  gfx.fillEllipse(240, GROUND_Y - 82, 38, 32);
-  gfx.fillStyle(0x2a7a2a, 0.5);
-  gfx.fillEllipse(250, GROUND_Y - 75, 22, 20);
-
-  // ── Detached garage ───────────────────────────────────────
-  // Sits set back in scale (slightly smaller, higher up), right side of yard
-  const gx = 560;   // left edge of garage
+  // ── Detached garage (right beside the main house) ─────────
+  const gx = 205;            // left edge of garage, adjacent to house (ends at x=200)
   const gy = GROUND_Y - 100; // top of garage walls
-  const gw = 190;
+  const gw = 150;
   const gh = 100;
 
   // Shadow
@@ -600,7 +579,7 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillRect(gx, gy, gw, gh);
   // Gable roof (triangle peak)
   gfx.fillStyle(0x7a3a14);
-  gfx.fillTriangle(gx - 8, gy + 2, gx + gw + 8, gy + 2, gx + gw / 2, gy - 44);
+  gfx.fillTriangle(gx - 8, gy + 2, gx + gw + 8, gy + 2, gx + gw / 2, gy - 40);
   // Roof fascia
   gfx.fillStyle(0x5a2a0a);
   gfx.fillRect(gx - 8, gy - 2, gw + 16, 5);
@@ -608,14 +587,14 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.lineStyle(1, 0x5a2a0a, 0.4);
   for (let r = 0; r < 4; r++) {
     const rowY = gy - 8 - r * 10;
-    const halfW = (gw / 2 + 8) * ((gy - rowY) / 44);
+    const halfW = (gw / 2 + 8) * ((gy - rowY) / 40);
     gfx.lineBetween(gx + gw / 2 - halfW, rowY, gx + gw / 2 + halfW, rowY);
   }
 
-  // Garage door — double-wide overhead panel door, slightly inset
-  const gdx = gx + 18;
-  const gdw = gw - 36;
-  const gdh = 60;
+  // Garage door — sectional panel door, slightly inset
+  const gdx = gx + 14;
+  const gdw = gw - 28;
+  const gdh = 58;
   const gdy = GROUND_Y - gdh;
   // Door frame
   gfx.fillStyle(0x888888);
@@ -633,7 +612,7 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
   }
   // Center handle
   gfx.fillStyle(0x888888);
-  gfx.fillRect(gdx + gdw / 2 - 8, gdy + gdh - 12, 16, 4);
+  gfx.fillRect(gdx + gdw / 2 - 7, gdy + gdh - 12, 14, 3);
   // Door track side rails
   gfx.fillStyle(0x777777);
   gfx.fillRect(gdx - 2, gdy - 2, 3, gdh + 2);
@@ -641,36 +620,96 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
 
   // Small window above garage door
   gfx.fillStyle(0x87ceeb, 0.85);
-  gfx.fillRect(gx + gw / 2 - 14, gy + 8, 28, 18);
+  gfx.fillRect(gx + gw / 2 - 12, gy + 8, 24, 16);
   gfx.lineStyle(1, 0xffffff, 0.6);
-  gfx.lineBetween(gx + gw / 2, gy + 8, gx + gw / 2, gy + 26);
-  gfx.lineBetween(gx + gw / 2 - 14, gy + 16, gx + gw / 2 + 14, gy + 16);
-  // Side service door (right side of garage)
-  gfx.fillStyle(0x7a6a5a);
-  gfx.fillRect(gx + gw - 22, GROUND_Y - 42, 16, 42);
-  gfx.fillStyle(0xd4a020);
-  gfx.fillCircle(gx + gw - 10, GROUND_Y - 20, 2);
+  gfx.lineBetween(gx + gw / 2, gy + 8, gx + gw / 2, gy + 24);
+  gfx.lineBetween(gx + gw / 2 - 12, gy + 15, gx + gw / 2 + 12, gy + 15);
 
-  // Minivan in driveway (aligned with the 'car' interaction zone at x=287)
-  drawMinivan(gfx, 287, GROUND_Y);
+  // ── Concrete driveway ──────────────────────────────────────
+  gfx.fillStyle(0xc8bfa8, 0.6);
+  gfx.fillRect(gx, GROUND_Y - 2, 280, 20);   // driveway apron in front of garage
+
+  // ── Property tree ─────────────────────────────────────────
+  gfx.fillStyle(0x6b4c2a);
+  gfx.fillRect(380, GROUND_Y - 62, 6, 62);
+  gfx.fillStyle(0x3a8a3a);
+  gfx.fillEllipse(383, GROUND_Y - 82, 38, 32);
+  gfx.fillStyle(0x2a7a2a, 0.5);
+  gfx.fillEllipse(393, GROUND_Y - 75, 22, 20);
+
+  // ── Mailbox (at curb, property line) ──────────────────────
+  gfx.fillStyle(0x555555);
+  gfx.fillRect(530, GROUND_Y - 28, 2, 28);
+  gfx.fillStyle(0x4a6fa5);
+  gfx.fillRect(522, GROUND_Y - 38, 18, 12);
+  gfx.fillStyle(0x6a8fc5);
+  gfx.fillRect(522, GROUND_Y - 38, 18, 3);
+
+  // ── Doug's house (right side of frontyard) ────────────────
+  const dx = 560;
+  const dy = GROUND_Y - 110;
+  const dw = 180;
+  const dh = 110;
+  // Shadow
+  gfx.fillStyle(0x000000, 0.15);
+  gfx.fillRect(dx, GROUND_Y - 2, dw, 4);
+  // Siding — pale olive / sage, distinct from main house
+  gfx.fillStyle(0xc8d4a8);
+  gfx.fillRect(dx, dy, dw, dh);
+  // Roof gable — dark green asphalt
+  gfx.fillStyle(0x4a5a2a);
+  gfx.fillTriangle(dx - 8, dy + 2, dx + dw + 8, dy + 2, dx + dw / 2, dy - 38);
+  gfx.fillStyle(0x2a3a1a);
+  gfx.fillRect(dx - 8, dy - 2, dw + 16, 5);
+  // Door — dark green
+  gfx.fillStyle(0x3a5a3a);
+  gfx.fillRect(dx + dw / 2 - 15, GROUND_Y - 48, 30, 48);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(dx + dw / 2 + 10, GROUND_Y - 24, 2.5);
+  // Windows
+  gfx.fillStyle(0x87ceeb);
+  gfx.fillRect(dx + 15, dy + 20, 30, 25);
+  gfx.fillRect(dx + dw - 45, dy + 20, 30, 25);
+  gfx.lineStyle(1, 0xffffff, 0.9);
+  gfx.strokeRect(dx + 15, dy + 20, 30, 25);
+  gfx.strokeRect(dx + dw - 45, dy + 20, 30, 25);
+  // Brenda in the left window (frowny)
+  gfx.fillStyle(0xf0c89a);
+  gfx.fillRect(dx + 25, dy + 22, 10, 12);
+  gfx.fillStyle(0x000000);
+  gfx.fillCircle(dx + 28, dy + 27, 1);
+  gfx.fillCircle(dx + 32, dy + 27, 1);
+  gfx.lineStyle(1, 0x000000);
+  gfx.lineBetween(dx + 27, dy + 32, dx + 30, dy + 31);
+  gfx.lineBetween(dx + 30, dy + 31, dx + 33, dy + 32);
+  // "DOUG" mailbox style tag on the door (tiny gold)
+  gfx.fillStyle(0xd4a020);
+  gfx.fillRect(dx + dw / 2 - 8, GROUND_Y - 58, 16, 4);
+  // American flag on a little pole
+  gfx.fillStyle(0x555555);
+  gfx.fillRect(dx + dw - 10, dy + 60, 1, 40);
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(dx + dw - 10, dy + 60, 16, 10);
+  gfx.fillStyle(0x2a3a88);
+  gfx.fillRect(dx + dw - 10, dy + 60, 6, 5);
+
+  // ── Minivan in driveway (in front of our garage) ──────────
+  drawMinivan(gfx, 430, GROUND_Y);
 
   // Lawn mower (visible when lawn not done)
   if (lawnStatus < 100) {
-    // Mower body
     gfx.fillStyle(0xcc3333);
-    gfx.fillRect(430, GROUND_Y - 14, 20, 10);
-    // Handle
+    gfx.fillRect(490, GROUND_Y - 14, 20, 10);
     gfx.lineStyle(2, 0x555555);
-    gfx.lineBetween(440, GROUND_Y - 14, 440, GROUND_Y - 30);
-    gfx.lineBetween(435, GROUND_Y - 30, 445, GROUND_Y - 30);
-    // Wheels
+    gfx.lineBetween(500, GROUND_Y - 14, 500, GROUND_Y - 30);
+    gfx.lineBetween(495, GROUND_Y - 30, 505, GROUND_Y - 30);
     gfx.fillStyle(0x333333);
-    gfx.fillCircle(433, GROUND_Y - 4, 3);
-    gfx.fillCircle(447, GROUND_Y - 4, 3);
+    gfx.fillCircle(493, GROUND_Y - 4, 3);
+    gfx.fillCircle(507, GROUND_Y - 4, 3);
   }
 
-  // Background person (jogger)
-  drawTinyPerson(gfx, 600, GROUND_Y, 0x4488cc, 0.35);
+  // Background person (jogger) — pushed further back behind Doug's house
+  drawTinyPerson(gfx, 770, GROUND_Y, 0x4488cc, 0.35);
 }
 
 export function drawGarage(gfx: Phaser.GameObjects.Graphics, state: DadState): void {

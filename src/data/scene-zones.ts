@@ -58,14 +58,14 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       {
         id: 'frontyard_mow',
         label: 'Lawn Mower',
-        x: 440,
+        x: 500,
         action: { type: 'minigame', gameId: 'mow' },
         visibleWhen: [{ field: 'flags.lawnStatus', op: '<', value: 100 }],
       },
       {
         id: 'car',
         label: 'Minivan',
-        x: 287,
+        x: 430,
         radius: 35,
         action: { type: 'dialogue', treeId: 'frontyard_drive' },
       },
@@ -78,9 +78,16 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       {
         id: 'detached_garage',
         label: 'Garage',
-        x: 660,
+        x: 275,
         radius: 50,
         action: { type: 'scene', sceneId: 'garage', timeCost: 2 },
+      },
+      {
+        id: 'dougs_house',
+        label: "Doug's House",
+        x: 660,
+        radius: 50,
+        action: { type: 'scene', sceneId: 'dougs', timeCost: 5 },
       },
     ],
     edges: {

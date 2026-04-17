@@ -6,8 +6,8 @@ export interface SceneZoneConfig {
   dadEntryX: number;          // default spawn x (center of scene)
   zones: InteractionZoneConfig[];
   edges?: {
-    left?: { sceneId: string; timeCost?: number };
-    right?: { sceneId: string; timeCost?: number };
+    left?: { sceneId: string; timeCost?: number; entryX?: number };
+    right?: { sceneId: string; timeCost?: number; entryX?: number };
   };
 }
 
@@ -123,7 +123,9 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
     ],
     edges: {
-      right: { sceneId: 'frontyard', timeCost: 3 },
+      // Exit from the garage drops Dad out in front of the garage door,
+      // not at the front door of the house.
+      right: { sceneId: 'frontyard', timeCost: 3, entryX: 290 },
     },
   },
 
@@ -743,6 +745,10 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         label: 'Fence Guy',
         x: 300,
         action: { type: 'dialogue', treeId: 'quikstop_theft_t2' },
+        // Disappears after he hops in his Buick and drives off
+        visibleWhen: [
+          { field: 'flags.fence_left_alley', op: '!=', value: true },
+        ],
       },
       {
         id: 'warehouse',

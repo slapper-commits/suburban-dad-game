@@ -3,6 +3,7 @@ import { drawCharacter, drawTinyPerson } from './CharacterRenderer';
 import type { CharacterConfig } from './CharacterRenderer';
 import { getNpcConfig } from '../data/npc-registry';
 import type { DadState } from '../types';
+import { choreography } from './SceneChoreography';
 
 const GROUND_Y = 337;
 const SCREEN_W = 800;
@@ -143,6 +144,98 @@ export function drawMinivan(
   gfx.fillStyle(0x888888);
   gfx.fillCircle(cx - W / 2 + 12, groundY - 2, 2);
   gfx.fillCircle(cx + W / 2 - 12, groundY - 2, 2);
+}
+
+/**
+ * Classic boxy American sedan — a Buick Park Avenue silhouette.
+ * `x` is the center, `groundY` is the ground line. `flipX` reverses facing
+ * (true = facing left, false = facing right, which is the default).
+ */
+export function drawBuick(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  groundY: number,
+  options?: { color?: number; flipX?: boolean },
+): void {
+  const color = options?.color ?? 0xc8a878;   // cream-gold Buick
+  const flip = options?.flipX ?? false;
+  const W = 86, H = 22;
+  const cx = x;
+  const topY = groundY - H - 4;
+  const front = flip ? cx - W / 2 : cx + W / 2;   // which side is the grille
+  const rear  = flip ? cx + W / 2 : cx - W / 2;
+
+  // Shadow
+  gfx.fillStyle(0x000000, 0.28);
+  gfx.fillEllipse(cx, groundY + 2, W + 12, 6);
+
+  // Main body — long, low, rectangular
+  gfx.fillStyle(color);
+  gfx.fillRect(cx - W / 2, topY + 6, W, H - 6);
+  // Sloped hood + trunk ends (classic Buick three-box profile)
+  gfx.fillTriangle(
+    cx - W / 2, topY + 6,
+    cx - W / 2 - 2, topY + H,
+    cx - W / 2, topY + H,
+  );
+  gfx.fillTriangle(
+    cx + W / 2, topY + 6,
+    cx + W / 2 + 2, topY + H,
+    cx + W / 2, topY + H,
+  );
+  // Greenhouse (roof + windows)
+  const ghLeft = cx - W / 2 + 14;
+  const ghRight = cx + W / 2 - 14;
+  gfx.fillStyle(Math.max(0, color - 0x181818));
+  gfx.fillRect(ghLeft, topY, ghRight - ghLeft, 8);
+  // Rounded roof corners
+  gfx.fillStyle(color);
+  gfx.fillTriangle(ghLeft, topY, ghLeft, topY + 8, ghLeft - 4, topY + 8);
+  gfx.fillTriangle(ghRight, topY, ghRight, topY + 8, ghRight + 4, topY + 8);
+
+  // Windows (split: windshield + rear)
+  gfx.fillStyle(0x9ab8ce);
+  gfx.fillRect(ghLeft + 2, topY + 2, (ghRight - ghLeft) / 2 - 4, 6);
+  gfx.fillRect(cx + 1, topY + 2, (ghRight - ghLeft) / 2 - 4, 6);
+  // Pillar between front and rear windows
+  gfx.fillStyle(0x3a2a1a);
+  gfx.fillRect(cx - 1, topY, 2, 8);
+
+  // Chrome side trim (the whole length)
+  gfx.fillStyle(0xdddddd);
+  gfx.fillRect(cx - W / 2 + 2, topY + H - 8, W - 4, 1);
+  // Bumper
+  gfx.fillStyle(0xaaaaaa);
+  gfx.fillRect(cx - W / 2, topY + H - 4, W, 3);
+
+  // Front grille + headlights (on `front` side)
+  gfx.fillStyle(0x2a2a2a);
+  gfx.fillRect(front - (flip ? 6 : 0), topY + H - 8, 6, 5);
+  gfx.fillStyle(0xffeaa0);
+  gfx.fillRect(front - (flip ? 3 : -1), topY + H - 11, 3, 3);
+  // Taillights (rear side)
+  gfx.fillStyle(0xcc3333);
+  gfx.fillRect(rear - (flip ? 0 : 0), topY + H - 10, 3, 4);
+
+  // Wheels
+  gfx.fillStyle(0x111111);
+  gfx.fillCircle(cx - W / 2 + 14, groundY - 2, 6);
+  gfx.fillCircle(cx + W / 2 - 14, groundY - 2, 6);
+  // Whitewall hint
+  gfx.fillStyle(0xe8e4d0);
+  gfx.fillCircle(cx - W / 2 + 14, groundY - 2, 4);
+  gfx.fillCircle(cx + W / 2 - 14, groundY - 2, 4);
+  // Chrome hubcaps
+  gfx.fillStyle(0xbbbbbb);
+  gfx.fillCircle(cx - W / 2 + 14, groundY - 2, 2);
+  gfx.fillCircle(cx + W / 2 - 14, groundY - 2, 2);
+
+  // Tiny Buick-style vent ports on the hood (three holes)
+  gfx.fillStyle(0x2a2a2a);
+  const ventX = flip ? cx - W / 4 : cx + W / 4;
+  gfx.fillCircle(ventX - 6, topY + 10, 1);
+  gfx.fillCircle(ventX, topY + 10, 1);
+  gfx.fillCircle(ventX + 6, topY + 10, 1);
 }
 
 /**
@@ -2351,8 +2444,27 @@ export function drawSketchy(gfx: Phaser.GameObjects.Graphics, state: DadState): 
   drawTinyPerson(gfx, 310, GROUND_Y, 0x4a4a4a, 0.25);
   drawTinyPerson(gfx, 640, GROUND_Y, 0x3a3a3a, 0.2);
 
-  // Fence Guy — always at the corner (this is his hangout)
-  drawNpc(gfx, 'fence_guy', 300, GROUND_Y);
+  // ── Fence Guy + his Buick — dynamic via SceneChoreography ──
+  // While `fence_leaves` is active, draw actors at their animated positions.
+  // After it completes, flags.fence_left_alley is set and nothing is drawn
+  // here (he's gone for good).
+  const fenceGone = choreography.isCompleted(state, 'fence_left_alley');
+  if (!fenceGone) {
+    const fenceA = choreography.getActor('fence_leaves', 'fence');
+    const buickA = choreography.getActor('fence_leaves', 'buick');
+    if (fenceA || buickA) {
+      // Animation in progress — render from actor state
+      const buickX = buickA?.x ?? 230;
+      drawBuick(gfx, buickX, GROUND_Y, { color: 0xc8a878 });
+      if (fenceA && !fenceA.hidden) {
+        drawNpc(gfx, 'fence_guy', fenceA.x, GROUND_Y);
+      }
+    } else {
+      // Static pre-deal: fence chilling next to his parked Buick
+      drawBuick(gfx, 230, GROUND_Y, { color: 0xc8a878 });
+      drawNpc(gfx, 'fence_guy', 300, GROUND_Y);
+    }
+  }
 
   // Warehouse Guy — appears when warehouse zone activates (guns >= 2)
   if ((state.vices.guns ?? 0) >= 2) {

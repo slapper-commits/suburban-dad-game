@@ -16,6 +16,8 @@ import {
 } from '../rendering/SceneRenderer';
 import { drawCharacter } from '../rendering/CharacterRenderer';
 import { getNpcConfig } from '../data/npc-registry';
+import { choreography } from '../rendering/SceneChoreography';
+import { registerAllBeats } from '../rendering/choreography/beats';
 
 // ── Scene data imports ──────────────────────────────────────
 import kitchenData from '../data/scenes/kitchen.json';
@@ -356,6 +358,9 @@ export class GameScene extends Phaser.Scene {
     // Create player character
     this.player = new PlayerCharacter(this, SCREEN_W / 2, 350);
 
+    // Register scene choreography beats once (fence_leaves, etc.).
+    registerAllBeats();
+
     // Ensure clicks route to the topmost interactive object (so choice text
     // at depth 101 receives the event before the panel at depth 100).
     this.input.topOnly = true;
@@ -489,6 +494,9 @@ export class GameScene extends Phaser.Scene {
     this.checkEdgeTransitions(delta);
     this.checkInteractInput();
 
+    // Advance scene choreography (dynamic beats like "fence hops in his Buick").
+    choreography.update(delta, this.reg.playerState.state);
+
     // Animated scene redraw — re-renders the background + NPCs each frame
     // so NPCs can idle-breathe, blink, sway.
     if (this.currentSceneData) {
@@ -618,7 +626,11 @@ export class GameScene extends Phaser.Scene {
           this.reg.timeClock.advance(edge.timeCost);
           this.reg.playerState.recoverSobriety(edge.timeCost);
         }
-        this.loadLocation(edge.sceneId, currentSide === 'left' ? 'fromLeft' : 'fromRight');
+        this.loadLocation(
+          edge.sceneId,
+          currentSide === 'left' ? 'fromLeft' : 'fromRight',
+          edge.entryX,
+        );
       }
     } else {
       this.edgeSide = currentSide;
@@ -628,7 +640,11 @@ export class GameScene extends Phaser.Scene {
 
   // ── Location loading ──────────────────────────────────────
 
-  private loadLocation(sceneId: string, fromDirection?: 'fromLeft' | 'fromRight'): void {
+  private loadLocation(
+    sceneId: string,
+    fromDirection?: 'fromLeft' | 'fromRight',
+    entryXOverride?: number,
+  ): void {
     const sceneData = this.sceneDataMap[sceneId];
     if (!sceneData) {
       console.error(`Scene not found: ${sceneId}`);
@@ -664,8 +680,12 @@ export class GameScene extends Phaser.Scene {
         zoneConfig.groundY,
       );
 
-      // Position player based on entry direction
-      if (fromDirection === 'fromLeft') {
+      // Position player based on entry direction / explicit override
+      if (entryXOverride !== undefined) {
+        // Edge declared a specific entry X (e.g. exiting the garage puts
+        // Dad at the garage door, not the front door of the house).
+        this.player.setPosition(entryXOverride);
+      } else if (fromDirection === 'fromLeft') {
         // Entering from left edge → appear on the right side
         this.player.setPosition(zoneConfig.walkBounds.maxX - 70);
       } else if (fromDirection === 'fromRight') {
@@ -978,6 +998,11 @@ export class GameScene extends Phaser.Scene {
       const [winMsg, loseMsg] = flavor[result.gameId] ?? flavor.haggle_fence;
       this.showInspectText(earnings > 0 ? winMsg : loseMsg);
       delete this.reg.playerState.state.flags.haggleEarnings;
+      // After the fence deal — triggers the choreography beat on next frame
+      // (fence walks to his Buick, gets in, drives off, never returns).
+      if (result.gameId === 'haggle_fence') {
+        this.reg.playerState.state.flags.fenceDealClosed = true;
+      }
     } else {
       // Grill game
       if (result.result === 'success') {

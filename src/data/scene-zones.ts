@@ -45,8 +45,8 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
     ],
     edges: {
-      left: { sceneId: 'frontyard', timeCost: 5 },
-      right: { sceneId: 'garage', timeCost: 3 },
+      left: { sceneId: 'backyard', timeCost: 5 },
+      right: { sceneId: 'frontyard', timeCost: 5 },
     },
   },
 
@@ -116,8 +116,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
     ],
     edges: {
-      left: { sceneId: 'backyard', timeCost: 5 },
-      right: { sceneId: 'kitchen', timeCost: 3 },
+      right: { sceneId: 'frontyard', timeCost: 3 },
     },
   },
 

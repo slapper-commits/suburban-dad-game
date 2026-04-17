@@ -492,17 +492,6 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         visibleWhen: [{ field: 'currentTime', op: '>=', value: 600 }],
       },
       {
-        id: 'sharon_motel',
-        label: 'The Motel (Room 12)',
-        x: 550,
-        radius: 40,
-        action: { type: 'scene', sceneId: 'motel_exterior', timeCost: 10 },
-        visibleWhen: [
-          { field: 'vices.prostitution', op: '>=', value: 1 },
-          { field: 'suspicion', op: '<', value: 70 },
-        ],
-      },
-      {
         id: 'gas_store',
         label: 'Store',
         x: 155,
@@ -519,6 +508,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
     ],
     edges: {
       left: { sceneId: 'quikstop', timeCost: 5 },
+      right: { sceneId: 'motel_exterior', timeCost: 5 },
     },
   },
 
@@ -815,7 +805,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
   motel_exterior: {
     groundY: 337,
     walkBounds: { minX: 30, maxX: 770 },
-    dadEntryX: 100,
+    dadEntryX: 80,
     zones: [
       {
         id: 'motel_sharon',
@@ -839,14 +829,10 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         action: { type: 'scene', sceneId: 'motel_room', timeCost: 2 },
         visibleWhen: [{ field: 'flags.sharon_invited_in', op: '==', value: true }],
       },
-      {
-        id: 'motel_lot_exit',
-        label: 'Leave',
-        x: 60,
-        radius: 30,
-        action: { type: 'scene', sceneId: 'gas_station', timeCost: 5 },
-      },
     ],
+    edges: {
+      left: { sceneId: 'gas_station', timeCost: 5 },
+    },
   },
 
   teen_alley: {

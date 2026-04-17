@@ -748,9 +748,14 @@ export function drawBackyard(gfx: Phaser.GameObjects.Graphics, state: DadState):
   gfx.fillRect(540, GROUND_Y - 35, 4, 35);
   gfx.fillRect(650, GROUND_Y - 35, 4, 35);
 
-  // Grill (state-dependent)
+  // Grill (state-dependent, Weber kettle)
   const grillStatus = (state.flags.grillStatus as string) ?? 'not_started';
   drawGrill(gfx, 350, GROUND_Y - 24, grillStatus);
+
+  // Adirondack chair on the patio
+  drawAdirondackChair(gfx, 180, GROUND_Y, 0xe8dcc0, 0xb8a880);
+  // Second chair facing the other way, a bit back
+  drawAdirondackChair(gfx, 470, GROUND_Y, 0x8fb4c8, 0x6a8ea0);
 
   // String lights (evening only)
   if (time >= 1020) {
@@ -1783,42 +1788,208 @@ export function drawHighway(gfx: Phaser.GameObjects.Graphics, state: DadState): 
 // Shared scene elements
 // ============================================================
 
+/**
+ * Classic Weber kettle charcoal grill.
+ * Tripod legs, round black bowl, domed lid, knob handle, bottom ash catcher.
+ * `grillX`, `grillY` roughly mark the top-left of the kettle bowl for layout compat.
+ */
 function drawGrill(gfx: Phaser.GameObjects.Graphics, grillX: number, grillY: number, status: string): void {
-  gfx.fillStyle(0x2d2d2d);
-  gfx.fillRect(grillX, grillY, 40, 24);
+  const cx = grillX + 20;              // kettle center X
+  const bowlY = grillY + 14;           // center Y of the bowl
+  const bowlW = 50;
+  const bowlH = 16;
+  const lidOpen = status === 'cooking' || status === 'prepped' || status === 'done' || status === 'burnt';
 
-  if (status === 'supplies_bought') {
-    gfx.fillStyle(0x6b4c2a);
-    gfx.fillRect(grillX + 50, grillY + 10, 12, 14);
-  } else if (status === 'prepped') {
-    gfx.fillStyle(0xff6600);
-    gfx.fillCircle(grillX + 10, grillY + 8, 3);
-    gfx.fillCircle(grillX + 22, grillY + 10, 3);
-    gfx.fillCircle(grillX + 32, grillY + 8, 2);
-  } else if (status === 'cooking') {
-    gfx.fillStyle(0x6b4c2a);
-    gfx.fillCircle(grillX + 10, grillY + 8, 4);
-    gfx.fillCircle(grillX + 24, grillY + 8, 4);
-    gfx.fillCircle(grillX + 35, grillY + 8, 4);
-    gfx.lineStyle(1, 0xaaaaaa, 0.5);
-    gfx.lineBetween(grillX + 15, grillY - 5, grillX + 12, grillY - 20);
-    gfx.lineBetween(grillX + 25, grillY - 3, grillX + 28, grillY - 18);
-  } else if (status === 'done') {
-    gfx.fillStyle(0xc8a040);
-    gfx.fillCircle(grillX + 10, grillY + 8, 4);
-    gfx.fillCircle(grillX + 24, grillY + 8, 4);
-    gfx.fillCircle(grillX + 35, grillY + 8, 4);
-    gfx.fillStyle(0xeeeeee);
-    gfx.fillRect(grillX + 50, grillY + 5, 25, 15);
-  } else if (status === 'burnt') {
-    gfx.fillStyle(0x111111);
-    gfx.fillCircle(grillX + 10, grillY + 8, 4);
-    gfx.fillCircle(grillX + 24, grillY + 8, 4);
-    gfx.fillCircle(grillX + 35, grillY + 8, 4);
-    gfx.lineStyle(2, 0x444444, 0.6);
-    gfx.lineBetween(grillX + 15, grillY - 5, grillX + 10, grillY - 25);
-    gfx.lineBetween(grillX + 25, grillY - 3, grillX + 30, grillY - 22);
+  // ── Tripod legs (3 angled black legs from ground up to the bowl) ──
+  gfx.lineStyle(2, 0x1a1a1a, 1);
+  const legTop = bowlY + 2;
+  const legBottomY = grillY + 38;
+  gfx.lineBetween(cx - 18, legBottomY, cx - 8, legTop);
+  gfx.lineBetween(cx + 18, legBottomY, cx + 8, legTop);
+  gfx.lineBetween(cx, legBottomY + 2, cx, legTop);
+
+  // ── Ash catcher (small disc hanging below the bowl) ──
+  gfx.fillStyle(0x1a1a1a);
+  gfx.fillEllipse(cx, bowlY + 12, 16, 5);
+
+  // Optional little wheel on lower-right leg
+  gfx.fillStyle(0x111111);
+  gfx.fillCircle(cx + 19, legBottomY, 2);
+
+  // ── Bowl (black kettle body) ──
+  gfx.fillStyle(0x1a1a1a);
+  gfx.fillEllipse(cx, bowlY, bowlW, bowlH);
+  // Soft highlight on the bowl to suggest curvature
+  gfx.fillStyle(0x3a3a3a, 0.6);
+  gfx.fillEllipse(cx - 8, bowlY - 2, 24, 6);
+  // Side vent (small round hole)
+  gfx.fillStyle(0x0a0a0a);
+  gfx.fillCircle(cx - 18, bowlY + 1, 1.5);
+
+  // ── Weber red badge (tiny accent on the bowl) ──
+  gfx.fillStyle(0xb5271f);
+  gfx.fillRect(cx + 8, bowlY + 1, 8, 2);
+
+  // ── Grill grate line across the bowl (visible when lid is up) ──
+  if (lidOpen) {
+    gfx.lineStyle(1, 0x555555, 1);
+    for (let i = -18; i <= 18; i += 5) {
+      gfx.lineBetween(cx + i, bowlY - 5, cx + i, bowlY - 1);
+    }
+    gfx.lineBetween(cx - 20, bowlY - 5, cx + 20, bowlY - 5);
   }
+
+  // ── Domed lid ──
+  // Closed: sits flush on top of bowl
+  // Open: slid up-back and slightly tilted, showing contents
+  const lidCx = lidOpen ? cx + 22 : cx;
+  const lidCy = lidOpen ? bowlY - 18 : bowlY - 6;
+  const lidW = bowlW;
+  const lidH = 14;
+  gfx.fillStyle(0x1a1a1a);
+  gfx.fillEllipse(lidCx, lidCy, lidW, lidH * 2);
+  // Mask the bottom half of the dome so it's a half-ellipse
+  gfx.fillStyle(lidOpen ? 0x5a9e3a : 0x1a1a1a, lidOpen ? 0 : 1);
+  // Lid highlight
+  gfx.fillStyle(0x3a3a3a, 0.7);
+  gfx.fillEllipse(lidCx - 6, lidCy - 2, 18, 5);
+  // Lid handle knob
+  gfx.fillStyle(0x111111);
+  gfx.fillCircle(lidCx, lidCy - lidH + 2, 2.5);
+  gfx.fillStyle(0x2a2a2a);
+  gfx.fillRect(lidCx - 1, lidCy - lidH + 4, 2, 3);
+  // Top lid vent (small chimney hole)
+  gfx.fillStyle(0x000000);
+  gfx.fillCircle(lidCx - 6, lidCy - lidH + 3, 1);
+
+  // ── Contents on the grate (state-driven) ──
+  if (status === 'supplies_bought') {
+    // Unopened charcoal bag next to the grill
+    gfx.fillStyle(0x6b4c2a);
+    gfx.fillRect(cx + 28, grillY + 18, 14, 18);
+    gfx.fillStyle(0xeeeeee);
+    gfx.fillRect(cx + 30, grillY + 22, 10, 3);
+  } else if (status === 'prepped') {
+    // Glowing coals visible through the open lid
+    gfx.fillStyle(0xff4400);
+    gfx.fillCircle(cx - 10, bowlY - 3, 3);
+    gfx.fillCircle(cx + 2, bowlY - 2, 3);
+    gfx.fillStyle(0xff8800);
+    gfx.fillCircle(cx + 12, bowlY - 3, 2.5);
+    gfx.fillStyle(0xffcc33, 0.8);
+    gfx.fillCircle(cx - 4, bowlY - 4, 2);
+  } else if (status === 'cooking') {
+    // Raw-ish patties searing
+    gfx.fillStyle(0x8b4a2a);
+    gfx.fillCircle(cx - 12, bowlY - 6, 4);
+    gfx.fillCircle(cx, bowlY - 6, 4);
+    gfx.fillCircle(cx + 12, bowlY - 6, 4);
+    gfx.fillStyle(0xff5500, 0.7);
+    gfx.fillCircle(cx - 8, bowlY - 2, 2);
+    // Smoke wisps
+    gfx.lineStyle(1, 0xcccccc, 0.5);
+    gfx.lineBetween(cx - 6, bowlY - 10, cx - 10, bowlY - 30);
+    gfx.lineBetween(cx + 6, bowlY - 10, cx + 4, bowlY - 34);
+    gfx.lineBetween(cx + 14, bowlY - 10, cx + 18, bowlY - 28);
+  } else if (status === 'done') {
+    // Golden-brown patties
+    gfx.fillStyle(0xc8a040);
+    gfx.fillCircle(cx - 12, bowlY - 6, 4);
+    gfx.fillCircle(cx, bowlY - 6, 4);
+    gfx.fillCircle(cx + 12, bowlY - 6, 4);
+    // Plate to the side with finished burgers
+    gfx.fillStyle(0xeeeeee);
+    gfx.fillEllipse(cx + 38, grillY + 28, 22, 6);
+    gfx.fillStyle(0xc8a040);
+    gfx.fillCircle(cx + 32, grillY + 26, 3);
+    gfx.fillCircle(cx + 42, grillY + 26, 3);
+  } else if (status === 'burnt') {
+    // Black hockey pucks
+    gfx.fillStyle(0x0a0a0a);
+    gfx.fillCircle(cx - 12, bowlY - 6, 4);
+    gfx.fillCircle(cx, bowlY - 6, 4);
+    gfx.fillCircle(cx + 12, bowlY - 6, 4);
+    // Heavy black smoke
+    gfx.lineStyle(2, 0x333333, 0.7);
+    gfx.lineBetween(cx - 5, bowlY - 10, cx - 14, bowlY - 38);
+    gfx.lineBetween(cx + 5, bowlY - 10, cx + 16, bowlY - 40);
+    gfx.lineBetween(cx + 14, bowlY - 10, cx + 22, bowlY - 32);
+  }
+}
+
+/**
+ * Classic painted-wood Adirondack chair, front-3/4 view.
+ * `x` is the center bottom (feet of the chair), `y` is ground line.
+ */
+function drawAdirondackChair(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  color: number = 0xe8dcc0,
+  shade: number = 0xb8a880,
+): void {
+  // Shadow
+  gfx.fillStyle(0x000000, 0.25);
+  gfx.fillEllipse(x, y + 2, 70, 8);
+
+  // Front legs
+  gfx.fillStyle(shade);
+  gfx.fillRect(x - 28, y - 20, 4, 20);
+  gfx.fillRect(x + 24, y - 20, 4, 20);
+
+  // Seat (slats) — slightly tilted back
+  gfx.fillStyle(color);
+  gfx.fillRect(x - 30, y - 24, 60, 4);
+  // Seat slat shadow lines
+  gfx.fillStyle(shade, 0.6);
+  gfx.fillRect(x - 20, y - 24, 1, 4);
+  gfx.fillRect(x - 5, y - 24, 1, 4);
+  gfx.fillRect(x + 10, y - 24, 1, 4);
+  gfx.fillRect(x + 22, y - 24, 1, 4);
+
+  // Back support angled bracket
+  gfx.fillStyle(shade);
+  gfx.fillRect(x - 26, y - 52, 3, 30);
+  gfx.fillRect(x + 23, y - 52, 3, 30);
+
+  // High back with 5 vertical slats, slight fan
+  const backTopY = y - 64;
+  const slats = [
+    { bx: x - 20, tilt: -2 },
+    { bx: x - 10, tilt: -1 },
+    { bx: x,      tilt: 0 },
+    { bx: x + 10, tilt: 1 },
+    { bx: x + 20, tilt: 2 },
+  ];
+  gfx.fillStyle(color);
+  for (const s of slats) {
+    // Each slat: trapezoid via triangle pair
+    gfx.fillTriangle(
+      s.bx - 3, y - 24,
+      s.bx + 3, y - 24,
+      s.bx + 3 + s.tilt, backTopY,
+    );
+    gfx.fillTriangle(
+      s.bx - 3, y - 24,
+      s.bx + 3 + s.tilt, backTopY,
+      s.bx - 3 + s.tilt, backTopY,
+    );
+  }
+  // Slat separators
+  gfx.lineStyle(0.5, shade, 0.7);
+  for (const s of slats) {
+    gfx.lineBetween(s.bx + 3, y - 24, s.bx + 3 + s.tilt, backTopY);
+  }
+
+  // Arms — wide flat planks over the front legs
+  gfx.fillStyle(color);
+  gfx.fillRect(x - 34, y - 32, 18, 4);
+  gfx.fillRect(x + 16, y - 32, 18, 4);
+
+  // Arm shadow underside
+  gfx.fillStyle(shade, 0.6);
+  gfx.fillRect(x - 34, y - 28, 18, 1);
+  gfx.fillRect(x + 16, y - 28, 18, 1);
 }
 
 function drawStringLights(gfx: Phaser.GameObjects.Graphics): void {

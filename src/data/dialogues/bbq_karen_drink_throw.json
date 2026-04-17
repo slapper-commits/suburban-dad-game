@@ -1,0 +1,28 @@
+{
+  "id": "bbq_karen_drink_throw",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "Karen sets her drink down. Deliberately. The entire yard notices without looking." },
+        { "speaker": "Karen", "text": "No. No. I'm done. I'm done today, David.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "text": "She picks the glass back up. Pulls her arm back. Hesitates. Then throws only the ice. Not the glass. The ice. It's somehow worse." },
+        { "speaker": "Karen", "text": "Don't. Say. A. Word.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" }
+      ],
+      "choices": [
+        { "text": "\"Babe—\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.karen_confronted", "value": true }, { "type": "add", "field": "suspicion", "value": 20 }] },
+        { "text": "Silence.", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.karen_confronted", "value": true }, { "type": "add", "field": "suspicion", "value": 10 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Karen walks away. The ice melts into the lawn. Something in the marriage melts with it."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "Dad keeps his mouth shut. It might be the smartest thing he's done all day. It's also too late."
+    }
+  }
+}

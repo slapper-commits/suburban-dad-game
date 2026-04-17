@@ -1,0 +1,29 @@
+{
+  "id": "bbq_cops_raid",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "Two squad cars roll up slow, lightbar off. The neighbors crane over fences like meerkats." },
+        { "speaker": "Officer Mendez", "text": "Evening, sir. Got a call about a disturbance.", "mouth": "neutral", "eyes": "normal", "eyebrows": "neutral" },
+        { "text": "Karen's knuckles go white on the counter. Doug tries to look innocent and achieves the opposite." },
+        { "speaker": "Dad", "text": "...", "mouth": "blank", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "Dad's mouth opens. Nothing comes out. Somewhere a dog barks. It feels personal." }
+      ],
+      "choices": [
+        { "text": "\"Just a family gathering, officer.\"", "nextNode": "end_a", "timeCost": 15, "effects": [{ "type": "set", "field": "flags.cops_arrived", "value": true }, { "type": "add", "field": "suspicion", "value": 20 }] },
+        { "text": "Lawyer. Say only: \"Lawyer.\"", "nextNode": "end_b", "timeCost": 15, "effects": [{ "type": "set", "field": "flags.cops_arrived", "value": true }, { "type": "set", "field": "flags.lawyered_up", "value": true }, { "type": "add", "field": "suspicion", "value": 10 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Officer Mendez studies him for a long moment. 'Keep it down, sir.' The cars pull away. The yard does not breathe for twenty seconds."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "Officer Mendez raises an eyebrow. Pockets his pen. 'Alright then.' Barb, across the yard, is already on the phone."
+    }
+  }
+}

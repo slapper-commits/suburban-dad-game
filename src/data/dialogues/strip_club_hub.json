@@ -1,0 +1,14 @@
+{
+  "id": "strip_club_hub",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "Bass thumps. Phil Collins, but remixed by someone with a grudge.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "I'm just here for the... atmosphere. Cultural research. Yeah.", "mouth": "smirk", "eyebrows": "raised" }
+      ]
+    }
+  }
+}

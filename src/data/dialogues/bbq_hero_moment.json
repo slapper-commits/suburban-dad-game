@@ -1,0 +1,15 @@
+{
+  "id": "bbq_hero_moment",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Doug", "text": "HEY. HEY EVERYBODY. To DAVE!", "mouth": "grin", "eyes": "normal", "eyebrows": "raised" },
+        { "text": "The yard lifts its drinks. Unprompted. The toast travels — Craig, Brenda, even Barb, grudgingly, raises her wine. Dad has no idea why, but here we are." },
+        { "text": "Across the lawn, Karen catches his eye. Smiles. A small, real nod. Like: yeah. Today. Somehow. You." }
+      ]
+    }
+  }
+}

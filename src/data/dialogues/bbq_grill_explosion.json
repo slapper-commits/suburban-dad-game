@@ -1,0 +1,28 @@
+{
+  "id": "bbq_grill_explosion",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "Dad flips a burger with the concentration of a man losing something he can't name." },
+        { "text": "PFFFT. WHOOF. A blue sheet of flame stands up on its hind legs and looks at him." },
+        { "speaker": "Karen", "text": "DAVID—", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" },
+        { "speaker": "Doug", "text": "I GOT IT! I GOT IT! I — I DON'T GOT IT—", "mouth": "grin", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "choices": [
+        { "text": "Hose it down.", "nextNode": "end_a", "timeCost": 10, "effects": [{ "type": "set", "field": "flags.grill_exploded", "value": true }, { "type": "set", "field": "flags.grillStatus", "value": "burnt" }, { "type": "add", "field": "reputation", "value": -15 }] },
+        { "text": "Let Doug handle it.", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.grill_exploded", "value": true }, { "type": "add", "field": "reputation", "value": -25 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "The grill hisses and dies. Twenty-four burgers are now archaeology. Dad's eyebrows: redefined."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "Doug fights the grill. The grill wins. Brenda is already dialing Papa John's."
+    }
+  }
+}

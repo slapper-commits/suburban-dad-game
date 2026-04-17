@@ -25,6 +25,7 @@
         {
           "text": "\"I won't say anything.\"",
           "nextNode": "deep_silence",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 5 }
           ]
@@ -32,6 +33,7 @@
         {
           "text": "\"Maybe we should cool it, Craig.\"",
           "nextNode": "deep_cool_it",
+          "timeCost": 5,
           "effects": [
             { "type": "set", "field": "flags.heroicConsideration", "value": true }
           ]
@@ -61,7 +63,8 @@
       "choices": [
         {
           "text": "Nod back",
-          "nextNode": "nod_end"
+          "nextNode": "nod_end",
+          "timeCost": 5
         }
       ]
     },
@@ -76,11 +79,13 @@
       "choices": [
         {
           "text": "\"Nice truck, Craig.\"",
-          "nextNode": "truck"
+          "nextNode": "truck",
+          "timeCost": 5
         },
         {
           "text": "\"How's the family?\"",
-          "nextNode": "family"
+          "nextNode": "family",
+          "timeCost": 5
         }
       ]
     },
@@ -96,7 +101,8 @@
       "choices": [
         {
           "text": "\"You are absolutely right.\"",
-          "nextNode": "family_end"
+          "nextNode": "family_end",
+          "timeCost": 5
         }
       ]
     },

@@ -1,4 +1,4 @@
-import { PlayerState, TimeClock, DialogueEngine, EndingResolver, WifeTexts } from './systems';
+import { PlayerState, TimeClock, DialogueEngine, EndingResolver, WifeTexts, BBQDirector } from './systems';
 
 /**
  * GameRegistry — singleton access to all shared game systems.
@@ -11,6 +11,7 @@ export class GameRegistry {
   public dialogueEngine: DialogueEngine;
   public endingResolver: EndingResolver;
   public wifeTexts: WifeTexts;
+  public bbqDirector: BBQDirector;
 
   private constructor() {
     this.playerState = new PlayerState();
@@ -18,6 +19,7 @@ export class GameRegistry {
     this.dialogueEngine = new DialogueEngine(this.playerState, this.timeClock);
     this.endingResolver = new EndingResolver();
     this.wifeTexts = new WifeTexts(this.playerState);
+    this.bbqDirector = new BBQDirector(this.playerState, this.timeClock, this.dialogueEngine, {});
   }
 
   static get instance(): GameRegistry {
@@ -34,5 +36,6 @@ export class GameRegistry {
     this.dialogueEngine = new DialogueEngine(this.playerState, this.timeClock);
     this.wifeTexts = new WifeTexts(this.playerState);
     this.wifeTexts.reset();
+    this.bbqDirector = new BBQDirector(this.playerState, this.timeClock, this.dialogueEngine, {});
   }
 }

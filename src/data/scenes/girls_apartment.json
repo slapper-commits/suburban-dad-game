@@ -1,0 +1,9 @@
+{
+  "id": "girls_apartment",
+  "name": "The Girls' Apartment",
+  "description": "Shag carpet. Lava lamp. Incense doing serious cardio.",
+  "background": "girls_apartment",
+  "isHome": false,
+  "enterDialogue": "girls_apartment_hub",
+  "hotspots": []
+}

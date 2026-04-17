@@ -1,0 +1,22 @@
+{
+  "id": "bbq_mil_screams",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Mother-in-Law", "text": "...David. On your collar.", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" },
+        { "speaker": "Mother-in-Law", "text": "THAT is NOT Karen's color.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "text": "Silence lands on the yard like a tarp. A fork hits a paper plate. A child says 'oooooh.'" }
+      ],
+      "choices": [
+        { "text": "\"Uhh...\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 30 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Barb nods, slowly, at her daughter. A signal that has been waiting since 1997."
+    }
+  }
+}

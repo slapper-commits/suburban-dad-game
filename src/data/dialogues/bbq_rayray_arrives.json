@@ -1,0 +1,28 @@
+{
+  "id": "bbq_rayray_arrives",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "A minivan glides past the curb like it's looking for something to hit. It stops. A weed-green tracksuit emerges into the afternoon sun." },
+        { "speaker": "RayRay", "text": "DAVID! MY BOY! I BROUGHT BEER AND I BROUGHT PRINCESS!", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "text": "Princess, a pit bull with kind eyes and a pink collar, wags so hard her whole back half moves." },
+        { "speaker": "Karen", "text": "...David. Who.", "mouth": "blank", "eyes": "vacant", "eyebrows": "neutral" }
+      ],
+      "choices": [
+        { "text": "\"RayRay! ...hey, man.\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "reputation", "value": -15 }] },
+        { "text": "\"I don't know him.\"", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.denied_rayray", "value": true }, { "type": "add", "field": "reputation", "value": -5 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Karen does not speak. Karen does not need to speak. Karen is a weather system now."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "RayRay's grin collapses in slow motion. Princess whimpers. Somewhere inside Dad, a small organ fails."
+    }
+  }
+}

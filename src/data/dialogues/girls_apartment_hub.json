@@ -1,0 +1,97 @@
+{
+  "id": "girls_apartment_hub",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.crack_smoked", "op": "==", "value": true }], "nextNode": "been_here" }
+      ],
+      "next": "first_visit"
+    },
+
+    "first_visit": {
+      "id": "first_visit",
+      "text": "",
+      "beats": [
+        { "text": "Shag carpet — the kind that eats earrings and lighters. Incense fights a losing war with whatever else is in the air.", "mouth": "neutral" },
+        { "speaker": "The Girls", "text": "Welcome to the satellite office, boo.", "mouth": "smile" },
+        { "text": "One of them produces a bong with the gravitas of a sommelier. Glass clinks. Lighter clicks.", "mouth": "neutral" },
+        { "speaker": "The Girls", "text": "Hit this, boo.", "mouth": "grin", "eyebrows": "raised" }
+      ],
+      "effects": [
+        { "type": "add", "field": "vices.drugs", "value": 1 },
+        { "type": "set", "field": "flags.smell", "value": true },
+        { "type": "set", "field": "flags.dilated_pupils", "value": true }
+      ],
+      "choices": [
+        {
+          "text": "Take a hit",
+          "nextNode": "took_hit",
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "animate", "value": "bong" }
+          ]
+        },
+        {
+          "text": "\"Want to see where the GOOD stuff lives?\"",
+          "nextNode": "to_trap"
+        },
+        { "text": "Bounce", "nextNode": "bounce" }
+      ]
+    },
+
+    "been_here": {
+      "id": "been_here",
+      "text": "",
+      "beats": [
+        { "speaker": "The Girls", "text": "Look who's back.", "mouth": "grin" },
+        { "text": "The lava lamp blorps a slow yes at you. The couch remembers your butt-print.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Take another hit",
+          "nextNode": "took_hit",
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "animate", "value": "bong" }
+          ]
+        },
+        {
+          "text": "\"Take me to the GOOD stuff\"",
+          "nextNode": "to_trap"
+        },
+        { "text": "Bounce", "nextNode": "bounce" }
+      ]
+    },
+
+    "took_hit": {
+      "id": "took_hit",
+      "text": "",
+      "beats": [
+        { "text": "*bubble bubble bubble* *cough* *cough cough*", "mouth": "shock" },
+        { "speaker": "Dad", "text": "Oh. Oh wow. The lava lamp is — it's GOING.", "mouth": "grin", "eyes": "stoned", "eyebrows": "raised" },
+        { "speaker": "The Girls", "text": "He's a natural.", "mouth": "smile" }
+      ]
+    },
+
+    "to_trap": {
+      "id": "to_trap",
+      "text": "",
+      "beats": [
+        { "speaker": "The Girls", "text": "Atta boy. Field trip.", "mouth": "grin" },
+        { "text": "They herd you out a back door. The hallway smells like cat. The stairwell smells like worse cat.", "mouth": "neutral" }
+      ],
+      "exitScene": "trap_house"
+    },
+
+    "bounce": {
+      "id": "bounce",
+      "text": "You back out apologizing to no one. The shag carpet keeps a sock you didn't know you'd lost.",
+      "exitScene": "sidewalk"
+    }
+  }
+}

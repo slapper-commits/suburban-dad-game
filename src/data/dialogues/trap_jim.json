@@ -1,0 +1,25 @@
+{
+  "id": "trap_jim",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "Jim is sitting in a chair, or the chair is sitting in Jim. Hard to say. He hasn't moved since you got here.", "mouth": "neutral", "eyes": "vacant" },
+        { "speaker": "Jim", "text": "...mm.", "mouth": "blank", "eyes": "vacant" },
+        { "speaker": "Dad", "text": "Hey, buddy. You good?", "mouth": "frown", "eyebrows": "worried" }
+      ],
+      "effects": [
+        { "type": "set", "field": "flags.saw_jim", "value": true }
+      ],
+      "choices": [
+        { "text": "Back away slowly", "nextNode": "close" }
+      ]
+    },
+    "close": {
+      "id": "close",
+      "text": "Jim does not register your departure. Jim has not registered the last six hours."
+    }
+  }
+}

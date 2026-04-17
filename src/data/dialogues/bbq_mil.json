@@ -34,11 +34,13 @@
       "choices": [
         {
           "text": "\"It's a European style, Barb.\"",
-          "nextNode": "barb_skeptical"
+          "nextNode": "barb_skeptical",
+          "timeCost": 5
         },
         {
           "text": "\"The mower pulls to the left\"",
-          "nextNode": "barb_reply"
+          "nextNode": "barb_reply",
+          "timeCost": 5
         }
       ]
     },

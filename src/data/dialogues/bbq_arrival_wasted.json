@@ -1,0 +1,28 @@
+{
+  "id": "bbq_arrival_wasted",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "Dad crosses the threshold of his own backyard at a gentle diagonal." },
+        { "speaker": "Karen", "text": "...David.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "Hey — hey babe, hey — whoa, sprinkler. Okay.", "mouth": "grin", "eyes": "drunk", "eyebrows": "raised" },
+        { "speaker": "Mother-in-Law", "text": "David. Are you UNWELL?", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "choices": [
+        { "text": "\"Heat. Just the heat.\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 15 }] },
+        { "text": "Commit to the bit. Greet everyone too loudly.", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 25 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Barb mouths the word 'heat' like it's a slur."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "\"DOUUUUG! BRENDAAAA! THE GIRLS!\" A child begins to cry. It's unclear which one."
+    }
+  }
+}

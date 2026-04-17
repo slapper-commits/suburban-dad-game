@@ -1,0 +1,44 @@
+{
+  "id": "trap_trina",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "Trina is half-folded into the couch like a forgotten sweater. Her pipe is still warm.", "mouth": "neutral", "eyes": "sleepy" },
+        { "speaker": "Trina", "text": "...you want?", "mouth": "neutral", "eyes": "sleepy" },
+        { "text": "She extends the pipe in your general direction. Not at you, exactly. In the area.", "mouth": "neutral" }
+      ],
+      "choices": [
+        {
+          "text": "Take it",
+          "nextNode": "took",
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -25 },
+            { "type": "set", "field": "vices.drugs", "value": 2 },
+            { "type": "set", "field": "flags.crack_smoked", "value": true },
+            { "type": "animate", "value": "crack" }
+          ]
+        },
+        { "text": "Decline", "nextNode": "decline" }
+      ]
+    },
+    "took": {
+      "id": "took",
+      "text": "",
+      "beats": [
+        { "text": "*huff* *cough* *cough cough cough*", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Dad", "text": "OH that's a different thing. That's a DIFFERENT thing.", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" }
+      ]
+    },
+    "decline": {
+      "id": "decline",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "I'm — I'm good, thanks.", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Trina", "text": "...mkay.", "mouth": "neutral", "eyes": "sleepy" }
+      ]
+    }
+  }
+}

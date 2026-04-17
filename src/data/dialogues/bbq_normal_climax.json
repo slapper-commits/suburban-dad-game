@@ -1,0 +1,15 @@
+{
+  "id": "bbq_normal_climax",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "The sun dips behind the Hendersons' roofline. The burgers — against all odds — were fine. The tiki torches do their tiki torch thing." },
+        { "speaker": "Karen", "text": "Good day?", "mouth": "smile", "eyes": "normal", "eyebrows": "neutral" },
+        { "speaker": "Dad", "text": "Yeah. Yeah. Good day.", "mouth": "smile", "eyes": "normal", "eyebrows": "neutral" }
+      ]
+    }
+  }
+}

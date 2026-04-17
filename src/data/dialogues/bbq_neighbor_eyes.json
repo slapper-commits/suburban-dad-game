@@ -1,0 +1,22 @@
+{
+  "id": "bbq_neighbor_eyes",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Neighbor Greg", "text": "Hey. Hey Dave. C'mere a sec.", "mouth": "neutral", "eyes": "normal", "eyebrows": "raised" },
+        { "speaker": "Neighbor Greg", "text": "Your eyes, man. Your eyes are doing a thing. You good?", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Dad", "text": "I'm fine, Greg. I'm FINE. Greg. I am — we're at a barbecue, Greg.", "mouth": "grin", "eyes": "stoned", "eyebrows": "raised" }
+      ],
+      "choices": [
+        { "text": "\"Asthma medication, don't worry about it.\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "reputation", "value": -5 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Greg nods the nod of a man who is absolutely going to tell his wife about this."
+    }
+  }
+}

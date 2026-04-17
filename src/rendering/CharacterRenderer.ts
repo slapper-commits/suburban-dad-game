@@ -5,9 +5,10 @@ import type { DadState } from '../types';
 // Character Config — the component system interface
 // ============================================================
 
-export type EyeStyle = 'normal' | 'sleepy' | 'shades' | 'stoned' | 'drunk' | 'wide' | 'angry';
+export type EyeStyle = 'normal' | 'sleepy' | 'shades' | 'stoned' | 'drunk' | 'wide' | 'angry' | 'sultry' | 'lidded' | 'vacant';
 export type EyebrowStyle = 'none' | 'neutral' | 'raised' | 'angry' | 'worried';
-export type MouthStyle = 'neutral' | 'smile' | 'grin' | 'frown' | 'shock' | 'smirk' | 'sleepy';
+export type MouthStyle = 'neutral' | 'smile' | 'grin' | 'frown' | 'shock' | 'smirk' | 'sleepy' | 'pouty' | 'blank';
+export type BodyType = 'male' | 'female';
 export type HairStyleType = 'normal' | 'buzzcut' | 'long' | 'messy' | 'bald';
 export type HatType = false | 'cap' | 'cowboy';
 export type ItemType =
@@ -31,6 +32,7 @@ export interface CharacterConfig {
   hairStyle?: HairStyleType;
   sz?: number;                  // scale factor, default 1
   flipX?: boolean;              // mirror character horizontally
+  bodyType?: BodyType;          // 'male' (default) or 'female' (narrower torso, hips)
 
   // ── Animation ───────────────────────────────────────────────
   /** Seconds since scene start (monotonic). Drives breathing/blink/idle. */
@@ -89,6 +91,7 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     flipX = false,
     hairStyle = 'normal',
     eyebrows = 'none',
+    bodyType = 'male',
     animTime = 0,
     isWalking = false,
     walkPhase = 0,
@@ -121,14 +124,16 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
   // fx is reserved for future flipX-conditional logic
   void flipX;
 
-  // Body dimensions
+  // Body dimensions — female variant has narrower torso + slightly wider hips
+  const isFemale = bodyType === 'female';
   const shoeH   = 2 * s;
   const legH    = 12 * s;
   const torsoH  = 12 * s;
   const headH   = 10 * s;
 
   const headW   = 12 * s;
-  const torsoW  = 14 * s;
+  const torsoW  = (isFemale ? 11 : 14) * s;   // narrower torso for female
+  const hipW    = (isFemale ? 13 : 14) * s;   // slight hip flare for female
   const armW    = 3 * s;
   const armH    = 10 * s;
   const legW    = 5 * s;
@@ -246,6 +251,28 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
       gfx.lineBetween(rightEyeX + 2 * s, eyeY - 2 * s, rightEyeX - 1 * s, eyeY - 1 * s);
       break;
 
+    case 'sultry':
+    case 'lidded':
+      // Half-closed bedroom eyes — top lash line + small pupils visible below
+      gfx.lineStyle(1 * s, 0x000000);
+      gfx.lineBetween(leftEyeX - 2 * s, eyeY - 0.5 * s, leftEyeX + 2 * s, eyeY - 0.5 * s);
+      gfx.lineBetween(rightEyeX - 2 * s, eyeY - 0.5 * s, rightEyeX + 2 * s, eyeY - 0.5 * s);
+      gfx.fillStyle(0x000000);
+      gfx.fillCircle(leftEyeX, eyeY + 0.5 * s, 0.9 * s);
+      gfx.fillCircle(rightEyeX, eyeY + 0.5 * s, 0.9 * s);
+      break;
+
+    case 'vacant':
+      // Empty black circles — no life behind them (addicts, dissociation)
+      gfx.fillStyle(0x000000);
+      gfx.fillCircle(leftEyeX, eyeY, 1.5 * s);
+      gfx.fillCircle(rightEyeX, eyeY, 1.5 * s);
+      // Darker shadow under eyes
+      gfx.lineStyle(0.6 * s, 0x332233, 0.7);
+      gfx.lineBetween(leftEyeX - 2 * s, eyeY + 2 * s, leftEyeX + 2 * s, eyeY + 2 * s);
+      gfx.lineBetween(rightEyeX - 2 * s, eyeY + 2 * s, rightEyeX + 2 * s, eyeY + 2 * s);
+      break;
+
     default: // 'normal'
       gfx.fillStyle(0x000000);
       gfx.fillCircle(leftEyeX, eyeY, 1.5 * s);
@@ -313,11 +340,36 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     case 'sleepy':
       gfx.lineBetween(cx - 1.5 * s, mouthY, cx + 1.5 * s, mouthY);
       break;
+    case 'pouty':
+      // Thicker short line below default — pursed lips
+      gfx.lineStyle(1.5 * s, 0x000000);
+      gfx.lineBetween(cx - 1.5 * s, mouthY + 0.5 * s, cx + 1.5 * s, mouthY + 0.5 * s);
+      break;
+    case 'blank':
+      // No mouth at all — vacant/dissociated. Intentional noop.
+      break;
   }
 
   // ── Torso ─────────────────────────────────────────────────
   gfx.fillStyle(shirt);
   gfx.fillRect(cx - torsoW / 2, torsoY, torsoW, torsoH);
+  // Female: subtle chest line + slight flare to suggest silhouette
+  if (isFemale) {
+    gfx.lineStyle(0.5 * s, 0x000000, 0.35);
+    gfx.lineBetween(cx - 2 * s, torsoY + 4 * s, cx + 2 * s, torsoY + 4 * s);
+    // Hip flare triangles at the bottom of the torso
+    gfx.fillStyle(shirt);
+    gfx.fillTriangle(
+      cx - torsoW / 2, torsoY + torsoH - 2 * s,
+      cx - hipW / 2, torsoY + torsoH,
+      cx - torsoW / 2, torsoY + torsoH,
+    );
+    gfx.fillTriangle(
+      cx + torsoW / 2, torsoY + torsoH - 2 * s,
+      cx + hipW / 2, torsoY + torsoH,
+      cx + torsoW / 2, torsoY + torsoH,
+    );
+  }
 
   // ── Arms (animated: walk swing or idle sway) ──────────────
   // Per-arm Y offset so they swing. Left arm opposite of right.
@@ -384,15 +436,17 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     leftLegLift = Math.max(0, Math.sin(p)) * 2 * s;
     rightLegLift = Math.max(0, -Math.sin(p)) * 2 * s;
   }
-  const leftLegX = x - torsoW / 2 + 1 * s;   // legs stay at body X (no tilt)
-  const rightLegX = x + torsoW / 2 - 1 * s - legW;
+  // Female: legs anchored to slightly-wider hipW for silhouette
+  const baseHipW = isFemale ? hipW : torsoW;
+  const leftLegX = x - baseHipW / 2 + 1 * s;   // legs stay at body X (no tilt)
+  const rightLegX = x + baseHipW / 2 - 1 * s - legW;
   gfx.fillRect(leftLegX, legsY - leftLegLift, legW, legH);
   gfx.fillRect(rightLegX, legsY - rightLegLift, legW, legH);
 
   // ── Shoes (follow legs) ───────────────────────────────────
   gfx.fillStyle(0x2d2d2d);
-  gfx.fillRect(x - torsoW / 2 + 0.5 * s, feetY - leftLegLift, shoeW, shoeH);
-  gfx.fillRect(x + torsoW / 2 - 0.5 * s - shoeW, feetY - rightLegLift, shoeW, shoeH);
+  gfx.fillRect(x - baseHipW / 2 + 0.5 * s, feetY - leftLegLift, shoeW, shoeH);
+  gfx.fillRect(x + baseHipW / 2 - 0.5 * s - shoeW, feetY - rightLegLift, shoeW, shoeH);
 
   // ── Dishevelment overlays ─────────────────────────────────
   drawDishevelment(gfx, config, cx, torsoY, torsoW, torsoH, headY, headW, legsY, legH, s);

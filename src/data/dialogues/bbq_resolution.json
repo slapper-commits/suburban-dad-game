@@ -1,0 +1,53 @@
+{
+  "id": "bbq_resolution",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.divorce_threatened", "op": "==", "value": true }], "nextNode": "resolution_divorce" },
+        { "conditions": [{ "field": "flags.cops_arrived", "op": "==", "value": true }], "nextNode": "resolution_cops" },
+        { "conditions": [{ "field": "flags.heroicFlag", "op": "==", "value": true }], "nextNode": "resolution_hero" }
+      ],
+      "next": "resolution_default"
+    },
+    "resolution_divorce": {
+      "id": "resolution_divorce",
+      "text": "",
+      "beats": [
+        { "text": "Guests don't say goodbye. They just... aren't there anymore. One by one the folding chairs fold themselves." },
+        { "speaker": "Dad", "text": "", "mouth": "frown", "eyes": "sleepy", "eyebrows": "worried" },
+        { "text": "Dad sits alone at the picnic table with a cold hot dog. The porch light buzzes. Somewhere, a sprinkler starts. Saturday ends." }
+      ]
+    },
+    "resolution_cops": {
+      "id": "resolution_cops",
+      "text": "",
+      "beats": [
+        { "text": "The squad cars pull away. The red-and-blue wash fades off the siding. The neighbors are still at their windows." },
+        { "text": "The cul-de-sac whispers. A blind lifts. A blind drops. A blind lifts again." },
+        { "speaker": "Karen", "text": "", "mouth": "frown", "eyes": "angry", "eyebrows": "neutral" },
+        { "text": "Karen won't look at him. She carries the potato salad inside. The screen door slaps once. Saturday ends." }
+      ]
+    },
+    "resolution_hero": {
+      "id": "resolution_hero",
+      "text": "",
+      "beats": [
+        { "text": "Dad sinks into the patio chair. It creaks. He earned that creak." },
+        { "speaker": "Karen", "text": "Scoot over, hero.", "mouth": "smile", "eyes": "normal", "eyebrows": "neutral" },
+        { "text": "The kid tears past, shrieking, chasing the dog, chasing nothing. The sun goes orange. Saturday ends — gentle, this time." }
+      ]
+    },
+    "resolution_default": {
+      "id": "resolution_default",
+      "text": "",
+      "beats": [
+        { "text": "The sky goes lavender, then bruise, then dark. Someone is doing dishes. The water runs and runs." },
+        { "text": "Up and down the street, porch lights click on. Click off. Click on. Click off." },
+        { "text": "A dog barks twice and stops. Saturday ends." }
+      ]
+    }
+  }
+}

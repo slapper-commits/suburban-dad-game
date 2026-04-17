@@ -1,0 +1,9 @@
+{
+  "id": "strip_club_vip",
+  "name": "VIP Back Room",
+  "description": "Pink light. One dancer. No witnesses.",
+  "background": "strip_club_vip",
+  "isHome": false,
+  "enterDialogue": "strip_club_vip",
+  "hotspots": []
+}

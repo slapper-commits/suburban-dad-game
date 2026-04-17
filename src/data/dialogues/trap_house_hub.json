@@ -1,0 +1,16 @@
+{
+  "id": "trap_house_hub",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "Boarded windows. The smell of burnt plastic. A cat stares from the kitchen doorway, judging silently.", "mouth": "neutral", "eyes": "wide" },
+        { "speaker": "Dealer", "text": "You Amber's friend?", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "Yes.", "mouth": "neutral", "eyes": "wide" },
+        { "text": "Trina is on the couch. Her eyes are open. That's the most you can say about it.", "mouth": "neutral" }
+      ]
+    }
+  }
+}

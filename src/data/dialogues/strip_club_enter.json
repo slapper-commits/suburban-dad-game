@@ -1,0 +1,65 @@
+{
+  "id": "strip_club_enter",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.cash", "op": "<", "value": 20 }], "nextNode": "broke" }
+      ],
+      "next": "pay"
+    },
+
+    "broke": {
+      "id": "broke",
+      "text": "",
+      "beats": [
+        { "text": "A wall of black cotton in the shape of a man steps in front of you. He looks down. Way down.", "mouth": "neutral" },
+        { "speaker": "Bouncer", "text": "Twenty bucks cover, khakis.", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "I, uh — I have... a coupon? No?", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Bouncer", "text": "Walk.", "mouth": "neutral", "eyebrows": "angry" }
+      ],
+      "exitScene": "strip_mall"
+    },
+
+    "pay": {
+      "id": "pay",
+      "text": "",
+      "beats": [
+        { "text": "A wall of black cotton in the shape of a man looms in the doorway. The bass leaks out around him like smoke.", "mouth": "neutral" },
+        { "speaker": "Bouncer", "text": "ID.", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "I'm forty-one.", "mouth": "neutral", "eyebrows": "raised" },
+        { "speaker": "Bouncer", "text": "I can see that. Twenty bucks, khakis.", "mouth": "smirk", "eyebrows": "raised" }
+      ],
+      "choices": [
+        {
+          "text": "Pay $20 cover",
+          "nextNode": "paid",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -20 },
+            { "type": "set", "field": "flags.strip_club_visited", "value": true }
+          ]
+        },
+        { "text": "Walk away", "nextNode": "walk_away" }
+      ]
+    },
+
+    "paid": {
+      "id": "paid",
+      "text": "",
+      "beats": [
+        { "speaker": "Bouncer", "text": "Hands where I can see 'em. Have fun.", "mouth": "smirk" },
+        { "text": "The door swings open. Bass. Pink light. The smell of fog machine and bad cologne.", "mouth": "neutral" }
+      ],
+      "exitScene": "strip_club"
+    },
+
+    "walk_away": {
+      "id": "walk_away",
+      "text": "Maybe next time. Or never. Probably never. Probably next time.",
+      "exitScene": "strip_mall"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "strip_club_bartender",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "She's wiping a glass with a rag that has seen things. She doesn't look up.", "mouth": "smirk" },
+        { "speaker": "Bartender", "text": "First time?", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "Is it that obvious?", "mouth": "frown", "eyebrows": "worried" }
+      ],
+      "choices": [
+        {
+          "text": "$15 whiskey",
+          "nextNode": "whiskey",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -15 },
+            { "type": "add", "field": "sobriety", "value": -10 },
+            { "type": "animate", "value": "shot" }
+          ]
+        },
+        { "text": "Just water", "nextNode": "water" },
+        { "text": "Back off", "nextNode": "close" }
+      ]
+    },
+    "whiskey": {
+      "id": "whiskey",
+      "text": "",
+      "beats": [
+        { "speaker": "Bartender", "text": "Suburban dad blend.", "mouth": "smirk" },
+        { "speaker": "Dad", "text": "*cough* Smooth.", "mouth": "shock", "eyes": "wide" }
+      ]
+    },
+    "water": {
+      "id": "water",
+      "text": "",
+      "beats": [
+        { "speaker": "Bartender", "text": "Eight bucks.", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "...for water.", "mouth": "frown" }
+      ]
+    },
+    "close": {
+      "id": "close",
+      "text": "You retreat to the wall. The wall, at least, asks nothing of you."
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "bbq_karen_divorce",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "Karen taps his elbow. Quiet. Pulls him behind the garage where nobody can see." },
+        { "speaker": "Karen", "text": "I'm not going to yell. I'm not going to cry. I'm done with both.", "mouth": "neutral", "eyes": "normal", "eyebrows": "neutral" },
+        { "speaker": "Karen", "text": "I'm calling my mom's lawyer Monday, David. That's it. That's the whole conversation.", "mouth": "frown", "eyes": "lidded", "eyebrows": "neutral" },
+        { "text": "Dad's world narrows to a pinhole. Somewhere past the fence, a kid is laughing. It sounds like it's from another life." }
+      ],
+      "choices": [
+        { "text": "\"Babe, please—\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.divorce_threatened", "value": true }] },
+        { "text": "\"I deserve this.\"", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.divorce_threatened", "value": true }, { "type": "set", "field": "flags.self_aware", "value": true }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Karen walks back to the party. Dad stays behind the garage. A spider works, diligent, above his head."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "Karen stops. Turns. Looks at him like he's a stranger she almost recognizes. Then walks back to the party."
+    }
+  }
+}

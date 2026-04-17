@@ -33,6 +33,7 @@
         {
           "text": "\"Just my phone. Big case.\"",
           "nextNode": "cash_phone",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -40,6 +41,7 @@
         {
           "text": "Casually shift the wad deeper into your pocket",
           "nextNode": "cash_shift",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -62,6 +64,7 @@
         {
           "text": "\"Walked into a door.\"",
           "nextNode": "injury_door",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 2 }
           ]
@@ -69,6 +72,7 @@
         {
           "text": "\"You should see the other guy.\" Laugh it off.",
           "nextNode": "injury_joke",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 2 }
           ]
@@ -90,11 +94,13 @@
       "choices": [
         {
           "text": "\"I'm making a statement.\"",
-          "nextNode": "lawn_statement"
+          "nextNode": "lawn_statement",
+          "timeCost": 5
         },
         {
           "text": "\"The mower's been drinking.\"",
-          "nextNode": "lawn_mower"
+          "nextNode": "lawn_mower",
+          "timeCost": 5
         }
       ]
     },
@@ -114,6 +120,7 @@
         {
           "text": "\"Allergies. Brutal this year.\"",
           "nextNode": "eyes_allergies",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -121,6 +128,7 @@
         {
           "text": "\"New eye drops. They're really something.\"",
           "nextNode": "eyes_drops",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -142,11 +150,13 @@
       "choices": [
         {
           "text": "\"Thanks! Glad you could make it.\"",
-          "nextNode": "normal_thanks"
+          "nextNode": "normal_thanks",
+          "timeCost": 5
         },
         {
           "text": "\"Wait till you try the burgers.\"",
-          "nextNode": "normal_burgers"
+          "nextNode": "normal_burgers",
+          "timeCost": 5
         }
       ]
     },

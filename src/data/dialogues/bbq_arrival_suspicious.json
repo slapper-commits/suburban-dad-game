@@ -1,0 +1,28 @@
+{
+  "id": "bbq_arrival_suspicious",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "You smell like... is that cologne? You don't own cologne.", "mouth": "frown", "eyes": "narrow", "eyebrows": "angry" },
+        { "speaker": "Mother-in-Law", "text": "David. Come here. Let me look at you in the light.", "mouth": "pouty", "eyes": "lidded", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "Ha. Haha. It's, uh, it's a whole day, Karen. Lot of errands. Big day of errands.", "mouth": "smirk", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "Barb's lawyer-daughter takes one slow sip of chardonnay and does not blink." }
+      ],
+      "choices": [
+        { "text": "Play it cool.", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 5 }] },
+        { "text": "Over-explain the lawn.", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 10 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Dad smiles the smile of a hostage. Karen files it away."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "\"...and THAT'S why the edger was, you know, the edger. Anyway.\" Nobody bought it. Nobody."
+    }
+  }
+}

@@ -13,7 +13,8 @@
         },
         {
           "text": "Just nod and move on",
-          "nextNode": "move_on"
+          "nextNode": "move_on",
+          "timeCost": 5
         }
       ]
     },

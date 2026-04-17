@@ -516,10 +516,127 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
           text: 'A strip mall karate dojo. The sensei is 19.',
         },
       },
+      {
+        id: 'club_entrance',
+        label: 'Club Purrrple',
+        x: 600,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'strip_club_enter' },
+        visibleWhen: [{ field: 'currentTime', op: '>=', value: 660 }],
+      },
     ],
     edges: {
       left: { sceneId: 'sidewalk', timeCost: 10 },
     },
+  },
+
+  strip_club: {
+    groundY: 400,
+    walkBounds: { minX: 80, maxX: 720 },
+    dadEntryX: 100,
+    zones: [
+      {
+        id: 'bar',
+        label: 'Bartender',
+        x: 150,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'strip_club_bartender' },
+      },
+      {
+        id: 'amber_stage',
+        label: 'Amber (stage)',
+        x: 400,
+        radius: 50,
+        action: { type: 'dialogue', treeId: 'strip_club_dancer' },
+      },
+      {
+        id: 'exit',
+        label: 'Exit',
+        x: 80,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'strip_mall', timeCost: 5 },
+      },
+    ],
+  },
+
+  strip_club_vip: {
+    groundY: 400,
+    walkBounds: { minX: 80, maxX: 720 },
+    dadEntryX: 200,
+    zones: [
+      {
+        id: 'amber_vip',
+        label: 'Amber',
+        x: 400,
+        radius: 60,
+        action: { type: 'dialogue', treeId: 'strip_club_vip' },
+      },
+    ],
+  },
+
+  girls_apartment: {
+    groundY: 400,
+    walkBounds: { minX: 80, maxX: 720 },
+    dadEntryX: 200,
+    zones: [
+      {
+        id: 'girls_couch',
+        label: 'The Girls',
+        x: 380,
+        radius: 60,
+        action: { type: 'dialogue', treeId: 'girls_apartment_hub' },
+      },
+      {
+        id: 'exit',
+        label: 'Exit',
+        x: 80,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'sidewalk', timeCost: 5 },
+      },
+    ],
+  },
+
+  trap_house: {
+    groundY: 400,
+    walkBounds: { minX: 80, maxX: 720 },
+    dadEntryX: 200,
+    zones: [
+      {
+        id: 'dealer',
+        label: 'Dealer',
+        x: 150,
+        radius: 45,
+        action: { type: 'dialogue', treeId: 'trap_dealer' },
+      },
+      {
+        id: 'jim',
+        label: 'Jim',
+        x: 300,
+        radius: 30,
+        action: { type: 'dialogue', treeId: 'trap_jim' },
+      },
+      {
+        id: 'trina',
+        label: 'Trina',
+        x: 520,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'trap_trina' },
+      },
+      {
+        id: 'rayray',
+        label: 'RayRay',
+        x: 650,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'trap_rayray' },
+      },
+      {
+        id: 'exit',
+        label: 'Exit',
+        x: 80,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'sidewalk', timeCost: 10 },
+      },
+    ],
   },
 
   sketchy: {

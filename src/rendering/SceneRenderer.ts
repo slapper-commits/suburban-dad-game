@@ -239,6 +239,189 @@ export function drawIntoxOverlay(gfx: Phaser.GameObjects.Graphics, sobriety: num
 }
 
 // ============================================================
+// Interior + Mood primitives (reusable across dark scenes)
+// ============================================================
+
+/**
+ * Draw a dark interior base — walls + floor + subtle radial vignette.
+ * Used for strip club, trap house, motel, etc.
+ */
+export function drawDimInterior(
+  gfx: Phaser.GameObjects.Graphics,
+  palette: { wall: number; floor: number; floorLine?: number; vignetteAlpha?: number },
+): void {
+  const { wall, floor, floorLine = 0x000000, vignetteAlpha = 0.4 } = palette;
+
+  // Walls
+  gfx.fillStyle(wall);
+  gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+
+  // Floor (lower ~25%)
+  gfx.fillStyle(floor);
+  gfx.fillRect(0, SCREEN_H - 100, SCREEN_W, 100);
+  // Floor trim line
+  gfx.lineStyle(1, floorLine, 0.6);
+  gfx.lineBetween(0, SCREEN_H - 100, SCREEN_W, SCREEN_H - 100);
+
+  // Radial vignette — subtle darkening at edges
+  gfx.fillStyle(0x000000, vignetteAlpha * 0.6);
+  gfx.fillRect(0, 0, 60, SCREEN_H);
+  gfx.fillRect(SCREEN_W - 60, 0, 60, SCREEN_H);
+  gfx.fillStyle(0x000000, vignetteAlpha * 0.4);
+  gfx.fillRect(0, 0, SCREEN_W, 40);
+  gfx.fillRect(0, SCREEN_H - 30, SCREEN_W, 30);
+}
+
+/** Soft colored light halo — neon, lamp, bar light. */
+export function drawMoodLight(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  color: number,
+  radius: number,
+): void {
+  gfx.fillStyle(color, 0.4);
+  gfx.fillCircle(x, y, radius * 0.7);
+  gfx.fillStyle(color, 0.18);
+  gfx.fillCircle(x, y, radius);
+  gfx.fillStyle(color, 0.08);
+  gfx.fillCircle(x, y, radius * 1.5);
+}
+
+/** Couch. Anchored at bottom-center of its footprint. */
+export function drawCouch(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  color: number = 0x6a4a3a,
+): void {
+  const w = 100, h = 40;
+  // Shadow
+  gfx.fillStyle(0x000000, 0.35);
+  gfx.fillEllipse(x, y + 3, w + 14, 6);
+  // Base
+  gfx.fillStyle(color);
+  gfx.fillRect(x - w / 2, y - h, w, h);
+  // Backrest
+  gfx.fillStyle(color);
+  gfx.fillRect(x - w / 2, y - h - 18, w, 18);
+  // Cushion seams
+  gfx.lineStyle(1, 0x000000, 0.3);
+  gfx.lineBetween(x - w / 4, y - h, x - w / 4, y - 4);
+  gfx.lineBetween(x + w / 4, y - h, x + w / 4, y - 4);
+  // Arm rests
+  gfx.fillStyle(color);
+  gfx.fillRect(x - w / 2 - 6, y - h - 4, 8, h + 4);
+  gfx.fillRect(x + w / 2 - 2, y - h - 4, 8, h + 4);
+}
+
+/** Bed. For motel scene. */
+export function drawBed(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  options?: { rumpled?: boolean },
+): void {
+  const w = 140, h = 50;
+  // Shadow
+  gfx.fillStyle(0x000000, 0.3);
+  gfx.fillEllipse(x, y + 3, w + 10, 6);
+  // Frame
+  gfx.fillStyle(0x4a3a2a);
+  gfx.fillRect(x - w / 2, y - h, w, h);
+  // Mattress
+  gfx.fillStyle(0xe8d8c0);
+  gfx.fillRect(x - w / 2 + 4, y - h + 4, w - 8, h - 10);
+  // Headboard
+  gfx.fillStyle(0x6a4a3a);
+  gfx.fillRect(x - w / 2 - 4, y - h - 16, w + 8, 18);
+  // Pillows
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(x - w / 2 + 10, y - h + 6, 28, 14);
+  gfx.fillRect(x - w / 2 + 44, y - h + 6, 28, 14);
+  // Rumpled sheet
+  if (options?.rumpled) {
+    gfx.fillStyle(0xc8b8a0);
+    gfx.fillRect(x, y - h + 22, 50, 14);
+    gfx.lineStyle(0.5, 0x000000, 0.3);
+    gfx.lineBetween(x + 10, y - h + 25, x + 40, y - h + 30);
+  }
+}
+
+/** Bar counter with a dark wood front. */
+export function drawBarCounter(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  w: number = 200,
+): void {
+  const h = 60;
+  gfx.fillStyle(0x3a2a1a);
+  gfx.fillRect(x - w / 2, y - h, w, h);
+  gfx.fillStyle(0x5a4a2a);
+  gfx.fillRect(x - w / 2, y - h, w, 6);
+  // Bottles behind
+  const bottleColors = [0x88aa66, 0xaa6633, 0x336699, 0x884488];
+  for (let i = 0; i < 6; i++) {
+    gfx.fillStyle(bottleColors[i % bottleColors.length]);
+    gfx.fillRect(x - w / 2 + 12 + i * (w - 24) / 6, y - h - 26, 8, 22);
+  }
+}
+
+/** Raised stage with front light spill. */
+export function drawStage(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  w: number = 180,
+): void {
+  // Stage platform
+  gfx.fillStyle(0x2a1a2a);
+  gfx.fillRect(x - w / 2, y - 8, w, 8);
+  gfx.fillStyle(0x3a2a3a);
+  gfx.fillRect(x - w / 2, y - 10, w, 2);
+  // Front light spill
+  gfx.fillStyle(0xffb8d8, 0.18);
+  gfx.fillTriangle(x - w / 2, y, x + w / 2, y, x, y + 100);
+}
+
+/** Stripper pole vertical from stage. */
+export function drawStripperPole(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  h: number = 180,
+): void {
+  gfx.fillStyle(0xcccccc);
+  gfx.fillRect(x - 2, y - h, 4, h);
+  // Highlight
+  gfx.fillStyle(0xffffff, 0.6);
+  gfx.fillRect(x - 1, y - h, 1, h);
+}
+
+/** Lay down N silhouette people around a base point. */
+export function drawCrowdSilhouettes(
+  gfx: Phaser.GameObjects.Graphics,
+  baseX: number,
+  baseY: number,
+  count: number,
+  spread: number = 120,
+): void {
+  // Simple deterministic distribution so it looks the same frame-to-frame
+  for (let i = 0; i < count; i++) {
+    const fx = (i / Math.max(1, count - 1)) - 0.5;
+    const x = baseX + fx * spread + Math.sin(i * 12.3) * 12;
+    const y = baseY + Math.cos(i * 7.7) * 4;
+    const color = [0x222222, 0x333333, 0x2a2a2a, 0x3a2a3a][i % 4];
+    // Head
+    gfx.fillStyle(color);
+    gfx.fillCircle(x, y - 24, 4);
+    // Body
+    gfx.fillRect(x - 5, y - 20, 10, 20);
+  }
+}
+
+// ============================================================
 // Per-location renderers
 // ============================================================
 
@@ -660,6 +843,21 @@ export function drawBBQ(gfx: Phaser.GameObjects.Graphics, state: DadState): void
 
   // Neighbor Greg — always at the BBQ
   drawTinyPerson(gfx, 80, GROUND_Y, 0x6688aa);
+
+  // Callback NPCs — show up if earlier flags set
+  const f = state.flags;
+  if (f.rayray_invited === true) {
+    drawNpc(gfx, 'tweaker_rayray', 740, GROUND_Y);
+  }
+  if (f.amber_confidante === true) {
+    drawNpc(gfx, 'amber', 430, GROUND_Y);
+  }
+  if (f.sharon_helped === true) {
+    drawTinyPerson(gfx, 760, GROUND_Y, 0x222222, 1.2);  // silent ex lurking
+  }
+
+  // Background party crowd — makes the BBQ feel populated
+  drawCrowdSilhouettes(gfx, 400, GROUND_Y + 2, 6, 560);
 }
 
 // ============================================================
@@ -1495,4 +1693,125 @@ function drawStringLights(gfx: Phaser.GameObjects.Graphics): void {
     gfx.fillStyle(0xf0e060);
     gfx.fillCircle(lx, ly, 3);
   }
+}
+
+// ============================================================
+// Phase 2b — Strip Club + Trap House
+// ============================================================
+
+export function drawStripClub(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
+  drawDimInterior(gfx, { wall: 0x1a0a1a, floor: 0x2a1a2a, vignetteAlpha: 0.5 });
+
+  // Mood lights — pink center, blue/purple wings
+  drawMoodLight(gfx, 400, 220, 0xff6688, 120);
+  drawMoodLight(gfx, 120, 100, 0x66aaff, 120);
+  drawMoodLight(gfx, 680, 100, 0xaa66ff, 120);
+
+  // Stage with pole, downstage center
+  drawStage(gfx, 400, 340);
+  drawStripperPole(gfx, 400, 340, 180);
+
+  // Bar (left)
+  drawBarCounter(gfx, 150, 340);
+
+  // Couch (right — for VIP-curious khakis)
+  drawCouch(gfx, 620, 340, 0x4a2a4a);
+
+  // Crowd silhouettes around the stage
+  drawCrowdSilhouettes(gfx, 400, 310, 8, 200);
+
+  // Foreground NPCs
+  drawNpc(gfx, 'bouncer', 100, 400);
+  drawNpc(gfx, 'bartender_club', 150, 400);
+  drawNpc(gfx, 'candi', 320, 400);
+  drawNpc(gfx, 'destiny', 480, 400);
+  // Amber on stage (slightly raised — stage top sits at y≈340-10)
+  drawNpc(gfx, 'amber', 400, 332);
+}
+
+export function drawStripClubVip(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
+  drawDimInterior(gfx, { wall: 0x2a0a2a, floor: 0x3a1a3a, vignetteAlpha: 0.6 });
+
+  // One unkind pink lamp
+  drawMoodLight(gfx, 400, 220, 0xff3377, 180);
+
+  // Red couch, center
+  drawCouch(gfx, 400, 350, 0x4a1a3a);
+
+  // Amber, centered
+  drawNpc(gfx, 'amber', 400, 400);
+}
+
+export function drawGirlsApartment(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
+  drawDimInterior(gfx, { wall: 0x3a2a3a, floor: 0x4a3a3a, vignetteAlpha: 0.3 });
+
+  // Lava lamp warmth halo
+  drawMoodLight(gfx, 200, 100, 0xffaa44, 140);
+
+  // Couch
+  drawCouch(gfx, 400, 380, 0x6a3a6a);
+
+  // Lava lamp — base + glass cylinder + wavy blob
+  const lampX = 200;
+  const lampBaseY = 380;
+  // Base
+  gfx.fillStyle(0x222222);
+  gfx.fillRect(lampX - 10, lampBaseY - 10, 20, 10);
+  // Glass cylinder
+  gfx.fillStyle(0xffaa44, 0.45);
+  gfx.fillRect(lampX - 7, lampBaseY - 70, 14, 60);
+  // Cap
+  gfx.fillStyle(0x222222);
+  gfx.fillRect(lampX - 10, lampBaseY - 76, 20, 6);
+  // Wavy blob inside
+  const blobOffset = Math.sin(_sceneAnimTime * 1.3) * 6;
+  gfx.fillStyle(0xff7733);
+  gfx.fillEllipse(lampX, lampBaseY - 35 + blobOffset, 10, 14);
+  gfx.fillEllipse(lampX + 2, lampBaseY - 50 - blobOffset * 0.5, 6, 8);
+
+  // The Girls on the couch
+  drawNpc(gfx, 'the_girls', 380, 380);
+}
+
+export function drawTrapHouse(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
+  drawDimInterior(gfx, { wall: 0x2a2a1a, floor: 0x1a2a1a, vignetteAlpha: 0.6 });
+
+  // Sickly green light from one fixture
+  drawMoodLight(gfx, 400, 120, 0x88aa66, 100);
+
+  // Couch
+  drawCouch(gfx, 500, 380, 0x3a3a2a);
+
+  // Boarded window (upper left)
+  gfx.fillStyle(0x111111);
+  gfx.fillRect(80, 80, 100, 70);
+  gfx.fillStyle(0x6a4a2a);
+  gfx.fillRect(80, 90, 100, 8);
+  gfx.fillRect(80, 110, 100, 8);
+  gfx.fillRect(80, 130, 100, 8);
+  // Diagonal plank
+  gfx.lineStyle(8, 0x6a4a2a);
+  gfx.lineBetween(80, 80, 180, 150);
+
+  // Card table with cash piles
+  const tableX = 350;
+  const tableY = 360;
+  gfx.fillStyle(0x222222);
+  gfx.fillRect(tableX - 50, tableY - 4, 100, 4);
+  gfx.fillStyle(0x111111);
+  gfx.fillRect(tableX - 48, tableY, 4, 18);
+  gfx.fillRect(tableX + 44, tableY, 4, 18);
+  // Four cash piles
+  for (let i = 0; i < 4; i++) {
+    gfx.fillStyle(0x4a8a4a);
+    gfx.fillRect(tableX - 40 + i * 22, tableY - 10, 16, 6);
+    gfx.fillStyle(0x6aa66a);
+    gfx.fillRect(tableX - 40 + i * 22, tableY - 12, 16, 2);
+  }
+
+  // NPCs
+  drawNpc(gfx, 'dealer', 150, 400);
+  drawNpc(gfx, 'crackhead_jim', 300, 400);
+  drawNpc(gfx, 'trina', 520, 380);
+  drawNpc(gfx, 'tweaker_rayray', 650, 400);
 }

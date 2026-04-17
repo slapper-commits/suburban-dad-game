@@ -1,0 +1,9 @@
+{
+  "id": "trap_house",
+  "name": "Trap House",
+  "description": "Boarded windows. Burnt-plastic smell. A cat watches from the kitchen.",
+  "background": "trap_house",
+  "isHome": false,
+  "enterDialogue": "trap_house_hub",
+  "hotspots": []
+}

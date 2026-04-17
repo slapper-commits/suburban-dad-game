@@ -1,0 +1,15 @@
+{
+  "id": "bbq_arrival_clean",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "Right on time, honey.", "mouth": "smile", "eyes": "normal", "eyebrows": "neutral" },
+        { "speaker": "Doug", "text": "DAVE! Get over here, buddy — I'm burning one with your name on it!", "mouth": "grin", "eyes": "normal", "eyebrows": "raised" },
+        { "text": "The camera drifts across the yard: tiki torches, folding chairs, a dog asleep under the table. For once, everything is where it should be." }
+      ]
+    }
+  }
+}

@@ -45,6 +45,7 @@
         {
           "text": "\"It's called organic mowing\"",
           "nextNode": "crooked_excuse",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 5 }
           ]
@@ -52,6 +53,7 @@
         {
           "text": "\"The mower has a mind of its own\"",
           "nextNode": "crooked_blame",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -73,11 +75,13 @@
       "choices": [
         {
           "text": "\"Great! Got everything done.\"",
-          "nextNode": "karen_ok"
+          "nextNode": "karen_ok",
+          "timeCost": 5
         },
         {
           "text": "\"You know. Saturday stuff.\"",
           "nextNode": "karen_suspicious",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -107,6 +111,7 @@
         {
           "text": "\"It's... ketchup? From the grill?\"",
           "nextNode": "lipstick_lie",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 20 }
           ]
@@ -114,6 +119,7 @@
         {
           "text": "\"I helped a neighbor move furniture\"",
           "nextNode": "lipstick_excuse",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 10 }
           ]
@@ -136,6 +142,7 @@
         {
           "text": "\"Doug's new air freshener\"",
           "nextNode": "perfume_dodge",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 8 }
           ]
@@ -143,6 +150,7 @@
         {
           "text": "\"I don't smell anything\"",
           "nextNode": "perfume_deny",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 15 }
           ]
@@ -165,6 +173,7 @@
         {
           "text": "\"The neighbor's doing a... cleansing ritual?\"",
           "nextNode": "smell_excuse",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 5 }
           ]
@@ -172,6 +181,7 @@
         {
           "text": "\"Must be the charcoal\"",
           "nextNode": "smell_charcoal",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -200,6 +210,7 @@
         {
           "text": "\"I'm celebrating... Saturday?\"",
           "nextNode": "wasted_response",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 15 }
           ]
@@ -207,6 +218,7 @@
         {
           "text": "Try to act sober",
           "nextNode": "wasted_act",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 10 }
           ]
@@ -229,6 +241,7 @@
         {
           "text": "\"Just one with Doug. It's a BBQ!\"",
           "nextNode": "buzzed_ok",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 3 }
           ]
@@ -236,6 +249,7 @@
         {
           "text": "\"Define 'drinking'\"",
           "nextNode": "buzzed_bad",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 8 }
           ]
@@ -258,6 +272,7 @@
         {
           "text": "\"I ran out of time—\"",
           "nextNode": "lawn_excuse",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 10 }
           ]
@@ -265,6 +280,7 @@
         {
           "text": "\"I'll do it tomorrow\"",
           "nextNode": "lawn_tomorrow",
+          "timeCost": 5,
           "effects": [
             { "type": "add", "field": "suspicion", "value": 5 }
           ]

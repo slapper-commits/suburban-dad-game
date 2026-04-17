@@ -1,0 +1,28 @@
+{
+  "id": "bbq_fist_fight",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "speaker": "Craig", "text": "What did you just say about my SMOKER, Doug?", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Doug", "text": "I said it's a GLORIFIED TRASH CAN, CRAIG—", "mouth": "grin", "eyes": "wide", "eyebrows": "angry" },
+        { "text": "Shove. Tackle. Cooler goes horizontal. Beer geysers. A hot dog pinwheels through the air in slow motion." },
+        { "speaker": "Brenda", "text": "DOUGLAS! NOT AT THE THING! DOUGLAS!", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "choices": [
+        { "text": "Break it up.", "nextNode": "end_a", "timeCost": 10, "effects": [{ "type": "add", "field": "reputation", "value": 10 }] },
+        { "text": "Film it.", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "set", "field": "flags.filmed_fight", "value": true }, { "type": "add", "field": "reputation", "value": -20 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Dad wades in, pulls them apart. Doug hugs him, sobbing slightly. Craig shakes his hand. The grill keeps grilling."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "Dad, vertical phone, wide smile. 'OH THIS IS GOING ON FACEBOOK.' Karen stares at him like she's never met him."
+    }
+  }
+}

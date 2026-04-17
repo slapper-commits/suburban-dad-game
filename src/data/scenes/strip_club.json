@@ -1,0 +1,9 @@
+{
+  "id": "strip_club",
+  "name": "Club Purrrple",
+  "description": "Neon. Dim. Bass. Bouncer at the door.",
+  "background": "strip_club",
+  "isHome": false,
+  "enterDialogue": "strip_club_hub",
+  "hotspots": []
+}

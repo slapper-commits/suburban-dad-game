@@ -9,6 +9,7 @@ import {
   drawKitchen, drawFrontYard, drawGarage, drawBackyard, drawDougs, drawBBQ,
   drawSidewalk, drawCraigs, drawKevins, drawKidsPorch, drawQuikstop, drawGasStation,
   drawStripMall, drawSketchy, drawHighway, drawGasStationStore,
+  drawStripClub, drawStripClubVip, drawGirlsApartment, drawTrapHouse,
   drawIntoxOverlay, setSceneAnimTime,
 } from '../rendering/SceneRenderer';
 import { drawCharacter } from '../rendering/CharacterRenderer';
@@ -31,6 +32,10 @@ import stripMallData from '../data/scenes/strip_mall.json';
 import sketchyData from '../data/scenes/sketchy.json';
 import highwayData from '../data/scenes/highway.json';
 import gasStationStoreData from '../data/scenes/gas_station_store.json';
+import stripClubData from '../data/scenes/strip_club.json';
+import stripClubVipData from '../data/scenes/strip_club_vip.json';
+import girlsApartmentData from '../data/scenes/girls_apartment.json';
+import trapHouseData from '../data/scenes/trap_house.json';
 
 // ── Dialogue data imports ───────────────────────────────────
 import kitchenHub from '../data/dialogues/kitchen_hub.json';
@@ -78,10 +83,38 @@ import gasProstitutionT2 from '../data/dialogues/gas_prostitution_t2.json';
 import kevinPitch from '../data/dialogues/kevin_pitch.json';
 import bbqCraig from '../data/dialogues/bbq_craig.json';
 import bbqNeighbor from '../data/dialogues/bbq_neighbor.json';
+// BBQ act-beat dialogues (fired by BBQDirector)
+import bbqArrivalClean from '../data/dialogues/bbq_arrival_clean.json';
+import bbqArrivalSuspicious from '../data/dialogues/bbq_arrival_suspicious.json';
+import bbqArrivalWasted from '../data/dialogues/bbq_arrival_wasted.json';
+import bbqRayrayArrives from '../data/dialogues/bbq_rayray_arrives.json';
+import bbqAmberArrives from '../data/dialogues/bbq_amber_arrives.json';
+import bbqMilScreams from '../data/dialogues/bbq_mil_screams.json';
+import bbqNeighborEyes from '../data/dialogues/bbq_neighbor_eyes.json';
+import bbqKarenDrinkThrow from '../data/dialogues/bbq_karen_drink_throw.json';
+import bbqFistFight from '../data/dialogues/bbq_fist_fight.json';
+import bbqSharonExArrives from '../data/dialogues/bbq_sharon_ex_arrives.json';
+import bbqCopsRaid from '../data/dialogues/bbq_cops_raid.json';
+import bbqGrillExplosion from '../data/dialogues/bbq_grill_explosion.json';
+import bbqKarenDivorce from '../data/dialogues/bbq_karen_divorce.json';
+import bbqHeroMoment from '../data/dialogues/bbq_hero_moment.json';
+import bbqNormalClimax from '../data/dialogues/bbq_normal_climax.json';
+import bbqResolution from '../data/dialogues/bbq_resolution.json';
 import frontyardDrive from '../data/dialogues/frontyard_drive.json';
 import garageChair from '../data/dialogues/garage_chair.json';
 import gasStationStore from '../data/dialogues/gas_station_store.json';
 import mountainView from '../data/dialogues/mountain_view.json';
+import stripClubEnter from '../data/dialogues/strip_club_enter.json';
+import stripClubHub from '../data/dialogues/strip_club_hub.json';
+import stripClubBartender from '../data/dialogues/strip_club_bartender.json';
+import stripClubDancer from '../data/dialogues/strip_club_dancer.json';
+import stripClubVip from '../data/dialogues/strip_club_vip.json';
+import girlsApartmentHub from '../data/dialogues/girls_apartment_hub.json';
+import trapHouseHub from '../data/dialogues/trap_house_hub.json';
+import trapDealer from '../data/dialogues/trap_dealer.json';
+import trapRayray from '../data/dialogues/trap_rayray.json';
+import trapJim from '../data/dialogues/trap_jim.json';
+import trapTrina from '../data/dialogues/trap_trina.json';
 
 const SCREEN_W = 800;
 const SCREEN_H = 450;
@@ -195,6 +228,10 @@ export class GameScene extends Phaser.Scene {
       sketchy: sketchyData as unknown as SceneData,
       highway: highwayData as unknown as SceneData,
       gas_station_store: gasStationStoreData as unknown as SceneData,
+      strip_club: stripClubData as unknown as SceneData,
+      strip_club_vip: stripClubVipData as unknown as SceneData,
+      girls_apartment: girlsApartmentData as unknown as SceneData,
+      trap_house: trapHouseData as unknown as SceneData,
     };
 
     // Register all dialogue trees
@@ -248,7 +285,38 @@ export class GameScene extends Phaser.Scene {
       garage_chair: garageChair as unknown as DialogueTree,
       gas_station_store: gasStationStore as unknown as DialogueTree,
       mountain_view: mountainView as unknown as DialogueTree,
+      strip_club_enter: stripClubEnter as unknown as DialogueTree,
+      strip_club_hub: stripClubHub as unknown as DialogueTree,
+      strip_club_bartender: stripClubBartender as unknown as DialogueTree,
+      strip_club_dancer: stripClubDancer as unknown as DialogueTree,
+      strip_club_vip: stripClubVip as unknown as DialogueTree,
+      girls_apartment_hub: girlsApartmentHub as unknown as DialogueTree,
+      trap_house_hub: trapHouseHub as unknown as DialogueTree,
+      trap_dealer: trapDealer as unknown as DialogueTree,
+      trap_rayray: trapRayray as unknown as DialogueTree,
+      trap_jim: trapJim as unknown as DialogueTree,
+      trap_trina: trapTrina as unknown as DialogueTree,
+      // BBQ act-beats
+      bbq_arrival_clean: bbqArrivalClean as unknown as DialogueTree,
+      bbq_arrival_suspicious: bbqArrivalSuspicious as unknown as DialogueTree,
+      bbq_arrival_wasted: bbqArrivalWasted as unknown as DialogueTree,
+      bbq_rayray_arrives: bbqRayrayArrives as unknown as DialogueTree,
+      bbq_amber_arrives: bbqAmberArrives as unknown as DialogueTree,
+      bbq_mil_screams: bbqMilScreams as unknown as DialogueTree,
+      bbq_neighbor_eyes: bbqNeighborEyes as unknown as DialogueTree,
+      bbq_karen_drink_throw: bbqKarenDrinkThrow as unknown as DialogueTree,
+      bbq_fist_fight: bbqFistFight as unknown as DialogueTree,
+      bbq_sharon_ex_arrives: bbqSharonExArrives as unknown as DialogueTree,
+      bbq_cops_raid: bbqCopsRaid as unknown as DialogueTree,
+      bbq_grill_explosion: bbqGrillExplosion as unknown as DialogueTree,
+      bbq_karen_divorce: bbqKarenDivorce as unknown as DialogueTree,
+      bbq_hero_moment: bbqHeroMoment as unknown as DialogueTree,
+      bbq_normal_climax: bbqNormalClimax as unknown as DialogueTree,
+      bbq_resolution: bbqResolution as unknown as DialogueTree,
     };
+
+    // Give the BBQDirector access to the dialogue map so it can fire beats
+    this.reg.bbqDirector.setTreeRegistry(this.dialogueMap);
   }
 
   create(data: { sceneId: string }): void {
@@ -576,6 +644,10 @@ export class GameScene extends Phaser.Scene {
       sketchy: drawSketchy,
       highway: drawHighway,
       gas_station_store: drawGasStationStore,
+      strip_club: drawStripClub,
+      strip_club_vip: drawStripClubVip,
+      girls_apartment: drawGirlsApartment,
+      trap_house: drawTrapHouse,
     };
 
     const renderer = renderers[sceneData.background];
@@ -791,6 +863,9 @@ export class GameScene extends Phaser.Scene {
         this.reg.dialogueEngine.start(tree);
       }
     }
+
+    // BBQ director: fire scripted act-beats based on state at BBQ
+    this.reg.bbqDirector.check();
   }
 
   private checkWifeTexts(): void {
@@ -1037,6 +1112,23 @@ export class GameScene extends Phaser.Scene {
       'crackhead': 'crackhead_guy',
       'dad': 'dad',
       'you': 'dad',
+      // Strip club
+      'bouncer': 'bouncer',
+      'bartender': 'bartender_club',
+      'amber': 'amber',
+      'candi': 'candi',
+      'destiny': 'destiny',
+      // Trap house
+      'dealer': 'dealer',
+      'jim': 'crackhead_jim',
+      'crackhead jim': 'crackhead_jim',
+      'rayray': 'tweaker_rayray',
+      'ray-ray': 'tweaker_rayray',
+      'ray ray': 'tweaker_rayray',
+      'tweaker rayray': 'tweaker_rayray',
+      'trina': 'trina',
+      // Store clerk
+      'clerk': 'clerk',
     };
     return map[s] ?? null;
   }

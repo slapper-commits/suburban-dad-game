@@ -1,0 +1,49 @@
+{
+  "id": "trap_rayray",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "speaker": "RayRay", "text": "Bro. BRO. You're Amber's friend? I'm Amber's friend. We're FRIENDS, bro.", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "text": "He produces a phone. The screen is cracked into a cubist masterpiece. A pit bull stares out from it.", "mouth": "neutral" },
+        { "speaker": "RayRay", "text": "That's Mango. Mango's a good boy. Mango bit a guy ONCE and the guy DESERVED it.", "mouth": "grin", "eyes": "wide" },
+        { "speaker": "RayRay", "text": "Listen — listen — my buddy's having a BBQ later. You should pull up. You should TOTALLY pull up.", "mouth": "grin", "eyebrows": "raised" }
+      ],
+      "choices": [
+        {
+          "text": "\"Sure, RayRay, you're welcome.\"",
+          "nextNode": "yes",
+          "effects": [
+            { "type": "set", "field": "flags.rayray_met", "value": true },
+            { "type": "set", "field": "flags.rayray_invited", "value": true }
+          ]
+        },
+        {
+          "text": "Demure",
+          "nextNode": "demure",
+          "effects": [
+            { "type": "set", "field": "flags.rayray_met", "value": true }
+          ]
+        }
+      ]
+    },
+    "yes": {
+      "id": "yes",
+      "text": "",
+      "beats": [
+        { "speaker": "RayRay", "text": "BRO. I KNEW you were good people.", "mouth": "grin", "eyes": "wide" },
+        { "text": "He hugs you. The hug lasts a beat too long. He smells like Axe and motor oil.", "mouth": "frown" }
+      ]
+    },
+    "demure": {
+      "id": "demure",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Maybe. We'll see. Probably not. Definitely maybe.", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "RayRay", "text": "Cool cool cool. No pressure. NO PRESSURE.", "mouth": "grin" }
+      ]
+    }
+  }
+}

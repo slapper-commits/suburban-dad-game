@@ -1,0 +1,28 @@
+{
+  "id": "bbq_sharon_ex_arrives",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "A black F-250 lurches half onto the curb. The engine keeps running for a three-count after the door opens." },
+        { "text": "A very large, very silent man in a cutoff walks across the lawn at a speed that is somehow both slow and inevitable." },
+        { "speaker": "Sharon's Ex", "text": "You David?", "mouth": "neutral", "eyes": "angry", "eyebrows": "neutral" },
+        { "text": "Dad looks at Karen. Karen looks at the man. The man looks only at Dad. A bee is the loudest thing in the yard." }
+      ],
+      "choices": [
+        { "text": "Stand your ground. In khakis.", "nextNode": "end_a", "timeCost": 10, "effects": [{ "type": "set", "field": "flags.stood_ground", "value": true }, { "type": "add", "field": "reputation", "value": 10 }] },
+        { "text": "\"There's been a misunderstanding.\"", "nextNode": "end_b", "timeCost": 10, "effects": [{ "type": "add", "field": "suspicion", "value": 20 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Dad plants his feet. Says nothing. The man eventually nods once and walks back to his truck. Nobody speaks for a full minute."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "\"Misunderstanding,\" the man repeats. He files that word away somewhere. He'll be back to it."
+    }
+  }
+}

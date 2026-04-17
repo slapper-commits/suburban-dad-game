@@ -1,0 +1,28 @@
+{
+  "id": "bbq_amber_arrives",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "",
+      "beats": [
+        { "text": "A lifted Jeep rolls up on 35s. Amber steps out in a yellow sundress, waves cheerfully at the children. The children wave back." },
+        { "speaker": "Karen", "text": "Who. Is. THAT.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Amber", "text": "DAVEY! You made it home! Your directions were SO bad, babe!", "mouth": "smile", "eyes": "sultry", "eyebrows": "raised" },
+        { "text": "Dad's entire body becomes one long held breath. A bee lands on his arm. He doesn't flinch. He can't." }
+      ],
+      "choices": [
+        { "text": "\"OH. Cousin. Of Doug's.\"", "nextNode": "end_a", "timeCost": 5, "effects": [{ "type": "add", "field": "reputation", "value": -10 }] },
+        { "text": "\"She's from... a conference.\"", "nextNode": "end_b", "timeCost": 5, "effects": [{ "type": "add", "field": "suspicion", "value": 25 }, { "type": "add", "field": "reputation", "value": -15 }] }
+      ]
+    },
+    "end_a": {
+      "id": "end_a",
+      "text": "Doug, from across the yard, mouths the word 'what' at an octave no one can hear."
+    },
+    "end_b": {
+      "id": "end_b",
+      "text": "\"A CONFERENCE,\" Karen repeats. \"For what, David. For what conference.\""
+    }
+  }
+}

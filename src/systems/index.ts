@@ -3,3 +3,4 @@ export { PlayerState } from './PlayerState';
 export { DialogueEngine } from './DialogueEngine';
 export { EndingResolver } from './EndingResolver';
 export { WifeTexts } from './WifeTexts';
+export { BBQDirector } from './BBQDirector';

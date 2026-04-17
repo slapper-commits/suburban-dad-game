@@ -114,7 +114,7 @@
         { "speaker": "The Girls", "text": "\"It is now.\"", "mouth": "grin", "eyes": "shades" },
         { "text": "They start walking. You follow. Obviously you follow. You think about Karen. Briefly. Then the laundromat goes by, and you don't.", "mouth": "sleepy" }
       ],
-      "exitScene": "strip_mall"
+      "exitScene": "girls_apartment"
     },
     "decline": {
       "id": "decline",

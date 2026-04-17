@@ -1,0 +1,132 @@
+{
+  "id": "trap_dealer",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "shakedown_risk" }
+      ],
+      "next": "normal"
+    },
+
+    "normal": {
+      "id": "normal",
+      "text": "",
+      "beats": [
+        { "text": "He doesn't stand. He doesn't have to. The room reorganizes around him.", "mouth": "neutral" },
+        { "speaker": "Dealer", "text": "What you need.", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "I — I don't know yet. I'm new at this.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Dealer", "text": "Suburban dad menu. Got three things on it. Pick one.", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Smoke one with him",
+          "nextNode": "smoked",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -30 },
+            { "type": "set", "field": "vices.drugs", "value": 2 },
+            { "type": "set", "field": "flags.paranoid", "value": true },
+            { "type": "set", "field": "flags.crack_smoked", "value": true },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "set", "field": "flags.dilated_pupils", "value": true },
+            { "type": "animate", "value": "crack" }
+          ]
+        },
+        {
+          "text": "Buy a dime to take home",
+          "nextNode": "bought",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -50 },
+            { "type": "set", "field": "flags.has_stash", "value": true }
+          ]
+        },
+        { "text": "Nope, wrong house", "nextNode": "wrong_house" }
+      ]
+    },
+
+    "shakedown_risk": {
+      "id": "shakedown_risk",
+      "text": "",
+      "beats": [
+        { "text": "He doesn't stand. He doesn't have to. His eyes go to your pocket and stay there.", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Dealer", "text": "That's a fat envelope, suburb.", "mouth": "smirk", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "It's — it's coupons. Mostly.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" }
+      ],
+      "choices": [
+        {
+          "text": "Smoke one with him",
+          "nextNode": "smoked",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -30 },
+            { "type": "set", "field": "vices.drugs", "value": 2 },
+            { "type": "set", "field": "flags.paranoid", "value": true },
+            { "type": "set", "field": "flags.crack_smoked", "value": true },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "set", "field": "flags.dilated_pupils", "value": true },
+            { "type": "animate", "value": "crack" }
+          ]
+        },
+        {
+          "text": "Buy a dime to take home",
+          "nextNode": "bought",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -50 },
+            { "type": "set", "field": "flags.has_stash", "value": true }
+          ]
+        },
+        {
+          "text": "Dealer eyes your pocket...",
+          "nextNode": "shakedown",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -200 },
+            { "type": "set", "field": "flags.injury", "value": true },
+            { "type": "add", "field": "suspicion", "value": 20 }
+          ]
+        },
+        { "text": "Nope, wrong house", "nextNode": "wrong_house" }
+      ]
+    },
+
+    "smoked": {
+      "id": "smoked",
+      "text": "",
+      "beats": [
+        { "text": "*click* *fzzzz* *huff*", "mouth": "shock" },
+        { "speaker": "Dad", "text": "I can hear my heartbeat. I can hear YOUR heartbeat.", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "speaker": "Dealer", "text": "Sit down before you bite your tongue off, suburb.", "mouth": "smirk" },
+        { "text": "The cat is gone. Was there a cat. There was a cat. The cat was lying.", "mouth": "neutral", "eyes": "wide" }
+      ]
+    },
+
+    "bought": {
+      "id": "bought",
+      "text": "",
+      "beats": [
+        { "speaker": "Dealer", "text": "Don't smoke that here. Don't show it to anybody. Don't call me.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "Cool, cool, cool. Got it. Cool.", "mouth": "frown", "eyes": "wide" }
+      ]
+    },
+
+    "shakedown": {
+      "id": "shakedown",
+      "text": "",
+      "beats": [
+        { "text": "RayRay is suddenly between you and the door. Jim is suddenly more awake than he was. Math is happening fast.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Dealer", "text": "Donation to the house. Appreciate you.", "mouth": "smirk" },
+        { "text": "You wake up on the sidewalk. Your wallet is empty. Your elbow hurts.", "mouth": "frown" }
+      ],
+      "exitScene": "sidewalk"
+    },
+
+    "wrong_house": {
+      "id": "wrong_house",
+      "text": "He nods once, very slowly. You back out the way you came in. The cat returns."
+    }
+  }
+}

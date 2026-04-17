@@ -42,7 +42,7 @@ export class WifeTexts {
     { at: 435,  body: "Morning! Charcoal (Kingsford!), buns, and the lawn. Party at 5. Love you" },
     { at: 600,  body: "Getting the charcoal today right? Kingsford NOT the cheap stuff" },
     { at: 750,  body: "How's the lawn coming?" },
-    { at: 840,  body: "My mom's coming at 4. PLEASE have the lawn done." },
+    { at: 840,  body: "My mom's coming at 5. PLEASE have the lawn done." },
     { at: 930,  body: (s: any) =>
         (s.flags.lawnStatus as number) > 80
           ? "Lawn looks great!"

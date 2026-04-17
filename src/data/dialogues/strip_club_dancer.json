@@ -1,0 +1,79 @@
+{
+  "id": "strip_club_dancer",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "She's mid-routine. The pole knows her better than anyone in her life, probably.", "mouth": "neutral" },
+        { "speaker": "Amber", "text": "Hey, suit.", "mouth": "pouty", "eyes": "sultry" },
+        { "speaker": "Dad", "text": "It's a polo, actually. From... the outlet store.", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Amber", "text": "Cute.", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Tip her $20",
+          "nextNode": "warmed_up",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -20 },
+            { "type": "set", "field": "flags.lipstick", "value": true }
+          ]
+        },
+        {
+          "text": "Make small talk",
+          "nextNode": "she_opens_up",
+          "effects": [
+            { "type": "set", "field": "flags.amber_met", "value": true }
+          ]
+        },
+        {
+          "text": "Ask about the back",
+          "nextNode": "to_vip",
+          "conditions": [{ "field": "flags.amber_met", "op": "==", "value": true }]
+        },
+        { "text": "Walk away", "nextNode": "close" }
+      ]
+    },
+
+    "warmed_up": {
+      "id": "warmed_up",
+      "text": "",
+      "beats": [
+        { "speaker": "Amber", "text": "Mmm. Look at you.", "mouth": "pouty", "eyes": "sultry" },
+        { "text": "She leans down. The lipstick on your collar is going to be a whole forensic situation later.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "I have a wife.", "mouth": "frown", "eyes": "wide" },
+        { "speaker": "Amber", "text": "I know, baby. We all do.", "mouth": "smirk" }
+      ]
+    },
+
+    "she_opens_up": {
+      "id": "she_opens_up",
+      "text": "",
+      "beats": [
+        { "speaker": "Amber", "text": "Slow night. Tuesdays, you know.", "mouth": "neutral", "eyes": "lidded" },
+        { "speaker": "Dad", "text": "It's, uh — it's Saturday.", "mouth": "neutral", "eyebrows": "raised" },
+        { "speaker": "Amber", "text": "Is it. Huh.", "mouth": "smirk" },
+        { "text": "She sits at the edge of the stage. The music keeps going without her.", "mouth": "neutral" },
+        { "speaker": "Amber", "text": "Got a kid. Three. Want to be a vet someday. Animals don't ask questions.", "mouth": "neutral", "eyes": "lidded" },
+        { "speaker": "Dad", "text": "...that's a good dream.", "mouth": "smile", "eyebrows": "worried" }
+      ]
+    },
+
+    "to_vip": {
+      "id": "to_vip",
+      "text": "",
+      "beats": [
+        { "speaker": "Amber", "text": "The back. Sure.", "mouth": "smirk", "eyes": "sultry" },
+        { "text": "She slides off the stage and tilts her head toward a curtain in the corner.", "mouth": "neutral" },
+        { "speaker": "Amber", "text": "Come on, polo.", "mouth": "pouty" }
+      ],
+      "exitScene": "strip_club_vip"
+    },
+
+    "close": {
+      "id": "close",
+      "text": "You drift back into the crowd. She's already looking past you."
+    }
+  }
+}

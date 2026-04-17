@@ -194,6 +194,7 @@ export class GameScene extends Phaser.Scene {
   // Confrontation tracking
   private confrontationFired = false;
   private debugHud!: DebugHud;
+  private bbqTickAccum = 0;
   private forcedBBQ = false;
 
   // Track which scenes have had their enter dialogue fired
@@ -442,6 +443,17 @@ export class GameScene extends Phaser.Scene {
     // Update player movement — pass active consumption animation if any
     const consumption = this.reg.playerState.getActiveConsumption();
     this.player.update(delta, this.reg.playerState.state, consumption);
+
+    // Auto-tick the clock at BBQ so the game always reaches 7 PM and
+    // resolves to an ending. 1 game minute per real second — BBQ is
+    // ~2 real minutes if the player idles.
+    if (this.reg.timeClock.isBBQTime && !this.reg.timeClock.isGameOver) {
+      this.bbqTickAccum += delta / 1000;
+      while (this.bbqTickAccum >= 1) {
+        this.bbqTickAccum -= 1;
+        this.reg.timeClock.advance(1);
+      }
+    }
 
     // While a consumption animation is playing, fade the dialogue panel so
     // the player can see Dad chugging / smoking / etc. (instead of it being

@@ -63,6 +63,8 @@ export interface CharacterConfig {
   tilt?: number;
   /** Torso rendered as bare skin (Dad got robbed of his shirt). */
   shirtless?: boolean;
+  /** Extra-pronounced hip + glute curve behind the character. */
+  curvy?: boolean;
 
   // BACKWARD COMPAT (mapped to eyes field internally)
   shades?: boolean;
@@ -364,16 +366,30 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     gfx.lineBetween(cx - 2 * s, torsoY + 4 * s, cx + 2 * s, torsoY + 4 * s);
     // Hip flare triangles at the bottom of the torso
     gfx.fillStyle(effectiveShirt);
+    const flareExtra = config.curvy ? 2 * s : 0;
     gfx.fillTriangle(
       cx - torsoW / 2, torsoY + torsoH - 2 * s,
-      cx - hipW / 2, torsoY + torsoH,
+      cx - hipW / 2 - flareExtra, torsoY + torsoH,
       cx - torsoW / 2, torsoY + torsoH,
     );
     gfx.fillTriangle(
       cx + torsoW / 2, torsoY + torsoH - 2 * s,
-      cx + hipW / 2, torsoY + torsoH,
+      cx + hipW / 2 + flareExtra, torsoY + torsoH,
       cx + torsoW / 2, torsoY + torsoH,
     );
+    // Curvy: extra rounded hip/glute bumps in the pants color,
+    // sitting just below the torso on each side. Reads as exaggerated
+    // hips in front view.
+    if (config.curvy) {
+      const pantsColor = config.pants ?? 0x4a5568;
+      gfx.fillStyle(pantsColor);
+      const bumpY = torsoY + torsoH;
+      const bumpW = (hipW + flareExtra * 2) + 3 * s;
+      gfx.fillEllipse(cx, bumpY + 1 * s, bumpW, 5 * s);
+      // Subtle shadow line down the middle for curve separation
+      gfx.lineStyle(0.5 * s, 0x000000, 0.25);
+      gfx.lineBetween(cx, bumpY - 1 * s, cx, bumpY + 3 * s);
+    }
   }
 
   // ── Arms (animated: walk swing or idle sway) ──────────────

@@ -277,7 +277,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
       {
         id: 'kids_house',
-        label: "Kid's Porch",
+        label: "Tamika's Porch",
         x: 550,
         radius: 35,
         action: { type: 'scene', sceneId: 'kids_porch', timeCost: 5 },

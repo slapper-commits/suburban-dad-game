@@ -154,6 +154,94 @@ export function setSceneAnimTime(seconds: number): void {
   _sceneAnimTime = seconds;
 }
 
+// ============================================================
+// Pixel font — 3×5 monospace for signage
+// ============================================================
+
+const FONT_3x5: Record<string, string[]> = {
+  'A': ['010','101','111','101','101'],
+  'B': ['110','101','110','101','110'],
+  'C': ['011','100','100','100','011'],
+  'D': ['110','101','101','101','110'],
+  'E': ['111','100','110','100','111'],
+  'F': ['111','100','110','100','100'],
+  'G': ['011','100','101','101','011'],
+  'H': ['101','101','111','101','101'],
+  'I': ['111','010','010','010','111'],
+  'J': ['001','001','001','101','010'],
+  'K': ['101','101','110','101','101'],
+  'L': ['100','100','100','100','111'],
+  'M': ['101','111','111','101','101'],
+  'N': ['101','111','111','111','101'],
+  'O': ['010','101','101','101','010'],
+  'P': ['110','101','110','100','100'],
+  'Q': ['010','101','101','111','011'],
+  'R': ['110','101','110','110','101'],
+  'S': ['011','100','010','001','110'],
+  'T': ['111','010','010','010','010'],
+  'U': ['101','101','101','101','111'],
+  'V': ['101','101','101','101','010'],
+  'W': ['101','101','111','111','101'],
+  'X': ['101','101','010','101','101'],
+  'Y': ['101','101','010','010','010'],
+  'Z': ['111','001','010','100','111'],
+  '0': ['010','101','101','101','010'],
+  '1': ['010','110','010','010','111'],
+  '2': ['110','001','010','100','111'],
+  '3': ['110','001','010','001','110'],
+  '4': ['101','101','111','001','001'],
+  '5': ['111','100','110','001','110'],
+  '6': ['011','100','110','101','010'],
+  '7': ['111','001','010','010','010'],
+  '8': ['010','101','010','101','010'],
+  '9': ['010','101','011','001','110'],
+  "'": ['010','010','000','000','000'],
+  '.': ['000','000','000','000','010'],
+  '!': ['010','010','010','000','010'],
+  '?': ['110','001','010','000','010'],
+  '$': ['011','110','010','011','110'],
+  '&': ['010','101','010','111','011'],
+  ' ': ['000','000','000','000','000'],
+  '-': ['000','000','111','000','000'],
+  ':': ['000','010','000','010','000'],
+};
+
+/**
+ * Render uppercase pixel text at (x, y) with the top-left of the first glyph.
+ * Each glyph is 3 cols × 5 rows. `scale` multiplies pixel size. Letters are
+ * separated by a 1-pixel (scaled) gap.
+ */
+export function drawPixelText(
+  gfx: Phaser.GameObjects.Graphics,
+  x: number,
+  y: number,
+  text: string,
+  scale: number = 2,
+  color: number = 0xffffff,
+  alpha: number = 1,
+): void {
+  const chars = text.toUpperCase().split('');
+  gfx.fillStyle(color, alpha);
+  let cx = x;
+  for (const c of chars) {
+    const pat = FONT_3x5[c] ?? FONT_3x5[' '];
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (pat[row][col] === '1') {
+          gfx.fillRect(cx + col * scale, y + row * scale, scale, scale);
+        }
+      }
+    }
+    cx += 4 * scale;   // 3 col glyph + 1 col gap
+  }
+}
+
+/** Returns the pixel width of `text` rendered with drawPixelText at `scale`. */
+export function pixelTextWidth(text: string, scale: number = 2): number {
+  if (text.length === 0) return 0;
+  return text.length * 4 * scale - scale;  // drop the trailing gap
+}
+
 /**
  * Draw an NPC from the registry at the given position.
  * Usage: drawNpc(gfx, 'doug', 335, GROUND_Y)
@@ -708,8 +796,53 @@ export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState)
     gfx.fillCircle(507, GROUND_Y - 4, 3);
   }
 
-  // Background person (jogger) — pushed further back behind Doug's house
-  drawTinyPerson(gfx, 770, GROUND_Y, 0x4488cc, 0.35);
+  // ── Tamika's porch visible across the way (up-right, distant) ──
+  // A small snippet of her coral-stucco porch peeks past Doug's house
+  // to signal "she's right over there on the sidewalk". Sit her on the
+  // chaise with her pink flamingo so it's unmistakably Tamika.
+  {
+    const tpx = 748;                 // distant porch anchor X
+    const tpy = GROUND_Y - 42;       // elevated (further back in perspective)
+    // Stucco wall corner peeking out
+    gfx.fillStyle(0xf0c8a8);
+    gfx.fillRect(tpx, tpy - 50, 52, 50);
+    // Terracotta roof edge
+    gfx.fillStyle(0xb45a2a);
+    gfx.fillRect(tpx - 2, tpy - 58, 56, 10);
+    // Porch deck
+    gfx.fillStyle(0xc0a088);
+    gfx.fillRect(tpx - 8, tpy, 60, 6);
+    // Railing
+    gfx.lineStyle(1, 0x8a7055);
+    gfx.lineBetween(tpx - 8, tpy - 10, tpx - 8, tpy);
+    gfx.lineBetween(tpx + 52, tpy - 10, tpx + 52, tpy);
+    gfx.lineBetween(tpx - 8, tpy - 10, tpx + 52, tpy - 10);
+    // Pink flamingo out front
+    gfx.fillStyle(0xff6b9d);
+    gfx.fillRect(tpx - 4, tpy + 6, 1, 9);
+    gfx.fillEllipse(tpx - 3, tpy + 4, 6, 3);
+    gfx.fillCircle(tpx - 1, tpy + 1, 1);
+    // Chaise lounge sliver
+    gfx.fillStyle(0xffd4a0);
+    gfx.fillRect(tpx + 8, tpy - 4, 30, 3);
+    gfx.fillRect(tpx + 30, tpy - 14, 10, 10);
+    // Tamika silhouette on the chaise — dark skin, pink top, shades
+    //   Head
+    gfx.fillStyle(0x6a3a1a);
+    gfx.fillCircle(tpx + 33, tpy - 16, 3);
+    //   Shades
+    gfx.fillStyle(0x111111);
+    gfx.fillRect(tpx + 31, tpy - 17, 5, 1);
+    //   Hot pink top
+    gfx.fillStyle(0xff6b9d);
+    gfx.fillRect(tpx + 15, tpy - 11, 20, 5);
+    //   Curvy lower body
+    gfx.fillStyle(0xf5d4a0);
+    gfx.fillEllipse(tpx + 22, tpy - 5, 18, 4);
+    //   Hair puff behind head
+    gfx.fillStyle(0x1a1a1a);
+    gfx.fillCircle(tpx + 31, tpy - 17, 2);
+  }
 }
 
 export function drawGarage(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
@@ -1231,41 +1364,95 @@ export function drawKidsPorch(gfx: Phaser.GameObjects.Graphics, state: DadState)
   const time = state.currentTime;
   drawOutdoorBase(gfx, time, 0x5a9e3a);
 
-  // Modest house
-  gfx.fillStyle(0xb8a898);
+  // Stucco ranch house (pale coral — Florida vibes)
+  gfx.fillStyle(0xf0c8a8);
   gfx.fillRect(30, GROUND_Y - 120, 170, 120);
-  // Roof
-  gfx.fillStyle(0x6a5a4a);
+  // Terracotta tile roof
+  gfx.fillStyle(0xb45a2a);
   gfx.fillRect(20, GROUND_Y - 140, 190, 25);
-  // Door
-  gfx.fillStyle(0x5a4a3a);
+  gfx.lineStyle(1, 0x7a3a14, 0.5);
+  for (let i = 0; i < 8; i++) {
+    gfx.lineBetween(20 + i * 25, GROUND_Y - 140, 20 + i * 25, GROUND_Y - 115);
+  }
+  // Door — teal
+  gfx.fillStyle(0x3a8a8a);
   gfx.fillRect(90, GROUND_Y - 48, 30, 48);
-  // Windows
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(113, GROUND_Y - 24, 2);
+  // Windows (with pink drapes visible)
   gfx.fillStyle(0x87ceeb);
   gfx.fillRect(45, GROUND_Y - 95, 30, 25);
   gfx.fillRect(140, GROUND_Y - 95, 30, 25);
+  gfx.fillStyle(0xff99b8, 0.6);
+  gfx.fillRect(45, GROUND_Y - 95, 7, 25);
+  gfx.fillRect(68, GROUND_Y - 95, 7, 25);
+  gfx.fillRect(140, GROUND_Y - 95, 7, 25);
+  gfx.fillRect(163, GROUND_Y - 95, 7, 25);
 
-  // Raised porch platform
-  gfx.fillStyle(0x8a7a6a);
-  gfx.fillRect(250, GROUND_Y - 15, 200, 15);
+  // Raised porch platform — painted wood
+  gfx.fillStyle(0xc0a088);
+  gfx.fillRect(250, GROUND_Y - 15, 240, 15);
   // Porch railing
-  gfx.lineStyle(2, 0x6a5a4a);
-  gfx.lineBetween(250, GROUND_Y - 40, 250, GROUND_Y - 15);
-  gfx.lineBetween(450, GROUND_Y - 40, 450, GROUND_Y - 15);
-  gfx.lineBetween(250, GROUND_Y - 40, 450, GROUND_Y - 40);
+  gfx.lineStyle(2, 0x8a7055);
+  gfx.lineBetween(250, GROUND_Y - 42, 250, GROUND_Y - 15);
+  gfx.lineBetween(490, GROUND_Y - 42, 490, GROUND_Y - 15);
+  gfx.lineBetween(250, GROUND_Y - 42, 490, GROUND_Y - 42);
+  // Post caps
+  gfx.fillStyle(0x8a7055);
+  gfx.fillRect(248, GROUND_Y - 46, 6, 4);
+  gfx.fillRect(488, GROUND_Y - 46, 6, 4);
 
-  // Energy drink cans scattered
-  gfx.fillStyle(0x33cc33);
-  gfx.fillRect(280, GROUND_Y - 20, 4, 6);
-  gfx.fillRect(310, GROUND_Y - 20, 4, 6);
-  gfx.fillRect(350, GROUND_Y - 20, 4, 6);
-  gfx.fillRect(390, GROUND_Y - 20, 4, 6);
-  // One knocked over
-  gfx.fillRect(420, GROUND_Y - 18, 6, 4);
+  // Pink flamingo lawn statue out front
+  gfx.fillStyle(0xff6b9d);
+  gfx.fillRect(215, GROUND_Y - 28, 3, 28);   // leg
+  gfx.fillEllipse(218, GROUND_Y - 32, 14, 8); // body
+  gfx.fillCircle(225, GROUND_Y - 38, 2);     // head
+  gfx.fillStyle(0xd44a7a);
+  gfx.fillRect(226, GROUND_Y - 38, 3, 1.5);  // beak
 
-  // The Kid NPC (conditional: time >= 720)
+  // Potted palm on the porch
+  gfx.fillStyle(0x5a2a1a);
+  gfx.fillRect(260, GROUND_Y - 30, 14, 15);
+  gfx.fillStyle(0x2a6a2a);
+  gfx.fillTriangle(267, GROUND_Y - 30, 253, GROUND_Y - 48, 281, GROUND_Y - 48);
+  gfx.fillTriangle(267, GROUND_Y - 30, 247, GROUND_Y - 42, 287, GROUND_Y - 42);
+
+  // Chaise lounge for Tamika (visible beneath her feet)
+  gfx.fillStyle(0xffd4a0);
+  gfx.fillRect(315, GROUND_Y - 18, 80, 6);
+  gfx.fillStyle(0xf5c089);
+  gfx.fillRect(315, GROUND_Y - 18, 80, 2);
+  // Chaise legs
+  gfx.fillStyle(0x555555);
+  gfx.fillRect(320, GROUND_Y - 12, 2, 12);
+  gfx.fillRect(390, GROUND_Y - 12, 2, 12);
+  // Raised back of chaise
+  gfx.fillStyle(0xffd4a0);
+  gfx.fillRect(368, GROUND_Y - 40, 26, 22);
+
+  // Iced tea glass on a little side table
+  gfx.fillStyle(0x8a6a4a);
+  gfx.fillRect(420, GROUND_Y - 22, 20, 22);
+  gfx.fillStyle(0xc89068);
+  gfx.fillRect(420, GROUND_Y - 24, 20, 3);
+  gfx.fillStyle(0xd49a3a, 0.7);
+  gfx.fillRect(426, GROUND_Y - 34, 8, 12);
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(427, GROUND_Y - 34, 6, 2);
+
+  // "TAMIKA" name plaque above the door
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(94, GROUND_Y - 56, 22, 6);
+  {
+    const label = 'TAMIKA';
+    const scale = 1;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 94 + (22 - tw) / 2, GROUND_Y - 55, label, scale, 0x6a3a1a);
+  }
+
+  // Tamika herself, lounging on the chaise (conditional: time >= 720)
   if (time >= 720) {
-    drawNpc(gfx, 'the_kid', 340, GROUND_Y - 15);
+    drawNpc(gfx, 'the_kid', 360, GROUND_Y - 15);
   }
 }
 
@@ -1285,9 +1472,19 @@ export function drawQuikstop(gfx: Phaser.GameObjects.Graphics, state: DadState):
   // Store door
   gfx.fillStyle(0x555555);
   gfx.fillRect(290, GROUND_Y - 60, 30, 60);
-  // QUIKSTOP sign
+  // QUIKSTOP sign — red backer, yellow pinstripe, bold white letters
   gfx.fillStyle(0xcc3333);
-  gfx.fillRect(150, GROUND_Y - 135, 200, 18);
+  gfx.fillRect(150, GROUND_Y - 138, 220, 24);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillRect(150, GROUND_Y - 140, 220, 3);
+  gfx.fillRect(150, GROUND_Y - 116, 220, 3);
+  // "QUIK-STOP" in 3x5 pixel font, centered on the backer
+  {
+    const label = 'QUIK-STOP';
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 150 + (220 - tw) / 2, GROUND_Y - 134, label, scale, 0xffffff);
+  }
   // Fluorescent glow from windows
   gfx.fillStyle(0xf0f0e0, 0.15);
   gfx.fillRect(120, GROUND_Y - 100, 150, 60);
@@ -1333,9 +1530,17 @@ export function drawGasStation(gfx: Phaser.GameObjects.Graphics, state: DadState
   gfx.fillRect(50, GROUND_Y - 80, 80, 40);
   gfx.fillStyle(0x555555);
   gfx.fillRect(145, GROUND_Y - 50, 25, 50);
-  // Store sign
+  // Store sign — blue backer with white "DAVE'S GAS"
   gfx.fillStyle(0x3a7bc8);
-  gfx.fillRect(50, GROUND_Y - 115, 140, 12);
+  gfx.fillRect(50, GROUND_Y - 120, 140, 18);
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(50, GROUND_Y - 122, 140, 2);
+  {
+    const label = "DAVE'S GAS";
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 50 + (140 - tw) / 2, GROUND_Y - 117, label, scale, 0xffffff);
+  }
 
   // Player's minivan — parked to the right of the store (zone at x=250)
   drawMinivan(gfx, 250, GROUND_Y);
@@ -1400,23 +1605,38 @@ export function drawGasStation(gfx: Phaser.GameObjects.Graphics, state: DadState
     drawNpc(gfx, 'sharon', 500, GROUND_Y);
   }
 
-  // Motel sign (right side) — visible once prostitution vice started
+  // Sunset Motel sign (right side) — visible once prostitution vice started
   if ((state.vices.prostitution ?? 0) >= 1 && suspicion < 70) {
     // Sign post
     gfx.fillStyle(0x444444);
-    gfx.fillRect(547, GROUND_Y - 120, 4, 120);
+    gfx.fillRect(547, GROUND_Y - 130, 4, 130);
     // Sign — red background
     gfx.fillStyle(0xcc2233);
-    gfx.fillRect(525, GROUND_Y - 130, 50, 22);
-    // Neon "MOTEL"
+    gfx.fillRect(518, GROUND_Y - 140, 64, 30);
     const blink = Math.floor(tNow * 3) % 3 !== 0;
-    gfx.fillStyle(0xffffaa, blink ? 0.95 : 0.4);
-    gfx.fillRect(528, GROUND_Y - 125, 44, 4);
-    gfx.fillStyle(0xffffaa, blink ? 0.9 : 0.3);
-    gfx.fillRect(530, GROUND_Y - 117, 40, 4);
-    // "VACANCY" hint below
-    gfx.fillStyle(0x66cc66);
-    gfx.fillRect(530, GROUND_Y - 105, 40, 3);
+    // "SUNSET" line
+    {
+      const scale = 1;
+      const label = 'SUNSET';
+      const tw = pixelTextWidth(label, scale);
+      drawPixelText(gfx, 518 + (64 - tw) / 2, GROUND_Y - 137, label, scale, 0xffffaa, blink ? 0.95 : 0.45);
+    }
+    // "MOTEL" line
+    {
+      const scale = 1;
+      const label = 'MOTEL';
+      const tw = pixelTextWidth(label, scale);
+      drawPixelText(gfx, 518 + (64 - tw) / 2, GROUND_Y - 127, label, scale, 0xffffaa, blink ? 0.9 : 0.35);
+    }
+    // "VACANCY" tag below
+    gfx.fillStyle(0x1a3a1a);
+    gfx.fillRect(521, GROUND_Y - 118, 58, 10);
+    {
+      const scale = 1;
+      const label = 'VACANCY';
+      const tw = pixelTextWidth(label, scale);
+      drawPixelText(gfx, 521 + (58 - tw) / 2, GROUND_Y - 115, label, scale, 0x66ff66);
+    }
   }
 
   // Kevin pitches everyone, even at gas stations
@@ -1441,7 +1661,14 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0xd4a0b0);
   gfx.fillRect(80, GROUND_Y - 120, 150, 120);
   gfx.fillStyle(0xcc6688);
-  gfx.fillRect(80, GROUND_Y - 130, 150, 14);
+  gfx.fillRect(80, GROUND_Y - 132, 150, 18);
+  // "LUCKY NAILS" sign text
+  {
+    const label = 'LUCKY NAILS';
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 80 + (150 - tw) / 2, GROUND_Y - 128, label, scale, 0xffffff);
+  }
   // Window
   gfx.fillStyle(0x87ceeb, 0.6);
   gfx.fillRect(100, GROUND_Y - 90, 60, 40);
@@ -1449,18 +1676,19 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0x555555);
   gfx.fillRect(180, GROUND_Y - 50, 25, 50);
 
-  // Store 2 — Pawn Shop (yellow facade with BIG "PAWN" sign)
+  // Store 2 — Tony's Pawn (yellow facade with red PAWN sign)
   gfx.fillStyle(0xd4c870);
   gfx.fillRect(230, GROUND_Y - 120, 150, 120);
   gfx.fillStyle(0xb8a840);
-  gfx.fillRect(230, GROUND_Y - 130, 150, 14);
-  // PAWN sign — red background, black letters
+  gfx.fillRect(230, GROUND_Y - 132, 150, 18);
+  // PAWN sign — red backer, white letters
   gfx.fillStyle(0xcc2222);
-  gfx.fillRect(240, GROUND_Y - 128, 130, 10);
-  gfx.fillStyle(0x111111);
-  // Crude "PAWN" letter blocks
-  for (let i = 0; i < 4; i++) {
-    gfx.fillRect(248 + i * 30, GROUND_Y - 126, 22, 6);
+  gfx.fillRect(235, GROUND_Y - 130, 140, 14);
+  {
+    const label = "TONY'S PAWN";
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 235 + (140 - tw) / 2, GROUND_Y - 127, label, scale, 0xffffff);
   }
   // Window with "$" sign
   gfx.fillStyle(0x87ceeb, 0.6);
@@ -1482,7 +1710,13 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0xe8e8e8);
   gfx.fillRect(380, GROUND_Y - 120, 150, 120);
   gfx.fillStyle(0xcc3333);
-  gfx.fillRect(380, GROUND_Y - 130, 150, 14);
+  gfx.fillRect(380, GROUND_Y - 132, 150, 18);
+  {
+    const label = 'KARATE DOJO';
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 380 + (150 - tw) / 2, GROUND_Y - 128, label, scale, 0xffffff);
+  }
   // Window
   gfx.fillStyle(0x87ceeb, 0.6);
   gfx.fillRect(400, GROUND_Y - 90, 60, 40);
@@ -1501,12 +1735,16 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
     // Blacked-out window
     gfx.fillStyle(0x111111);
     gfx.fillRect(550, GROUND_Y - 90, 60, 40);
-    // Animated hot-pink neon "PURRRPLE" bar (with a heart glyph)
-    const blink = Math.floor(time * 3) % 4 !== 0; // flicker
-    gfx.fillStyle(0xff3388, blink ? 0.95 : 0.5);
-    gfx.fillRect(545, GROUND_Y - 115, 90, 10);
-    gfx.fillStyle(0xff99cc, blink ? 0.9 : 0.4);
-    gfx.fillRect(547, GROUND_Y - 113, 86, 6);
+    // Animated hot-pink neon "PURRRPLE" sign (with flicker)
+    const blink = Math.floor(time * 3) % 4 !== 0;
+    gfx.fillStyle(0x3a0a3a);
+    gfx.fillRect(535, GROUND_Y - 128, 110, 16);
+    {
+      const label = 'PURRRPLE';
+      const scale = 2;
+      const tw = pixelTextWidth(label, scale);
+      drawPixelText(gfx, 535 + (110 - tw) / 2, GROUND_Y - 125, label, scale, 0xff3388, blink ? 0.95 : 0.55);
+    }
     // Heart silhouette glyph on the facade
     gfx.fillStyle(0xff66aa, blink ? 0.9 : 0.4);
     gfx.fillCircle(570, GROUND_Y - 70, 5);
@@ -2226,20 +2464,35 @@ export function drawMotelExterior(gfx: Phaser.GameObjects.Graphics, state: DadSt
     gfx.strokeRect(wx, GROUND_Y - 150, 30, 40);
   }
 
-  // Large "MOTEL" neon sign on pole (left side)
+  // Large "SUNSET MOTEL" neon sign on pole (left side)
   gfx.fillStyle(0x444444);
-  gfx.fillRect(130, GROUND_Y - 170, 4, 170);
-  // Sign board red
+  gfx.fillRect(130, GROUND_Y - 180, 4, 180);
+  // Sign board — red with yellow pinstripes
   gfx.fillStyle(0xcc2233);
-  gfx.fillRect(85, GROUND_Y - 180, 94, 38);
-  // Neon letters (animated blink)
+  gfx.fillRect(62, GROUND_Y - 200, 140, 60);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillRect(62, GROUND_Y - 200, 140, 3);
+  gfx.fillRect(62, GROUND_Y - 143, 140, 3);
+  // "SUNSET" and "MOTEL" neon (animated blink)
   const blink = Math.floor(time * 3) % 3 !== 0;
-  gfx.fillStyle(0xffffaa, blink ? 0.95 : 0.4);
-  gfx.fillRect(93, GROUND_Y - 175, 76, 6);
-  gfx.fillStyle(0xffffaa, blink ? 0.9 : 0.3);
-  gfx.fillRect(99, GROUND_Y - 162, 66, 5);
-  gfx.fillStyle(0x66cc66);
-  gfx.fillRect(95, GROUND_Y - 150, 76, 4);
+  {
+    const scale = 2;
+    const label1 = 'SUNSET';
+    const tw1 = pixelTextWidth(label1, scale);
+    drawPixelText(gfx, 62 + (140 - tw1) / 2, GROUND_Y - 192, label1, scale, 0xffffaa, blink ? 0.95 : 0.4);
+    const label2 = 'MOTEL';
+    const tw2 = pixelTextWidth(label2, scale);
+    drawPixelText(gfx, 62 + (140 - tw2) / 2, GROUND_Y - 174, label2, scale, 0xffffaa, blink ? 0.95 : 0.4);
+  }
+  // "VACANCY" tab below the board
+  gfx.fillStyle(0x1a1a1a);
+  gfx.fillRect(82, GROUND_Y - 140, 100, 14);
+  {
+    const label = 'VACANCY';
+    const scale = 2;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, 82 + (100 - tw) / 2, GROUND_Y - 137, label, scale, 0x66ff66);
+  }
 
   // Taco cart (center-left) — metallic cart + yellow canopy + steam
   const cx = 300;
@@ -2254,15 +2507,27 @@ export function drawMotelExterior(gfx: Phaser.GameObjects.Graphics, state: DadSt
   gfx.fillTriangle(cx - 50, GROUND_Y - 50, cx + 50, GROUND_Y - 50, cx, GROUND_Y - 100);
   // Canopy fringe
   gfx.fillRect(cx - 50, GROUND_Y - 50, 100, 4);
-  // TACOS sign (black letters block)
+  // "EL FUEGO" painted sign panel on the canopy lip
   gfx.fillStyle(0x222222);
-  gfx.fillRect(cx - 30, GROUND_Y - 78, 60, 12);
-  gfx.fillStyle(0xffffff);
-  gfx.fillRect(cx - 25, GROUND_Y - 74, 4, 4);
-  gfx.fillRect(cx - 17, GROUND_Y - 74, 4, 4);
-  gfx.fillRect(cx - 9, GROUND_Y - 74, 4, 4);
-  gfx.fillRect(cx - 1, GROUND_Y - 74, 4, 4);
-  gfx.fillRect(cx + 7, GROUND_Y - 74, 4, 4);
+  gfx.fillRect(cx - 44, GROUND_Y - 82, 88, 14);
+  gfx.fillStyle(0xffcc33);
+  gfx.fillRect(cx - 44, GROUND_Y - 82, 88, 2);
+  gfx.fillRect(cx - 44, GROUND_Y - 70, 88, 2);
+  {
+    const label = 'EL FUEGO';
+    const scale = 1;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, cx - tw / 2, GROUND_Y - 78, label, scale, 0xffcc33);
+  }
+  // Small "TACOS" sub-label on the cart body
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(cx - 20, GROUND_Y - 44, 40, 9);
+  {
+    const label = 'TACOS';
+    const scale = 1;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, cx - tw / 2, GROUND_Y - 42, label, scale, 0xffffff);
+  }
   // Steam puffs (animated)
   const puffT = time * 2;
   for (let i = 0; i < 3; i++) {

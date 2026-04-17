@@ -70,13 +70,19 @@ export const npcRegistry: Record<string, Partial<CharacterConfig>> = {
   },
 
   // ── Vice NPCs ─────────────────────────────────────────────
+  // Tamika from Tampa — the porch lady. Runs a lucrative side operation
+  // from her porch. Florida to the bone. Curvy on purpose.
   the_kid: {
-    shirt: 0x222222,    // hoodie
-    skin: 0xd4a878,
-    hair: 0x222222,
-    pants: 0x111111,
+    shirt: 0xff6b9d,    // hot pink top
+    skin: 0x6a3a1a,     // deep brown
+    hair: 0x1a1a1a,     // black braids
+    pants: 0xf5d4a0,    // cream linen shorts
     item: 'laptop',
     mouth: 'smirk',
+    eyes: 'shades',
+    eyebrows: 'raised',
+    bodyType: 'female',
+    curvy: true,
   },
   the_girls: {
     shirt: 0x9b6b9b,    // purple

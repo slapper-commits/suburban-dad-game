@@ -481,12 +481,13 @@ export class GameScene extends Phaser.Scene {
       this.dialogueChoices.forEach(c => c.setAlpha(targetAlpha));
     }
 
-    // Update interaction zones
-    if (!this.dialogueActive) {
-      this.updateInteractionZones();
-      this.checkEdgeTransitions(delta);
-      this.checkInteractInput();
-    }
+    // Update interaction zones — even while a dialogue is active, so the
+    // player can walk around, trigger a new zone (which closes the current
+    // dialogue), or drift across an edge. The dialogue panel is a
+    // non-intrusive overlay, not a modal.
+    this.updateInteractionZones();
+    this.checkEdgeTransitions(delta);
+    this.checkInteractInput();
 
     // Animated scene redraw — re-renders the background + NPCs each frame
     // so NPCs can idle-breathe, blink, sway.
@@ -554,12 +555,17 @@ export class GameScene extends Phaser.Scene {
       case 'dialogue': {
         const tree = this.dialogueMap[action.treeId];
         if (tree) {
-          this.player.freeze();
+          // If a dialogue is already open (player walked to a new NPC
+          // without closing the previous panel), close it cleanly first.
+          if (this.dialogueActive) {
+            this.reg.dialogueEngine.end();
+          }
           this.reg.dialogueEngine.start(tree);
         }
         break;
       }
       case 'scene': {
+        if (this.dialogueActive) this.reg.dialogueEngine.end();
         if (action.timeCost) {
           this.reg.timeClock.advance(action.timeCost);
           this.reg.playerState.recoverSobriety(action.timeCost);
@@ -568,12 +574,12 @@ export class GameScene extends Phaser.Scene {
         break;
       }
       case 'inspect': {
-        this.player.freeze();
+        if (this.dialogueActive) this.reg.dialogueEngine.end();
         this.showInspectText(action.text);
         break;
       }
       case 'conditional_inspect': {
-        this.player.freeze();
+        if (this.dialogueActive) this.reg.dialogueEngine.end();
         const match = action.routes.find(r =>
           this.reg.playerState.checkConditions(r.conditions)
         );
@@ -581,6 +587,7 @@ export class GameScene extends Phaser.Scene {
         break;
       }
       case 'minigame': {
+        if (this.dialogueActive) this.reg.dialogueEngine.end();
         this.launchMinigame(action.gameId);
         break;
       }
@@ -605,6 +612,8 @@ export class GameScene extends Phaser.Scene {
       this.edgeDwellTime += delta;
       if (this.edgeDwellTime >= EDGE_DWELL_TIME) {
         const edge = zoneConfig.edges[currentSide]!;
+        // Walking across a scene boundary closes any open dialogue panel.
+        if (this.dialogueActive) this.reg.dialogueEngine.end();
         if (edge.timeCost) {
           this.reg.timeClock.advance(edge.timeCost);
           this.reg.playerState.recoverSobriety(edge.timeCost);
@@ -685,7 +694,6 @@ export class GameScene extends Phaser.Scene {
         this.dialogueMap[sceneData.enterDialogue] &&
         !this.enteredScenes.has(sceneId)) {
       this.enteredScenes.add(sceneId);
-      this.player.freeze();
       this.reg.dialogueEngine.start(this.dialogueMap[sceneData.enterDialogue]);
     }
   }
@@ -1431,12 +1439,10 @@ export class GameScene extends Phaser.Scene {
 
   private showDialogueNode(node: DialogueNode, choices: DialogueChoice[], isEnd: boolean): void {
     this.dialogueActive = true;
-    this.player.freeze();
-
-    // Hide interaction zone prompts during dialogue
-    for (const zone of this.interactionZones) {
-      zone.hide();
-    }
+    // NOTE: player is NOT frozen — dialogue is a non-intrusive overlay.
+    // The player can keep walking around and even engage other zones, which
+    // cleanly closes this dialogue and opens the new one. Interaction zone
+    // prompts stay visible so the player can see their options.
 
     this.dialoguePanel.setVisible(true);
     this.dialogueSpeaker.setVisible(true);
@@ -1493,7 +1499,7 @@ export class GameScene extends Phaser.Scene {
 
   private hideDialogue(): void {
     this.dialogueActive = false;
-    this.player.unfreeze();
+    // Player was never frozen for dialogue — nothing to unfreeze here.
 
     this.dialoguePanel.setVisible(false);
     this.dialogueSpeaker.setVisible(false);

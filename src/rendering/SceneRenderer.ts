@@ -1266,14 +1266,45 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0x555555);
   gfx.fillRect(480, GROUND_Y - 50, 25, 50);
 
-  // Store 4 — Vacant (gray facade)
-  gfx.fillStyle(0x999999);
-  gfx.fillRect(530, GROUND_Y - 120, 120, 120);
-  gfx.fillStyle(0x777777);
-  gfx.fillRect(530, GROUND_Y - 130, 120, 14);
-  // Boarded window
-  gfx.fillStyle(0x8a6a4a);
-  gfx.fillRect(550, GROUND_Y - 90, 60, 40);
+  // Store 4 — Club Purrrple (opens at 9 AM) OR Vacant before then
+  const clubOpen = time >= 540;
+  if (clubOpen) {
+    // Dark purple facade, neon signage
+    gfx.fillStyle(0x2a0a2a);
+    gfx.fillRect(530, GROUND_Y - 120, 120, 120);
+    gfx.fillStyle(0x1a001a);
+    gfx.fillRect(530, GROUND_Y - 130, 120, 14);
+    // Blacked-out window
+    gfx.fillStyle(0x111111);
+    gfx.fillRect(550, GROUND_Y - 90, 60, 40);
+    // Animated hot-pink neon "PURRRPLE" bar (with a heart glyph)
+    const blink = Math.floor(time * 3) % 4 !== 0; // flicker
+    gfx.fillStyle(0xff3388, blink ? 0.95 : 0.5);
+    gfx.fillRect(545, GROUND_Y - 115, 90, 10);
+    gfx.fillStyle(0xff99cc, blink ? 0.9 : 0.4);
+    gfx.fillRect(547, GROUND_Y - 113, 86, 6);
+    // Heart silhouette glyph on the facade
+    gfx.fillStyle(0xff66aa, blink ? 0.9 : 0.4);
+    gfx.fillCircle(570, GROUND_Y - 70, 5);
+    gfx.fillCircle(580, GROUND_Y - 70, 5);
+    gfx.fillTriangle(564, GROUND_Y - 69, 586, GROUND_Y - 69, 575, GROUND_Y - 55);
+    // Door with "VIP" marker
+    gfx.fillStyle(0x1a1a1a);
+    gfx.fillRect(620, GROUND_Y - 50, 25, 50);
+    gfx.fillStyle(0xd4a020);
+    gfx.fillRect(625, GROUND_Y - 40, 15, 4);
+    // Mood light spill on the sidewalk
+    drawMoodLight(gfx, 630, GROUND_Y + 4, 0xff3388, 40);
+  } else {
+    // Vacant gray facade — club hasn't opened yet
+    gfx.fillStyle(0x999999);
+    gfx.fillRect(530, GROUND_Y - 120, 120, 120);
+    gfx.fillStyle(0x777777);
+    gfx.fillRect(530, GROUND_Y - 130, 120, 14);
+    // Boarded window
+    gfx.fillStyle(0x8a6a4a);
+    gfx.fillRect(550, GROUND_Y - 90, 60, 40);
+  }
 
   // Parked cars
   gfx.fillStyle(0x6b8cae);

@@ -468,6 +468,13 @@ export class GameScene extends Phaser.Scene {
     // Find the closest in-range zone
     for (const zone of this.interactionZones) {
       if (zone.inRange) {
+        // Skip zones whose visibility conditions fail (e.g. mow zone after
+        // lawnStatus reaches 100) — they're hidden on the UI but the in-range
+        // check would otherwise still trigger them on an E press.
+        if (zone.config.visibleWhen &&
+            !this.reg.playerState.checkConditions(zone.config.visibleWhen)) {
+          continue;
+        }
         // Check action conditions
         if (zone.config.conditions &&
             !this.reg.playerState.checkConditions(zone.config.conditions)) {

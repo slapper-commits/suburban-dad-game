@@ -519,10 +519,10 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       {
         id: 'club_entrance',
         label: 'Club Purrrple',
-        x: 600,
+        x: 620,
         radius: 40,
         action: { type: 'dialogue', treeId: 'strip_club_enter' },
-        visibleWhen: [{ field: 'currentTime', op: '>=', value: 660 }],
+        visibleWhen: [{ field: 'currentTime', op: '>=', value: 540 }],
       },
     ],
     edges: {

@@ -6,86 +6,148 @@
       "id": "router",
       "text": "",
       "routes": [
-        {
-          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "done" }],
-          "nextNode": "plate_ready"
-        },
-        {
-          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "burnt" }],
-          "nextNode": "plate_burnt"
-        },
-        {
-          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "cooking" }],
-          "nextNode": "still_cooking"
-        }
+        { "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "done" }], "nextNode": "plate_ready" },
+        { "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "burnt" }], "nextNode": "plate_burnt" },
+        { "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "cooking" }], "nextNode": "still_cooking" },
+        { "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "prepped" }], "nextNode": "late_prep" },
+        { "conditions": [{ "field": "flags.boughtCharcoal", "op": "==", "value": true }], "nextNode": "late_start" }
       ],
       "next": "no_food"
     },
+
     "plate_ready": {
       "id": "plate_ready",
-      "text": "The platter goes out. Golden-brown perfection. Guests descend like they haven't eaten in days.",
+      "text": "",
+      "beats": [
+        { "text": "The platter goes out. Golden-brown perfection. Guests descend like they haven't eaten in days.", "mouth": "grin" },
+        { "speaker": "Karen", "text": "\"These are... actually really good, David.\"", "mouth": "smile" }
+      ],
       "choices": [
-        {
-          "text": "Bask in the glory",
-          "nextNode": "bask",
-          "timeCost": 30
-        }
+        { "text": "Bask in the glory", "nextNode": "bask", "timeCost": 15 }
       ]
     },
+
     "plate_burnt": {
       "id": "plate_burnt",
-      "text": "You present the... burgers. Karen's face does something you'll see in your nightmares.",
+      "text": "",
+      "beats": [
+        { "text": "You present the... burgers. Karen's face does something you'll see in your nightmares.", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"They're... dark.\"", "mouth": "frown", "eyebrows": "angry" }
+      ],
       "choices": [
-        {
-          "text": "\"They're rustic!\"",
-          "nextNode": "bask",
-          "timeCost": 30
-        }
+        { "text": "\"They're rustic!\"", "nextNode": "bask", "timeCost": 15, "effects": [{ "type": "add", "field": "reputation", "value": -5 }] }
       ]
     },
+
     "still_cooking": {
       "id": "still_cooking",
-      "text": "Still cooking. Guests are getting hungry. The pressure mounts.",
+      "text": "",
+      "beats": [
+        { "text": "Still cooking. Guests are drifting closer. The MIL is timing this.", "mouth": "shock" }
+      ],
       "choices": [
         {
-          "text": "Flip attentively",
-          "nextNode": "emergency_flip",
-          "timeCost": 15,
-          "effects": [
-            { "type": "flag", "field": "grillStatus", "value": "done" },
-            { "type": "flag", "field": "grilledPerfectly", "value": true }
-          ]
+          "text": "Flip attentively — FLIP MINIGAME",
+          "nextNode": "grill_launch",
+          "timeCost": 5
         },
         {
           "text": "Get distracted by guests",
           "nextNode": "emergency_burn",
-          "timeCost": 20,
+          "timeCost": 15,
           "effects": [
             { "type": "flag", "field": "grillStatus", "value": "burnt" },
-            { "type": "flag", "field": "burnedBurgers", "value": true }
+            { "type": "flag", "field": "burnedBurgers", "value": true },
+            { "type": "add", "field": "reputation", "value": -15 }
           ]
         }
       ]
     },
-    "no_food": {
-      "id": "no_food",
-      "text": "There are no burgers. There is no charcoal. The grill is cold. The guests are ordering pizza.",
-      "effects": [
-        { "type": "add", "field": "suspicion", "value": 20 },
-        { "type": "add", "field": "reputation", "value": -20 }
+
+    "late_prep": {
+      "id": "late_prep",
+      "text": "",
+      "beats": [
+        { "text": "You show up. Coals are gray. The guests are staring at the grill like they're willing it to produce food.", "mouth": "neutral" },
+        { "speaker": "MIL", "text": "\"David. It's 5:30. People are HUNGRY.\"", "mouth": "frown", "eyebrows": "angry" }
+      ],
+      "choices": [
+        {
+          "text": "Start grilling NOW — FLIP MINIGAME",
+          "nextNode": "grill_launch",
+          "timeCost": 5,
+          "effects": [{ "type": "add", "field": "suspicion", "value": 5 }]
+        }
       ]
     },
-    "emergency_flip": {
-      "id": "emergency_flip",
-      "text": "You save the burgers just in time. Crisis averted."
+
+    "late_start": {
+      "id": "late_start",
+      "text": "",
+      "beats": [
+        { "text": "Bag of charcoal on the patio. Unopened. You haven't even lit the coals yet. It's 5:15 PM.", "mouth": "shock" },
+        { "speaker": "Greg (neighbor)", "text": "\"Need a hand with the fire, Dave?\"", "mouth": "smile" },
+        { "speaker": "Dad", "text": "\"I GOT it, Greg.\"", "mouth": "frown", "eyebrows": "angry" },
+        { "text": "Greg gives Karen a look. Karen gives you a look. Guests are hungry.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Build the fire in record time (15 min, +suspicion)",
+          "nextNode": "late_fire_built",
+          "timeCost": 15,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "prepped" },
+            { "type": "add", "field": "suspicion", "value": 10 },
+            { "type": "add", "field": "reputation", "value": -5 }
+          ]
+        }
+      ]
     },
+
+    "late_fire_built": {
+      "id": "late_fire_built",
+      "text": "",
+      "beats": [
+        { "text": "Coals are ash-gray in twenty minutes flat. A miracle. You pat yourself on the back. The MIL sees you pat yourself on the back.", "mouth": "grin" },
+        { "speaker": "Dad", "text": "\"Ready. Let's go.\"", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Start grilling — FLIP MINIGAME",
+          "nextNode": "grill_launch",
+          "timeCost": 5
+        }
+      ]
+    },
+
+    "grill_launch": {
+      "id": "grill_launch",
+      "text": "",
+      "exitScene": "MINIGAME:grill"
+    },
+
+    "no_food": {
+      "id": "no_food",
+      "text": "",
+      "beats": [
+        { "text": "There are no burgers. There is no charcoal. The grill is cold. The guests are ordering pizza.", "mouth": "frown" },
+        { "speaker": "MIL", "text": "\"A BBQ. With no BBQ.\"", "mouth": "frown", "eyebrows": "angry" },
+        { "speaker": "Karen", "text": "\"Mom. Please.\"", "mouth": "sleepy", "eyebrows": "worried" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 20 },
+        { "type": "add", "field": "reputation", "value": -25 }
+      ]
+    },
+
     "emergency_burn": {
       "id": "emergency_burn",
-      "text": "By the time you look back, it's too late. Smoke signals."
+      "text": "By the time you look back, it's too late. Smoke signals. Greg takes a photo."
     },
+
     "bask": {
       "id": "bask",
-      "text": "It's nearly 8. Karen is watching you from across the patio with an expression you can't quite read."
+      "text": "It's 5:45. Karen is watching you from across the patio with an expression you can't quite read."
     }
   }
 }

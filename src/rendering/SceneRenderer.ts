@@ -231,45 +231,27 @@ export function drawIntoxOverlay(gfx: Phaser.GameObjects.Graphics, sobrietyOrSta
   else if (sobriety < 60) { color = 0xd4a54a; alpha = 0.15; }
   else { color = 0xd4a54a; alpha = 0.08; }
 
-  // Drugs darken the world: psychedelic magenta wash + deeper vignette
+  // Drugs add a subtle magenta tint — NOT darken. Keep the scene readable.
   if (drugs >= 1) {
-    color = 0x9b4a9b;
-    alpha = Math.min(0.45, alpha + drugs * 0.08);
+    color = 0xcc66bb;
+    alpha = Math.min(0.14, 0.04 + drugs * 0.04);
   }
 
   gfx.fillStyle(color, alpha);
   gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
 
-  // Drug-level distortion: pulsing radial vignette that gets stronger
-  if (drugs >= 1) {
-    const pulseT = (performance.now() / 1000);
-    const pulse = Math.sin(pulseT * (0.6 + drugs * 0.4)) * 0.5 + 0.5;
-    const vignetteA = 0.15 + drugs * 0.12 + pulse * 0.08;
-    // Top + bottom darken bands
-    gfx.fillStyle(0x000000, vignetteA);
-    gfx.fillRect(0, 0, SCREEN_W, 40 + drugs * 20);
-    gfx.fillRect(0, SCREEN_H - (40 + drugs * 20), SCREEN_W, 40 + drugs * 20);
-    // Side darken bands
-    gfx.fillRect(0, 0, 30 + drugs * 15, SCREEN_H);
-    gfx.fillRect(SCREEN_W - (30 + drugs * 15), 0, 30 + drugs * 15, SCREEN_H);
-
-    // Deep drugs + low sobriety: color shift / chromatic ghost
-    if (drugs >= 2 && sobriety < 40) {
-      gfx.fillStyle(0xff66aa, 0.06 + pulse * 0.04);
-      gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
-      // "Crawl to the Ferrari" mode — tilted/stuttering narrow view
-      if (sobriety < 25) {
-        gfx.fillStyle(0x000000, 0.3);
-        gfx.fillEllipse(SCREEN_W / 2, SCREEN_H / 2, SCREEN_W * 1.3, SCREEN_H * 1.3);
-        gfx.fillStyle(0x110022, 0.25);
-        gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
-      }
-    }
+  // Only the extreme "crawl to the Ferrari" state adds a tunnel vision hint.
+  // Triggered only when vices.drugs >= 2 AND sobriety < 20 — a narrow window.
+  if (drugs >= 2 && sobriety < 20) {
+    const pulseT = performance.now() / 1000;
+    const pulse = Math.sin(pulseT * 1.2) * 0.5 + 0.5;
+    gfx.fillStyle(0xff77cc, 0.05 + pulse * 0.03);
+    gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
   }
 
-  // High suspicion tints everything a bit tense-red
-  if (suspicion >= 70) {
-    gfx.fillStyle(0xcc2222, 0.06);
+  // Suspicion tints slightly red — very subtle
+  if (suspicion >= 80) {
+    gfx.fillStyle(0xcc2222, 0.04);
     gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
   }
 }
@@ -1430,9 +1412,7 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0x2a4a2a);
   gfx.fillRect(690, GROUND_Y - 35, 50, 5);
 
-  // The Girls — always two of them at the alley
-  drawNpc(gfx, 'the_girls', 698, GROUND_Y);
-  drawNpc(gfx, 'candi', 724, GROUND_Y, { sz: 0.95 });
+  // (The Girls are at the SIDEWALK, not here. The alley is just an alley.)
 
   // Kevin NPC pitching outside (conditional: pyramid >= 1)
   if ((state.vices.pyramid ?? 0) >= 1) {

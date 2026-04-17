@@ -897,10 +897,22 @@ export class GameScene extends Phaser.Scene {
         this.reg.playerState.state.flags.cash_bulge = true;
       }
       this.reg.timeClock.advance(20);
-      const msg = earnings > 0
-        ? `You pocket $${earnings}. The fence slaps the hood of his Buick. 'Pleasure doin' business, khakis.'`
-        : `You came out empty-handed. The fence is already on his phone to someone more reliable.`;
-      this.showInspectText(msg);
+      const flavor: Record<string, [string, string]> = {
+        haggle_fence: [
+          `You pocket $${earnings}. The fence slaps the hood of his Buick. 'Pleasure doin' business, khakis.'`,
+          `You came out empty-handed. The fence is already on his phone to someone more reliable.`,
+        ],
+        haggle_pawn: [
+          `You pocket $${earnings}. The pawnbroker signs the receipt. 'Come back when you've got more grandpas, chief.'`,
+          `You walked out with less dignity than you walked in with. The pawnbroker's crossword is still on HUBRIS.`,
+        ],
+        haggle_tony: [
+          `You pocket $${earnings}. Tony nods. 'Knew you had it in you, Khaki King.'`,
+          `Tony's pinkie ring glints as he shrugs. 'Next time, chief. Next time.'`,
+        ],
+      };
+      const [winMsg, loseMsg] = flavor[result.gameId] ?? flavor.haggle_fence;
+      this.showInspectText(earnings > 0 ? winMsg : loseMsg);
       delete this.reg.playerState.state.flags.haggleEarnings;
     } else {
       // Grill game

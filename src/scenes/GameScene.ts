@@ -867,9 +867,9 @@ export class GameScene extends Phaser.Scene {
 
     if (result.gameId === 'mow') {
       // Mow results are set directly by MowGame (mowQuality, lawnStatus, crooked_mow)
-      // Add time cost for mowing
-      this.reg.timeClock.advance(90);
-      this.reg.playerState.recoverSobriety(90);
+      // Add time cost for mowing — 2 hours (suburban dad reality)
+      this.reg.timeClock.advance(120);
+      this.reg.playerState.recoverSobriety(120);
     } else if (result.gameId.startsWith('haggle_')) {
       // Haggle — apply earnings to cash and show inspect text with summary
       const earnings = (this.reg.playerState.state.flags.haggleEarnings as number) ?? 0;

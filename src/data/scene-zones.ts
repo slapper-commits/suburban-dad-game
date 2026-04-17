@@ -543,11 +543,25 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         action: { type: 'dialogue', treeId: 'strip_club_bartender' },
       },
       {
+        id: 'tony',
+        label: 'Tony',
+        x: 250,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'strip_club_tony' },
+      },
+      {
         id: 'amber_stage',
         label: 'Amber (stage)',
         x: 400,
         radius: 50,
         action: { type: 'dialogue', treeId: 'strip_club_dancer' },
+      },
+      {
+        id: 'vip_curtain',
+        label: 'VIP Back Room',
+        x: 660,
+        radius: 40,
+        action: { type: 'scene', sceneId: 'strip_club_vip', timeCost: 5 },
       },
       {
         id: 'exit',

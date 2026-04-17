@@ -224,6 +224,16 @@ export const npcRegistry: Record<string, Partial<CharacterConfig>> = {
     bodyType: 'female',
     sz: 0.95,
   },
+  tony: {
+    shirt: 0x3a1a1a,      // dark leather jacket
+    skin: 0xd4a878,
+    hair: 0x111111,
+    hairStyle: 'normal',
+    pants: 0x1a1a1a,
+    eyes: 'shades',
+    mouth: 'smirk',
+    eyebrows: 'raised',
+  },
 
   // ── Trap House ────────────────────────────────────────────
   dealer: {

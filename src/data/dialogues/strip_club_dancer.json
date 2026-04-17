@@ -28,9 +28,8 @@
           ]
         },
         {
-          "text": "Ask about the back",
-          "nextNode": "to_vip",
-          "conditions": [{ "field": "flags.amber_met", "op": "==", "value": true }]
+          "text": "Ask about the back room (VIP)",
+          "nextNode": "to_vip"
         },
         { "text": "Walk away", "nextNode": "close" }
       ]

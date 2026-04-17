@@ -109,6 +109,7 @@ import stripClubHub from '../data/dialogues/strip_club_hub.json';
 import stripClubBartender from '../data/dialogues/strip_club_bartender.json';
 import stripClubDancer from '../data/dialogues/strip_club_dancer.json';
 import stripClubVip from '../data/dialogues/strip_club_vip.json';
+import stripClubTony from '../data/dialogues/strip_club_tony.json';
 import girlsApartmentHub from '../data/dialogues/girls_apartment_hub.json';
 import trapHouseHub from '../data/dialogues/trap_house_hub.json';
 import trapDealer from '../data/dialogues/trap_dealer.json';
@@ -290,6 +291,7 @@ export class GameScene extends Phaser.Scene {
       strip_club_bartender: stripClubBartender as unknown as DialogueTree,
       strip_club_dancer: stripClubDancer as unknown as DialogueTree,
       strip_club_vip: stripClubVip as unknown as DialogueTree,
+      strip_club_tony: stripClubTony as unknown as DialogueTree,
       girls_apartment_hub: girlsApartmentHub as unknown as DialogueTree,
       trap_house_hub: trapHouseHub as unknown as DialogueTree,
       trap_dealer: trapDealer as unknown as DialogueTree,
@@ -1125,6 +1127,7 @@ export class GameScene extends Phaser.Scene {
       'amber': 'amber',
       'candi': 'candi',
       'destiny': 'destiny',
+      'tony': 'tony',
       // Trap house
       'dealer': 'dealer',
       'jim': 'crackhead_jim',

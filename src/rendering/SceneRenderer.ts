@@ -925,12 +925,10 @@ export function drawSidewalk(gfx: Phaser.GameObjects.Graphics, state: DadState):
   drawTinyPerson(gfx, 150, GROUND_Y, 0x4488cc, 0.3);  // jogger
   drawTinyPerson(gfx, 650, GROUND_Y, 0x6a5a4a, 0.3);  // dog walker
 
-  // The Girls (conditional: time >= 570, drugs < 1)
-  if (time >= 570 && (state.vices.drugs ?? 0) < 1) {
-    drawNpc(gfx, 'the_girls', 480, GROUND_Y);
-  } else if ((state.vices.drugs ?? 0) >= 1) {
-    // They still hang around if you're in the club
-    drawNpc(gfx, 'the_girls', 480, GROUND_Y);
+  // The Girls — always two of them, hanging out together
+  if (time >= 570 || (state.vices.drugs ?? 0) >= 1) {
+    drawNpc(gfx, 'the_girls', 468, GROUND_Y);
+    drawNpc(gfx, 'candi', 494, GROUND_Y, { sz: 0.95 });
   }
 }
 
@@ -1327,8 +1325,9 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0x2a4a2a);
   gfx.fillRect(690, GROUND_Y - 35, 50, 5);
 
-  // The Girls — always visible at the alley (this is their hangout)
-  drawNpc(gfx, 'the_girls', 710, GROUND_Y);
+  // The Girls — always two of them at the alley
+  drawNpc(gfx, 'the_girls', 698, GROUND_Y);
+  drawNpc(gfx, 'candi', 724, GROUND_Y, { sz: 0.95 });
 
   // Kevin NPC pitching outside (conditional: pyramid >= 1)
   if ((state.vices.pyramid ?? 0) >= 1) {
@@ -1754,10 +1753,30 @@ export function drawStripClub(gfx: Phaser.GameObjects.Graphics, _state: DadState
   // Foreground NPCs
   drawNpc(gfx, 'bouncer', 100, 400);
   drawNpc(gfx, 'bartender_club', 150, 400);
+  drawNpc(gfx, 'tony', 250, 400);    // shady dude at the end of the bar
   drawNpc(gfx, 'candi', 320, 400);
   drawNpc(gfx, 'destiny', 480, 400);
   // Amber on stage (slightly raised — stage top sits at y≈340-10)
   drawNpc(gfx, 'amber', 400, 332);
+
+  // VIP curtain — red velvet drape on the right side, leads to back room
+  gfx.fillStyle(0x5a0a2a);
+  gfx.fillRect(640, 260, 48, 140);
+  // Vertical pleats
+  for (let i = 0; i < 4; i++) {
+    gfx.fillStyle(0x7a1a3a, 0.7);
+    gfx.fillRect(640 + i * 12 + 2, 260, 2, 140);
+  }
+  // "VIP" gold signage above
+  gfx.fillStyle(0xd4a020);
+  gfx.fillRect(632, 246, 62, 14);
+  gfx.fillStyle(0x222222);
+  gfx.fillRect(638, 250, 6, 6);   // V
+  gfx.fillRect(648, 250, 6, 6);   // I
+  gfx.fillRect(658, 250, 6, 6);   // P
+  gfx.fillRect(670, 250, 18, 6);  // decorative
+  // Pink glow spilling from behind curtain
+  drawMoodLight(gfx, 664, 330, 0xff3377, 28);
 }
 
 export function drawStripClubVip(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
@@ -1800,8 +1819,9 @@ export function drawGirlsApartment(gfx: Phaser.GameObjects.Graphics, _state: Dad
   gfx.fillEllipse(lampX, lampBaseY - 35 + blobOffset, 10, 14);
   gfx.fillEllipse(lampX + 2, lampBaseY - 50 - blobOffset * 0.5, 6, 8);
 
-  // The Girls on the couch
-  drawNpc(gfx, 'the_girls', 380, 380);
+  // The Girls on the couch — there are two of them
+  drawNpc(gfx, 'the_girls', 368, 380);
+  drawNpc(gfx, 'candi', 394, 380, { sz: 0.95 });
 }
 
 export function drawTrapHouse(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {

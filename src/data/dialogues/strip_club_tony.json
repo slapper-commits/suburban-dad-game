@@ -1,0 +1,314 @@
+{
+  "id": "strip_club_tony",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.tony_burned", "op": "==", "value": true }], "nextNode": "burned" },
+        { "conditions": [{ "field": "flags.tony_won_big", "op": "==", "value": true }], "nextNode": "won_big_revisit" }
+      ],
+      "next": "intro"
+    },
+
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "A man in a leather jacket at the end of the bar has not taken his eyes off you since you walked in.", "mouth": "neutral" },
+        { "speaker": "Tony", "text": "Hey. Khakis. C'mere.", "mouth": "smirk", "eyes": "shades" },
+        { "speaker": "Dad", "text": "...me?", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Tony", "text": "Yeah you. You look like a man with a mortgage.", "mouth": "smirk" },
+        { "speaker": "Tony", "text": "You ever play three-card monte? Easy money. I need a fourth for a private game.", "mouth": "grin", "eyes": "shades" },
+        { "text": "He fans three cards on the bar. The queen is right there. She's RIGHT THERE.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"Fine. $50 to play.\"",
+          "nextNode": "bet_50",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 50 }],
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -50 },
+            { "type": "add", "field": "vices.gambling", "value": 1 },
+            { "type": "set", "field": "flags.tony_met", "value": true }
+          ]
+        },
+        {
+          "text": "\"$200. I'm all in.\"",
+          "nextNode": "bet_200",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 200 }],
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -200 },
+            { "type": "add", "field": "vices.gambling", "value": 1 },
+            { "type": "set", "field": "flags.tony_met", "value": true }
+          ]
+        },
+        {
+          "text": "\"What if I don't have cash?\"",
+          "nextNode": "no_cash",
+          "conditions": [{ "field": "flags.cash", "op": "<", "value": 50 }]
+        },
+        { "text": "\"Hard pass, Tony.\"", "nextNode": "pass" }
+      ]
+    },
+
+    "bet_50": {
+      "id": "bet_50",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Watch the queen. Watch the queen. Don't lose the queen.", "mouth": "smirk" },
+        { "text": "His hands are too fast. Like, suspicious-fast.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "Middle!", "mouth": "shock", "eyes": "wide" }
+      ],
+      "choices": [
+        {
+          "text": "Commit — it's MIDDLE.",
+          "nextNode": "bet_50_flip",
+          "effects": []
+        },
+        {
+          "text": "Actually... LEFT.",
+          "nextNode": "bet_50_left"
+        }
+      ]
+    },
+
+    "bet_50_flip": {
+      "id": "bet_50_flip",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "bet_50_lose" }
+      ],
+      "next": "bet_50_win"
+    },
+
+    "bet_50_win": {
+      "id": "bet_50_win",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "...well I'll be damned.", "mouth": "shock", "eyebrows": "raised" },
+        { "text": "Tony slides $150 across the bar. He's still smiling but his eyes are not.", "mouth": "sleepy" },
+        { "speaker": "Tony", "text": "Double or nothing? One more round?", "mouth": "smirk" }
+      ],
+      "effects": [
+        { "type": "add", "field": "flags.cash", "value": 150 },
+        { "type": "set", "field": "flags.cash_bulge", "value": true }
+      ],
+      "choices": [
+        {
+          "text": "$300. Let's go.",
+          "nextNode": "bet_300",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 300 }],
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -300 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "Nope. Cash it. Leave.",
+          "nextNode": "cash_out_win"
+        }
+      ]
+    },
+
+    "bet_50_lose": {
+      "id": "bet_50_lose",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Ooooh, tough luck, khakis.", "mouth": "smirk" },
+        { "text": "The queen was NEVER in the middle. She was never any of them. You're not sure she was ever on the bar.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"One more? I can feel it.\"",
+          "nextNode": "bet_50",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 50 }],
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -50 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        { "text": "Walk away.", "nextNode": "pass" }
+      ]
+    },
+
+    "bet_50_left": {
+      "id": "bet_50_left",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Ooooh. Close. So close.", "mouth": "smirk" },
+        { "text": "Queen was in the middle. Obviously. The one you almost picked.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        { "text": "Run it back.", "nextNode": "bet_50",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 50 }],
+          "timeCost": 10,
+          "effects": [{ "type": "add", "field": "flags.cash", "value": -50 }] },
+        { "text": "Leave.", "nextNode": "pass" }
+      ]
+    },
+
+    "bet_200": {
+      "id": "bet_200",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Oh we got a HIGH ROLLER. Boys, the KHAKI KING is in.", "mouth": "grin", "eyes": "shades" },
+        { "text": "Two men at the next booth turn their heads in unison.", "mouth": "sleepy" }
+      ],
+      "next": "bet_200_flip"
+    },
+
+    "bet_200_flip": {
+      "id": "bet_200_flip",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 60 }], "nextNode": "bet_200_lose" }
+      ],
+      "next": "bet_200_win"
+    },
+
+    "bet_200_win": {
+      "id": "bet_200_win",
+      "text": "",
+      "beats": [
+        { "text": "You slam your finger on the middle card. The queen stares back.", "mouth": "grin" },
+        { "speaker": "Tony", "text": "Son of a BITCH.", "mouth": "shock", "eyebrows": "angry" },
+        { "text": "Tony peels $600 off a roll. 'Nice work, khakis.'", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "flags.cash", "value": 600 },
+        { "type": "set", "field": "flags.cash_bulge", "value": true },
+        { "type": "set", "field": "flags.tony_won_big", "value": true }
+      ]
+    },
+
+    "bet_200_lose": {
+      "id": "bet_200_lose",
+      "text": "",
+      "beats": [
+        { "text": "You slam your finger on the middle card. It's the jack.", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Tony", "text": "Oof. That's a tough one.", "mouth": "smirk" },
+        { "text": "One of the booth guys stands up. Big guy.", "mouth": "sleepy" },
+        { "speaker": "Tony", "text": "Listen. You wanna earn it back? My cousin runs a thing out back.", "mouth": "smirk", "eyebrows": "raised" }
+      ],
+      "choices": [
+        {
+          "text": "\"What kind of thing?\"",
+          "nextNode": "back_room_pitch",
+          "effects": [{ "type": "set", "field": "flags.tony_burned", "value": true }]
+        },
+        { "text": "Eat the loss. Walk.", "nextNode": "pass" }
+      ]
+    },
+
+    "back_room_pitch": {
+      "id": "back_room_pitch",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Just gotta move a bag. Down the block. Twenty minutes. Triple what you lost.", "mouth": "smirk" },
+        { "speaker": "Dad", "text": "What's in the bag?", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Tony", "text": "You don't ask. That's the WHOLE gig.", "mouth": "grin" }
+      ],
+      "choices": [
+        {
+          "text": "\"I'll do it.\"",
+          "nextNode": "bag_run",
+          "timeCost": 25,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": 600 },
+            { "type": "add", "field": "vices.theft", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 15 },
+            { "type": "set", "field": "flags.cash_bulge", "value": true }
+          ]
+        },
+        {
+          "text": "\"Nope. Nope nope nope.\"",
+          "nextNode": "decline_bag"
+        }
+      ]
+    },
+
+    "bag_run": {
+      "id": "bag_run",
+      "text": "",
+      "beats": [
+        { "text": "Twenty minutes later you're $600 richer and you will never sleep right again.", "mouth": "sleepy", "eyes": "wide" },
+        { "speaker": "Tony", "text": "Good man. Come see me next weekend. I've got a thing in Reno.", "mouth": "grin", "eyes": "shades" },
+        { "text": "You do not plan to see Tony next weekend.", "mouth": "sleepy" }
+      ]
+    },
+
+    "decline_bag": {
+      "id": "decline_bag",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Your loss, khakis.", "mouth": "smirk" },
+        { "text": "The big guy sits back down. Somehow this feels worse.", "mouth": "sleepy" }
+      ]
+    },
+
+    "bet_300": {
+      "id": "bet_300",
+      "text": "",
+      "beats": [
+        { "text": "Tony shuffles faster. Your heart is in your teeth.", "mouth": "shock" },
+        { "text": "You pick. You lose. Obviously you lose. It was never the queen.", "mouth": "sleepy" },
+        { "speaker": "Tony", "text": "Brutal game, huh?", "mouth": "smirk" }
+      ],
+      "effects": [
+        { "type": "set", "field": "flags.tony_burned", "value": true }
+      ]
+    },
+
+    "cash_out_win": {
+      "id": "cash_out_win",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "I'm good.", "mouth": "neutral" },
+        { "speaker": "Tony", "text": "Smart man. That's rare.", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "You pocket the money. Tony winks. He'll remember you.", "mouth": "sleepy" }
+      ]
+    },
+
+    "no_cash": {
+      "id": "no_cash",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "We can arrange something. You got a minivan, yeah?", "mouth": "grin", "eyes": "shades" },
+        { "speaker": "Dad", "text": "How do you know about my minivan?", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Tony", "text": "Come back when you're flush, champ.", "mouth": "smirk" }
+      ]
+    },
+
+    "pass": {
+      "id": "pass",
+      "text": "You walk away. Tony's eyes follow you across the room. You feel them on your back all night."
+    },
+
+    "burned": {
+      "id": "burned",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Khakis. Back for more punishment?", "mouth": "grin", "eyes": "shades" },
+        { "text": "He fans the cards again. The queen winks at you. She is lying. She is always lying.", "mouth": "sleepy" }
+      ],
+      "next": "intro"
+    },
+
+    "won_big_revisit": {
+      "id": "won_big_revisit",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "Oh look. The Khaki King returns.", "mouth": "smirk" },
+        { "text": "He nods at the bartender. A whiskey appears in front of you you didn't order.", "mouth": "sleepy" },
+        { "speaker": "Tony", "text": "You feel lucky today? I feel lucky today.", "mouth": "grin" }
+      ],
+      "next": "intro"
+    }
+  }
+}

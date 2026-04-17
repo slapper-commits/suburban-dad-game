@@ -508,7 +508,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       {
         id: 'gas_store',
         label: 'Store',
-        x: 300,
+        x: 155,
         radius: 40,
         action: { type: 'scene', sceneId: 'gas_station_store', timeCost: 1 },
       },
@@ -577,7 +577,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
   },
 
   strip_club: {
-    groundY: 400,
+    groundY: 340,
     walkBounds: { minX: 80, maxX: 720 },
     dadEntryX: 100,
     zones: [
@@ -620,7 +620,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
   },
 
   strip_club_vip: {
-    groundY: 400,
+    groundY: 340,
     walkBounds: { minX: 80, maxX: 720 },
     dadEntryX: 200,
     zones: [
@@ -635,7 +635,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
   },
 
   girls_apartment: {
-    groundY: 400,
+    groundY: 340,
     walkBounds: { minX: 80, maxX: 720 },
     dadEntryX: 200,
     zones: [
@@ -657,7 +657,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
   },
 
   trap_house: {
-    groundY: 400,
+    groundY: 340,
     walkBounds: { minX: 80, maxX: 720 },
     dadEntryX: 200,
     zones: [

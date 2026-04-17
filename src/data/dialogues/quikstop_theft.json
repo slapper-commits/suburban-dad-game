@@ -30,7 +30,7 @@
       "id": "t1_drunk",
       "text": "You emerge bruised and flush. The cash is real. Your ribs are not happy. Future-you will have SO many questions about this bruise.",
       "effects": [
-        { "type": "add", "field": "cash", "value": 150 },
+        { "type": "add", "field": "flags.cash", "value": 150 },
         { "type": "add", "field": "vices.theft", "value": 1 },
         { "type": "set", "field": "flags.cash_bulge", "value": true },
         { "type": "set", "field": "flags.injury", "value": true }
@@ -84,7 +84,7 @@
           "nextNode": "t1",
           "timeCost": 15,
           "effects": [
-            { "type": "add", "field": "cash", "value": 150 },
+            { "type": "add", "field": "flags.cash", "value": 150 },
             { "type": "add", "field": "vices.theft", "value": 1 },
             { "type": "set", "field": "flags.cash_bulge", "value": true }
           ]

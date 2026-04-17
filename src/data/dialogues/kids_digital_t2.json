@@ -43,7 +43,7 @@
           "nextNode": "t2",
           "timeCost": 60,
           "effects": [
-            { "type": "add", "field": "cash", "value": 300 },
+            { "type": "add", "field": "flags.cash", "value": 300 },
             { "type": "add", "field": "vices.digital", "value": 1 },
             { "type": "add", "field": "suspicion", "value": 10 }
           ]
@@ -72,7 +72,7 @@
           "nextNode": "t3",
           "timeCost": 90,
           "effects": [
-            { "type": "add", "field": "cash", "value": 500 },
+            { "type": "add", "field": "flags.cash", "value": 500 },
             { "type": "add", "field": "vices.digital", "value": 1 },
             { "type": "add", "field": "suspicion", "value": 20 },
             { "type": "set", "field": "flags.injury", "value": true }

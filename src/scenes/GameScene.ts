@@ -439,6 +439,19 @@ export class GameScene extends Phaser.Scene {
     const consumption = this.reg.playerState.getActiveConsumption();
     this.player.update(delta, this.reg.playerState.state, consumption);
 
+    // While a consumption animation is playing, fade the dialogue panel so
+    // the player can see Dad chugging / smoking / etc. (instead of it being
+    // hidden behind the semi-transparent panel).
+    if (this.dialogueActive && this.dialoguePanel) {
+      const targetAlpha = consumption ? 0.18 : 1;
+      this.dialoguePanel.setAlpha(targetAlpha);
+      this.dialogueText?.setAlpha(targetAlpha);
+      this.dialogueSpeaker?.setAlpha(targetAlpha);
+      this.dialoguePortraitFrame?.setAlpha(targetAlpha);
+      this.dialoguePortraitGfx?.setAlpha(targetAlpha);
+      this.dialogueChoices.forEach(c => c.setAlpha(targetAlpha));
+    }
+
     // Update interaction zones
     if (!this.dialogueActive) {
       this.updateInteractionZones();
@@ -679,7 +692,7 @@ export class GameScene extends Phaser.Scene {
     const renderer = renderers[sceneData.background];
     if (renderer) {
       renderer(this.sceneGfx, state);
-      drawIntoxOverlay(this.sceneGfx, state.sobriety);
+      drawIntoxOverlay(this.sceneGfx, state);
     } else {
       this.sceneGfx.fillStyle(0x2a2a3e);
       this.sceneGfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
@@ -1018,7 +1031,7 @@ export class GameScene extends Phaser.Scene {
     this.hudGroup.add(this.suspicionFill);
 
     // Energy
-    this.add.text(metersX - 4, 36, 'NRG', { fontSize: '9px', color: '#4488cc', fontFamily: 'monospace' }).setOrigin(1, 0).setDepth(D);
+    this.add.text(metersX - 4, 36, 'ENRG', { fontSize: '9px', color: '#4488cc', fontFamily: 'monospace' }).setOrigin(1, 0).setDepth(D);
     this.energyBar = this.add.rectangle(metersX + barWidth / 2, 42, barWidth, barHeight, 0x333333).setDepth(D);
     this.energyFill = this.add.rectangle(metersX, 42, barWidth * 0.8, barHeight, 0x4488cc).setOrigin(0, 0.5).setDepth(D);
     this.hudGroup.add(this.energyBar);

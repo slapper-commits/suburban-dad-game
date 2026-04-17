@@ -11,7 +11,7 @@
           "nextNode": "buy_charcoal",
           "timeCost": 10,
           "effects": [
-            { "type": "add", "field": "cash", "value": -15 },
+            { "type": "add", "field": "flags.cash", "value": -15 },
             { "type": "set", "field": "flags.hasCharcoal", "value": true }
           ]
         },
@@ -20,7 +20,7 @@
           "nextNode": "buy_ice",
           "timeCost": 5,
           "effects": [
-            { "type": "add", "field": "cash", "value": -5 },
+            { "type": "add", "field": "flags.cash", "value": -5 },
             { "type": "set", "field": "flags.hasIce", "value": true }
           ]
         },

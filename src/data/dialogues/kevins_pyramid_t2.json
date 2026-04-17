@@ -43,7 +43,7 @@
           "nextNode": "t2",
           "timeCost": 60,
           "effects": [
-            { "type": "add", "field": "cash", "value": -200 },
+            { "type": "add", "field": "flags.cash", "value": -200 },
             { "type": "add", "field": "vices.pyramid", "value": 1 }
           ]
         },
@@ -72,7 +72,7 @@
           "timeCost": 90,
           "effects": [
             { "type": "add", "field": "vices.pyramid", "value": 1 },
-            { "type": "add", "field": "cash", "value": 100 }
+            { "type": "add", "field": "flags.cash", "value": 100 }
           ]
         },
         {

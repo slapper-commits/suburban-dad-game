@@ -73,7 +73,7 @@
           "nextNode": "t3",
           "timeCost": 120,
           "effects": [
-            { "type": "add", "field": "cash", "value": 800 },
+            { "type": "add", "field": "flags.cash", "value": 800 },
             { "type": "add", "field": "vices.theft", "value": 1 },
             { "type": "add", "field": "suspicion", "value": 25 }
           ]

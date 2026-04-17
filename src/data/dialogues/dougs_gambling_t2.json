@@ -60,14 +60,14 @@
           "text": "\"Go all in\" (risky play)",
           "nextNode": "t2_win",
           "effects": [
-            { "type": "add", "field": "cash", "value": 200 }
+            { "type": "add", "field": "flags.cash", "value": 200 }
           ]
         },
         {
           "text": "\"Play it safe\" (conservative)",
           "nextNode": "t2_lose",
           "effects": [
-            { "type": "add", "field": "cash", "value": -150 }
+            { "type": "add", "field": "flags.cash", "value": -150 }
           ]
         }
       ]
@@ -111,14 +111,14 @@
           "text": "\"Read the table\" (trust your gut)",
           "nextNode": "t3_win",
           "effects": [
-            { "type": "add", "field": "cash", "value": 1000 }
+            { "type": "add", "field": "flags.cash", "value": 1000 }
           ]
         },
         {
           "text": "\"Bluff big\" (go for glory)",
           "nextNode": "t3_lose",
           "effects": [
-            { "type": "add", "field": "cash", "value": -500 },
+            { "type": "add", "field": "flags.cash", "value": -500 },
             { "type": "add", "field": "suspicion", "value": 10 }
           ]
         }

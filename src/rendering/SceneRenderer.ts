@@ -214,28 +214,64 @@ export function drawViceOverlay(gfx: Phaser.GameObjects.Graphics, state: DadStat
 // Intoxication overlay
 // ============================================================
 
-export function drawIntoxOverlay(gfx: Phaser.GameObjects.Graphics, sobriety: number): void {
-  if (sobriety >= 80) return;
+export function drawIntoxOverlay(gfx: Phaser.GameObjects.Graphics, sobrietyOrState: number | DadState): void {
+  // Support legacy sobriety-only calls
+  const state: DadState | null = typeof sobrietyOrState === 'number' ? null : sobrietyOrState;
+  const sobriety = state ? state.sobriety : (sobrietyOrState as number);
+  const drugs = state ? (state.vices?.drugs ?? 0) : 0;
+  const suspicion = state ? (state.suspicion ?? 0) : 0;
 
+  if (sobriety >= 80 && drugs === 0) return;
+
+  // Base color + alpha from sobriety
   let color: number;
   let alpha: number;
+  if (sobriety < 20) { color = 0x9b6b9b; alpha = 0.3; }
+  else if (sobriety < 40) { color = 0x9b6b9b; alpha = 0.2; }
+  else if (sobriety < 60) { color = 0xd4a54a; alpha = 0.15; }
+  else { color = 0xd4a54a; alpha = 0.08; }
 
-  if (sobriety < 20) {
-    color = 0x9b6b9b;
-    alpha = 0.3;
-  } else if (sobriety < 40) {
-    color = 0x9b6b9b;
-    alpha = 0.2;
-  } else if (sobriety < 60) {
-    color = 0xd4a54a;
-    alpha = 0.15;
-  } else {
-    color = 0xd4a54a;
-    alpha = 0.08;
+  // Drugs darken the world: psychedelic magenta wash + deeper vignette
+  if (drugs >= 1) {
+    color = 0x9b4a9b;
+    alpha = Math.min(0.45, alpha + drugs * 0.08);
   }
 
   gfx.fillStyle(color, alpha);
   gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+
+  // Drug-level distortion: pulsing radial vignette that gets stronger
+  if (drugs >= 1) {
+    const pulseT = (performance.now() / 1000);
+    const pulse = Math.sin(pulseT * (0.6 + drugs * 0.4)) * 0.5 + 0.5;
+    const vignetteA = 0.15 + drugs * 0.12 + pulse * 0.08;
+    // Top + bottom darken bands
+    gfx.fillStyle(0x000000, vignetteA);
+    gfx.fillRect(0, 0, SCREEN_W, 40 + drugs * 20);
+    gfx.fillRect(0, SCREEN_H - (40 + drugs * 20), SCREEN_W, 40 + drugs * 20);
+    // Side darken bands
+    gfx.fillRect(0, 0, 30 + drugs * 15, SCREEN_H);
+    gfx.fillRect(SCREEN_W - (30 + drugs * 15), 0, 30 + drugs * 15, SCREEN_H);
+
+    // Deep drugs + low sobriety: color shift / chromatic ghost
+    if (drugs >= 2 && sobriety < 40) {
+      gfx.fillStyle(0xff66aa, 0.06 + pulse * 0.04);
+      gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+      // "Crawl to the Ferrari" mode — tilted/stuttering narrow view
+      if (sobriety < 25) {
+        gfx.fillStyle(0x000000, 0.3);
+        gfx.fillEllipse(SCREEN_W / 2, SCREEN_H / 2, SCREEN_W * 1.3, SCREEN_H * 1.3);
+        gfx.fillStyle(0x110022, 0.25);
+        gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+      }
+    }
+  }
+
+  // High suspicion tints everything a bit tense-red
+  if (suspicion >= 70) {
+    gfx.fillStyle(0xcc2222, 0.06);
+    gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+  }
 }
 
 // ============================================================
@@ -1820,11 +1856,11 @@ export function drawStripClub(gfx: Phaser.GameObjects.Graphics, _state: DadState
   drawCrowdSilhouettes(gfx, 400, 310, 8, 200);
 
   // Foreground NPCs
-  drawNpc(gfx, 'bouncer', 100, 400);
-  drawNpc(gfx, 'bartender_club', 150, 400);
-  drawNpc(gfx, 'tony', 250, 400);    // shady dude at the end of the bar
-  drawNpc(gfx, 'candi', 320, 400);
-  drawNpc(gfx, 'destiny', 480, 400);
+  drawNpc(gfx, 'bouncer', 100, 340);
+  drawNpc(gfx, 'bartender_club', 150, 340);
+  drawNpc(gfx, 'tony', 250, 340);    // shady dude at the end of the bar
+  drawNpc(gfx, 'candi', 320, 340);
+  drawNpc(gfx, 'destiny', 480, 340);
   // Amber on stage (slightly raised — stage top sits at y≈340-10)
   drawNpc(gfx, 'amber', 400, 332);
 
@@ -1858,7 +1894,7 @@ export function drawStripClubVip(gfx: Phaser.GameObjects.Graphics, _state: DadSt
   drawCouch(gfx, 400, 350, 0x4a1a3a);
 
   // Amber, centered
-  drawNpc(gfx, 'amber', 400, 400);
+  drawNpc(gfx, 'amber', 400, 340);
 }
 
 export function drawGirlsApartment(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
@@ -1889,8 +1925,8 @@ export function drawGirlsApartment(gfx: Phaser.GameObjects.Graphics, _state: Dad
   gfx.fillEllipse(lampX + 2, lampBaseY - 50 - blobOffset * 0.5, 6, 8);
 
   // The Girls on the couch — there are two of them
-  drawNpc(gfx, 'the_girls', 368, 380);
-  drawNpc(gfx, 'candi', 394, 380, { sz: 0.95 });
+  drawNpc(gfx, 'the_girls', 368, 340);
+  drawNpc(gfx, 'candi', 394, 340, { sz: 0.95 });
 }
 
 export function drawTrapHouse(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
@@ -1930,8 +1966,8 @@ export function drawTrapHouse(gfx: Phaser.GameObjects.Graphics, _state: DadState
   }
 
   // NPCs
-  drawNpc(gfx, 'dealer', 150, 400);
-  drawNpc(gfx, 'crackhead_jim', 300, 400);
-  drawNpc(gfx, 'trina', 520, 380);
-  drawNpc(gfx, 'tweaker_rayray', 650, 400);
+  drawNpc(gfx, 'dealer', 150, 340);
+  drawNpc(gfx, 'crackhead_jim', 300, 340);
+  drawNpc(gfx, 'trina', 520, 340);
+  drawNpc(gfx, 'tweaker_rayray', 650, 340);
 }

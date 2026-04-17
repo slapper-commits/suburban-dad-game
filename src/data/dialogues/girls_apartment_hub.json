@@ -36,8 +36,13 @@
           ]
         },
         {
-          "text": "\"Want to see where the GOOD stuff lives?\"",
-          "nextNode": "to_trap"
+          "text": "\"Want to see where the GOOD stuff lives?\" (2 hr field trip)",
+          "nextNode": "to_trap",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "add", "field": "suspicion", "value": 15 }
+          ]
         },
         { "text": "Bounce", "nextNode": "bounce" }
       ]
@@ -61,8 +66,13 @@
           ]
         },
         {
-          "text": "\"Take me to the GOOD stuff\"",
-          "nextNode": "to_trap"
+          "text": "\"Take me to the GOOD stuff\" (2 hr field trip)",
+          "nextNode": "to_trap",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "add", "field": "suspicion", "value": 15 }
+          ]
         },
         { "text": "Bounce", "nextNode": "bounce" }
       ]

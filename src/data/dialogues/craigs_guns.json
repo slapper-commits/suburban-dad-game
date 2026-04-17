@@ -93,7 +93,7 @@
           "nextNode": "t1",
           "timeCost": 30,
           "effects": [
-            { "type": "add", "field": "cash", "value": 50 },
+            { "type": "add", "field": "flags.cash", "value": 50 },
             { "type": "add", "field": "vices.guns", "value": 1 }
           ]
         },

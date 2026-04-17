@@ -532,39 +532,530 @@ export function drawCrowdSilhouettes(
 // ============================================================
 
 export function drawKitchen(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
-  // Wall
-  gfx.fillStyle(0xc8b890);
-  gfx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+  void state;
+  const FLOOR_Y = 350;
 
-  // Floor
-  gfx.fillStyle(0x8a6a4a);
-  gfx.fillRect(0, 350, SCREEN_W, SCREEN_H - 350);
-
-  // Counter
-  gfx.fillStyle(0x8a6a4a);
-  gfx.fillRect(0, 350 - 60, 300, 60);
-
-  // Coffee maker on counter
-  gfx.fillStyle(0x555555);
-  gfx.fillRect(60, 350 - 60 - 20, 15, 20);
-
-  // Coffee mug on counter
-  gfx.fillStyle(0xc4a878);
-  gfx.fillRect(100, 350 - 60 - 10, 8, 10);
-
-  // Fridge
-  gfx.fillStyle(0xd4a078);
-  gfx.fillRect(SCREEN_W - 80, 350 - 120, 60, 120);
-  gfx.lineStyle(2, 0x3a2a1a);
-  gfx.strokeRect(SCREEN_W - 80, 350 - 120, 60, 120);
-
-  // Yellow note on fridge
-  gfx.fillStyle(0xf0e080);
-  gfx.fillRect(SCREEN_W - 65, 350 - 100, 15, 12);
-
-  // Overhead light
+  // ── Walls ──
+  // Upper wall — warm cream
+  gfx.fillStyle(0xf0e4c8);
+  gfx.fillRect(0, 0, SCREEN_W, FLOOR_Y);
+  // Ceiling shadow
+  gfx.fillStyle(0x000000, 0.08);
+  gfx.fillRect(0, 0, SCREEN_W, 14);
+  // Crown molding — layered white + beige
   gfx.fillStyle(0xffffff);
-  gfx.fillCircle(SCREEN_W / 2, 30, 8);
+  gfx.fillRect(0, 10, SCREEN_W, 6);
+  gfx.fillStyle(0xe4d0a8);
+  gfx.fillRect(0, 16, SCREEN_W, 2);
+  // Wainscoting (bottom third of wall) — off-white panels
+  gfx.fillStyle(0xf8f4e8);
+  gfx.fillRect(0, FLOOR_Y - 78, SCREEN_W, 78);
+  // Chair rail
+  gfx.fillStyle(0xd4c8a8);
+  gfx.fillRect(0, FLOOR_Y - 82, SCREEN_W, 4);
+  gfx.fillStyle(0xe8dcbc);
+  gfx.fillRect(0, FLOOR_Y - 80, SCREEN_W, 1);
+  // Baseboard
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(0, FLOOR_Y - 8, SCREEN_W, 8);
+  gfx.fillStyle(0xd4c8a8);
+  gfx.fillRect(0, FLOOR_Y - 9, SCREEN_W, 1);
+  // Wainscoting vertical panel dividers
+  gfx.lineStyle(1, 0xd8ccb0, 0.55);
+  for (let vx = 60; vx < SCREEN_W; vx += 70) {
+    gfx.lineBetween(vx, FLOOR_Y - 76, vx, FLOOR_Y - 10);
+  }
+
+  // ── Hardwood floor ──
+  gfx.fillStyle(0x8a5a2a);
+  gfx.fillRect(0, FLOOR_Y, SCREEN_W, SCREEN_H - FLOOR_Y);
+  gfx.lineStyle(1, 0x5a3a1a, 0.55);
+  for (let py = FLOOR_Y + 14; py < SCREEN_H; py += 14) {
+    gfx.lineBetween(0, py, SCREEN_W, py);
+  }
+  // Plank seams (staggered)
+  for (let row = 0; row < 7; row++) {
+    const ry = FLOOR_Y + row * 14;
+    const stagger = (row % 2) * 40;
+    for (let px = 20 + stagger; px < SCREEN_W; px += 90) {
+      gfx.lineBetween(px, ry, px, ry + 14);
+    }
+  }
+
+  // ── Big picture window (center back wall) ──
+  const winX = 280, winY = 34, winW = 220, winH = 170;
+  // Outer trim (shadow)
+  gfx.fillStyle(0xd4c8a8);
+  gfx.fillRect(winX - 14, winY - 12, winW + 28, winH + 24);
+  // Inner frame — crisp white
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(winX - 10, winY - 8, winW + 20, winH + 16);
+  // Sky gradient (morning)
+  gfx.fillGradientStyle(0x87ceeb, 0x87ceeb, 0xd8e8f0, 0xd8e8f0);
+  gfx.fillRect(winX, winY, winW, winH);
+  // Clouds
+  gfx.fillStyle(0xffffff, 0.85);
+  gfx.fillEllipse(winX + 54, winY + 36, 40, 14);
+  gfx.fillEllipse(winX + 164, winY + 58, 52, 16);
+  gfx.fillEllipse(winX + 110, winY + 90, 30, 10);
+  // Distant sun glow
+  gfx.fillStyle(0xfff4c8, 0.5);
+  gfx.fillCircle(winX + winW - 50, winY + 44, 16);
+  // Neighborhood background — row of suburban houses
+  // Neighbor 1 — blue
+  gfx.fillStyle(0xb8c8d8);
+  gfx.fillRect(winX + 12, winY + 118, 54, 40);
+  gfx.fillStyle(0x4a5a7a);
+  gfx.fillTriangle(winX + 8, winY + 118, winX + 70, winY + 118, winX + 39, winY + 96);
+  gfx.fillStyle(0x87ceeb);
+  gfx.fillRect(winX + 22, winY + 130, 10, 10);
+  gfx.fillRect(winX + 44, winY + 130, 10, 10);
+  // Neighbor 2 — warm yellow
+  gfx.fillStyle(0xe8d4a8);
+  gfx.fillRect(winX + 82, winY + 114, 64, 44);
+  gfx.fillStyle(0x7a3a14);
+  gfx.fillTriangle(winX + 76, winY + 114, winX + 152, winY + 114, winX + 114, winY + 90);
+  gfx.fillStyle(0x87ceeb);
+  gfx.fillRect(winX + 92, winY + 128, 12, 12);
+  gfx.fillRect(winX + 124, winY + 128, 12, 12);
+  // Neighbor 3 — sage
+  gfx.fillStyle(0xc8d4a8);
+  gfx.fillRect(winX + 162, winY + 120, 48, 38);
+  gfx.fillStyle(0x4a5a2a);
+  gfx.fillTriangle(winX + 158, winY + 120, winX + 214, winY + 120, winX + 186, winY + 100);
+  // Tree in the middle
+  gfx.fillStyle(0x6b4c2a);
+  gfx.fillRect(winX + 72, winY + 122, 6, 36);
+  gfx.fillStyle(0x3a8a3a);
+  gfx.fillEllipse(winX + 75, winY + 110, 34, 28);
+  // Picket fence across the front
+  gfx.fillStyle(0xffffff);
+  for (let fx = winX + 4; fx < winX + winW - 4; fx += 10) {
+    gfx.fillRect(fx, winY + 148, 3, 12);
+  }
+  gfx.fillRect(winX, winY + 154, winW, 2);
+  // Lush lawn
+  gfx.fillStyle(0x5a9e3a);
+  gfx.fillRect(winX, winY + 160, winW, 10);
+  // Window mullions — cross + vertical thirds
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(winX + winW / 3 - 2, winY, 4, winH);
+  gfx.fillRect(winX + (winW * 2) / 3 - 2, winY, 4, winH);
+  gfx.fillRect(winX, winY + winH / 2 - 2, winW, 4);
+  // Sill + apron
+  gfx.fillStyle(0xe4d0a8);
+  gfx.fillRect(winX - 18, winY + winH + 8, winW + 36, 8);
+  gfx.fillStyle(0xd4c08c);
+  gfx.fillRect(winX - 12, winY + winH + 16, winW + 24, 3);
+  // Curtains — cream sheers with gold tie-backs
+  gfx.fillStyle(0xf4e8cc, 0.85);
+  gfx.fillRect(winX - 24, winY - 12, 20, winH + 26);
+  gfx.fillRect(winX + winW + 4, winY - 12, 20, winH + 26);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(winX - 16, winY + winH / 2, 3);
+  gfx.fillCircle(winX + winW + 14, winY + winH / 2, 3);
+
+  // ── Floral wall art (above sofa, left of window) ──
+  const fX = 110, fY = 58, fW = 88, fH = 108;
+  // Gilded frame layers
+  gfx.fillStyle(0x8a6a1a);
+  gfx.fillRect(fX - 8, fY - 8, fW + 16, fH + 16);
+  gfx.fillStyle(0xd4a838);
+  gfx.fillRect(fX - 5, fY - 5, fW + 10, fH + 10);
+  gfx.fillStyle(0xffdc84);
+  gfx.fillRect(fX - 3, fY - 3, fW + 6, 2);
+  gfx.fillRect(fX - 3, fY + fH + 1, fW + 6, 2);
+  // Canvas — aged cream
+  gfx.fillStyle(0xf0dcc0);
+  gfx.fillRect(fX, fY, fW, fH);
+  // Porcelain vase
+  gfx.fillStyle(0xe8ecf4);
+  gfx.fillTriangle(fX + 28, fY + 64, fX + 60, fY + 64, fX + 52, fY + 94);
+  gfx.fillTriangle(fX + 28, fY + 64, fX + 52, fY + 94, fX + 36, fY + 94);
+  // Blue china pattern
+  gfx.fillStyle(0x3a6aa8);
+  gfx.fillRect(fX + 32, fY + 76, 24, 2);
+  gfx.fillCircle(fX + 44, fY + 84, 3);
+  // Stems
+  gfx.fillStyle(0x2a6a2a);
+  for (let st = 0; st < 4; st++) {
+    gfx.lineStyle(1, 0x2a6a2a);
+    gfx.lineBetween(fX + 40 + st * 3, fY + 64, fX + 38 + st * 4, fY + 28 + st * 2);
+  }
+  // Roses (layered petals)
+  const roses: [number, number, number, number][] = [
+    [fX + 30, fY + 32, 8, 0xff99aa],
+    [fX + 52, fY + 24, 8, 0xffb8c4],
+    [fX + 64, fY + 42, 7, 0xff99aa],
+    [fX + 42, fY + 46, 6, 0xffccdc],
+    [fX + 20, fY + 48, 6, 0xff8aa0],
+  ];
+  for (const [rx, ry, rr, rc] of roses) {
+    gfx.fillStyle(rc);
+    gfx.fillCircle(rx, ry, rr);
+    gfx.fillStyle(0xcc3a5a);
+    gfx.fillCircle(rx, ry, Math.max(2, rr - 4));
+    // Highlight
+    gfx.fillStyle(0xffffff, 0.6);
+    gfx.fillCircle(rx - rr / 3, ry - rr / 3, 1.5);
+  }
+  // Leaves
+  gfx.fillStyle(0x2a6a2a);
+  gfx.fillEllipse(fX + 20, fY + 52, 12, 4);
+  gfx.fillEllipse(fX + 62, fY + 58, 14, 4);
+  gfx.fillEllipse(fX + 48, fY + 60, 10, 3);
+
+  // ── Eagle-soaring landscape (above dining, right of window) ──
+  const eX = 544, eY = 42, eW = 200, eH = 110;
+  // Heavy rustic wood frame
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(eX - 10, eY - 10, eW + 20, eH + 20);
+  gfx.fillStyle(0x6a4a2a);
+  gfx.fillRect(eX - 7, eY - 7, eW + 14, eH + 14);
+  gfx.fillStyle(0x8a6a3a);
+  gfx.fillRect(eX - 4, eY - 4, eW + 8, 2);
+  gfx.fillRect(eX - 4, eY + eH + 2, eW + 8, 2);
+  // Sunset sky
+  gfx.fillGradientStyle(0xf0a040, 0xf0a040, 0xf4d488, 0xf4d488);
+  gfx.fillRect(eX, eY, eW, Math.floor(eH * 0.55));
+  // Distant sun disc
+  gfx.fillStyle(0xfff0a8);
+  gfx.fillCircle(eX + eW - 48, eY + 22, 12);
+  gfx.fillStyle(0xffd468, 0.6);
+  gfx.fillCircle(eX + eW - 48, eY + 22, 18);
+  // Mountain silhouettes (back range — lighter)
+  gfx.fillStyle(0x5a6a8a);
+  gfx.fillTriangle(eX, eY + eH * 0.6, eX + 70, eY + eH * 0.3, eX + 130, eY + eH * 0.55);
+  gfx.fillTriangle(eX + 90, eY + eH * 0.55, eX + 160, eY + eH * 0.25, eX + eW, eY + eH * 0.5);
+  // Mountain silhouettes (front range — darker)
+  gfx.fillStyle(0x3a4a5a);
+  gfx.fillTriangle(eX - 4, eY + eH * 0.7, eX + 48, eY + eH * 0.42, eX + 100, eY + eH * 0.7);
+  gfx.fillTriangle(eX + 70, eY + eH * 0.7, eX + 130, eY + eH * 0.4, eX + 180, eY + eH * 0.7);
+  gfx.fillTriangle(eX + 150, eY + eH * 0.7, eX + 190, eY + eH * 0.5, eX + eW, eY + eH * 0.7);
+  // Snowcaps
+  gfx.fillStyle(0xffffff);
+  gfx.fillTriangle(eX + 44, eY + eH * 0.46, eX + 52, eY + eH * 0.42, eX + 58, eY + eH * 0.5);
+  gfx.fillTriangle(eX + 126, eY + eH * 0.44, eX + 134, eY + eH * 0.4, eX + 140, eY + eH * 0.48);
+  // Evergreen forest at base
+  gfx.fillStyle(0x1a3a1a);
+  gfx.fillRect(eX, eY + eH * 0.7, eW, eH * 0.3);
+  for (let tr = 0; tr < 14; tr++) {
+    const tx = eX + 4 + tr * 14;
+    const th = 10 + (tr % 3) * 3;
+    gfx.fillStyle(0x2a5a2a);
+    gfx.fillTriangle(tx - 4, eY + eH * 0.72 + th, tx + 4, eY + eH * 0.72 + th, tx, eY + eH * 0.72);
+  }
+  // Reflective lake (small patch at base)
+  gfx.fillStyle(0x6a8aba);
+  gfx.fillRect(eX + 60, eY + eH - 10, 90, 8);
+  gfx.fillStyle(0xaaccee, 0.5);
+  gfx.fillRect(eX + 60, eY + eH - 10, 90, 2);
+  // The bald eagle — center, wings spread
+  const egX = eX + eW / 2 - 8;
+  const egY = eY + eH * 0.32;
+  gfx.fillStyle(0x3a2a1a);
+  // Body
+  gfx.fillEllipse(egX, egY + 2, 14, 6);
+  // Wings — swept with multiple feather segments
+  gfx.fillTriangle(egX - 7, egY, egX - 36, egY - 10, egX - 12, egY + 4);
+  gfx.fillTriangle(egX - 26, egY - 8, egX - 42, egY + 2, egX - 14, egY + 3);
+  gfx.fillTriangle(egX + 7, egY, egX + 36, egY - 10, egX + 12, egY + 4);
+  gfx.fillTriangle(egX + 26, egY - 8, egX + 42, egY + 2, egX + 14, egY + 3);
+  // Wing tip feathers
+  gfx.fillStyle(0x1a0a00);
+  gfx.fillRect(egX - 42, egY, 4, 2);
+  gfx.fillRect(egX + 38, egY, 4, 2);
+  // White head
+  gfx.fillStyle(0xffffff);
+  gfx.fillCircle(egX, egY - 1, 3);
+  // Yellow beak
+  gfx.fillStyle(0xd4a020);
+  gfx.fillTriangle(egX + 2, egY - 2, egX + 5, egY, egX + 2, egY + 1);
+  // Eye
+  gfx.fillStyle(0x000000);
+  gfx.fillCircle(egX - 1, egY - 1, 0.8);
+  // White tail feathers
+  gfx.fillStyle(0xffffff);
+  gfx.fillTriangle(egX - 4, egY + 6, egX + 4, egY + 6, egX, egY + 12);
+
+  // Small brass plaque on the eagle frame
+  gfx.fillStyle(0xd4a020);
+  gfx.fillRect(eX + eW / 2 - 22, eY + eH + 4, 44, 6);
+  {
+    const label = 'AMERICA';
+    const scale = 1;
+    const tw = pixelTextWidth(label, scale);
+    drawPixelText(gfx, eX + eW / 2 - tw / 2, eY + eH + 5, label, scale, 0x3a1a0a);
+  }
+
+  // ── Sofa (living room area, left) ──
+  const sfX = 86, sfY = FLOOR_Y - 58;
+  gfx.fillStyle(0x4a6a8a);
+  gfx.fillRect(sfX, sfY, 142, 24);
+  gfx.fillRect(sfX - 8, sfY, 10, 52);
+  gfx.fillRect(sfX + 140, sfY, 10, 52);
+  gfx.fillStyle(0x3a5a7a);
+  gfx.fillRect(sfX, sfY + 24, 142, 28);
+  // Cushion seams
+  gfx.lineStyle(1, 0x2a3a5a, 0.6);
+  gfx.lineBetween(sfX + 47, sfY + 24, sfX + 47, sfY + 52);
+  gfx.lineBetween(sfX + 95, sfY + 24, sfX + 95, sfY + 52);
+  // Floral throw pillows
+  const drawThrowPillow = (ppx: number) => {
+    gfx.fillStyle(0xf0d4c8);
+    gfx.fillRect(ppx, sfY + 4, 24, 22);
+    gfx.fillStyle(0xff99aa);
+    gfx.fillCircle(ppx + 6, sfY + 10, 3);
+    gfx.fillCircle(ppx + 18, sfY + 16, 3);
+    gfx.fillStyle(0x3a7a3a);
+    gfx.fillRect(ppx + 9, sfY + 12, 6, 1);
+    gfx.fillRect(ppx + 13, sfY + 18, 6, 1);
+  };
+  drawThrowPillow(sfX + 6);
+  drawThrowPillow(sfX + 112);
+  // Sofa legs (dark wood)
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(sfX + 2, sfY + 52, 4, 6);
+  gfx.fillRect(sfX + 136, sfY + 52, 4, 6);
+
+  // Coffee table
+  gfx.fillStyle(0x5a3a1a);
+  gfx.fillRect(116, FLOOR_Y - 18, 104, 5);
+  gfx.fillStyle(0x7a4a20);
+  gfx.fillRect(116, FLOOR_Y - 18, 104, 1);
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(120, FLOOR_Y - 13, 3, 12);
+  gfx.fillRect(213, FLOOR_Y - 13, 3, 12);
+  // Coaster + magazine
+  gfx.fillStyle(0xc4c4a0);
+  gfx.fillRect(140, FLOOR_Y - 22, 26, 4);
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(140, FLOOR_Y - 22, 6, 4);
+  gfx.fillStyle(0xffffff);
+  gfx.fillCircle(190, FLOOR_Y - 20, 3);
+
+  // Persian-style area rug
+  gfx.fillStyle(0x8a2a2a);
+  gfx.fillRect(58, FLOOR_Y - 8, 196, 22);
+  gfx.fillStyle(0xd4a020, 0.45);
+  gfx.fillRect(62, FLOOR_Y - 6, 188, 2);
+  gfx.fillRect(62, FLOOR_Y + 10, 188, 2);
+  gfx.fillStyle(0x3a6a8a);
+  for (let rx = 80; rx < 252; rx += 22) gfx.fillCircle(rx, FLOOR_Y + 2, 2);
+  gfx.fillStyle(0xd4a020);
+  for (let rx = 91; rx < 252; rx += 22) gfx.fillCircle(rx, FLOOR_Y + 2, 1.5);
+  // Fringe
+  gfx.lineStyle(1, 0xd4a020, 0.6);
+  for (let fx2 = 58; fx2 < 254; fx2 += 4) {
+    gfx.lineBetween(fx2, FLOOR_Y + 14, fx2, FLOOR_Y + 18);
+  }
+
+  // Floor lamp in corner
+  gfx.fillStyle(0x3a2a1a);
+  gfx.fillRect(40, FLOOR_Y - 2, 16, 2);
+  gfx.fillRect(46, FLOOR_Y - 112, 4, 110);
+  gfx.fillStyle(0xe4d0a0);
+  gfx.fillTriangle(36, FLOOR_Y - 114, 62, FLOOR_Y - 114, 49, FLOOR_Y - 138);
+  gfx.fillStyle(0xc8a878);
+  gfx.fillRect(36, FLOOR_Y - 114, 26, 2);
+  // Warm glow
+  gfx.fillStyle(0xfff0a0, 0.35);
+  gfx.fillEllipse(49, FLOOR_Y - 110, 60, 14);
+
+  // ── Dining table (right side) ──
+  const tX = 520, tY = FLOOR_Y - 26;
+  const tW = 180;
+  // Tabletop — mahogany with highlight
+  gfx.fillStyle(0x5a2a1a);
+  gfx.fillRect(tX, tY, tW, 8);
+  gfx.fillStyle(0x7a4020);
+  gfx.fillRect(tX, tY, tW, 2);
+  // Apron
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(tX + 4, tY + 8, tW - 8, 4);
+  // Legs (turned, tapered)
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(tX + 10, tY + 12, 6, 14);
+  gfx.fillRect(tX + tW - 16, tY + 12, 6, 14);
+  // Dining chairs — two backs visible at the far side
+  const drawDiningChair = (ccx: number) => {
+    gfx.fillStyle(0x3a1a0a);
+    gfx.fillRect(ccx - 12, tY - 26, 24, 24);
+    gfx.fillStyle(0x5a2a1a);
+    gfx.fillRect(ccx - 12, tY - 26, 24, 3);
+    // Back slats
+    gfx.fillStyle(0x2a0a00);
+    gfx.fillRect(ccx - 7, tY - 22, 2, 16);
+    gfx.fillRect(ccx - 1, tY - 22, 2, 16);
+    gfx.fillRect(ccx + 5, tY - 22, 2, 16);
+    // Seat cushion peek
+    gfx.fillStyle(0xcc9966);
+    gfx.fillRect(ccx - 10, tY - 4, 20, 3);
+  };
+  drawDiningChair(tX + 44);
+  drawDiningChair(tX + 136);
+  // Front-facing chair seats visible through the table
+  gfx.fillStyle(0x4a2a1a);
+  gfx.fillRect(tX + 30, tY + 8, 28, 4);
+  gfx.fillRect(tX + 122, tY + 8, 28, 4);
+
+  // Dining table runner + centerpiece
+  gfx.fillStyle(0xe8dcbc);
+  gfx.fillRect(tX + 30, tY + 1, tW - 60, 5);
+  gfx.fillStyle(0xd4a020, 0.6);
+  gfx.fillRect(tX + 30, tY + 1, tW - 60, 1);
+  // Crystal vase
+  gfx.fillStyle(0xdce8f4, 0.9);
+  gfx.fillTriangle(tX + tW / 2 - 10, tY - 2, tX + tW / 2 + 10, tY - 2, tX + tW / 2 + 6, tY + 2);
+  gfx.fillTriangle(tX + tW / 2 - 10, tY - 2, tX + tW / 2 + 6, tY + 2, tX + tW / 2 - 6, tY + 2);
+  // Flowers (mixed)
+  gfx.fillStyle(0xff99aa);
+  gfx.fillCircle(tX + tW / 2 - 4, tY - 10, 3);
+  gfx.fillCircle(tX + tW / 2 + 3, tY - 13, 3);
+  gfx.fillStyle(0xfff0a0);
+  gfx.fillCircle(tX + tW / 2 + 8, tY - 8, 2.5);
+  gfx.fillStyle(0xff6699);
+  gfx.fillCircle(tX + tW / 2 - 2, tY - 10, 1);
+  // Leaves
+  gfx.fillStyle(0x2a6a2a);
+  gfx.fillEllipse(tX + tW / 2 - 7, tY - 5, 7, 2);
+  gfx.fillEllipse(tX + tW / 2 + 7, tY - 4, 7, 2);
+
+  // Brass candlesticks flanking the centerpiece
+  for (const cdx of [tX + 40, tX + tW - 40]) {
+    gfx.fillStyle(0xd4a020);
+    gfx.fillRect(cdx - 1, tY - 16, 2, 16);
+    gfx.fillEllipse(cdx, tY, 6, 2);
+    gfx.fillStyle(0xf0e8d0);
+    gfx.fillRect(cdx - 1, tY - 20, 2, 4);
+    gfx.fillStyle(0xffcc33);
+    gfx.fillCircle(cdx, tY - 22, 2);
+  }
+
+  // Chandelier over the dining table
+  const chX = tX + tW / 2;
+  const chY = 24;
+  gfx.fillStyle(0x6a6a6a);
+  gfx.fillRect(chX - 1, 0, 2, chY);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillEllipse(chX, chY, 44, 6);
+  gfx.fillEllipse(chX, chY + 6, 32, 4);
+  // Candles
+  for (let ci = 0; ci < 5; ci++) {
+    const cix = chX - 18 + ci * 9;
+    gfx.fillStyle(0xf0e8d0);
+    gfx.fillRect(cix - 1, chY - 4, 2, 4);
+    gfx.fillStyle(0xfff0a0);
+    gfx.fillCircle(cix, chY - 6, 1.5);
+  }
+  // Warm glow
+  gfx.fillStyle(0xfff0a0, 0.25);
+  gfx.fillEllipse(chX, chY + 4, 70, 18);
+
+  // ── Bar cart / coffee station (left, preserves x=100 zone) ──
+  gfx.fillStyle(0x3a2a1a);
+  gfx.fillRect(86, FLOOR_Y - 44, 34, 44);
+  gfx.fillStyle(0x5a3a1a);
+  gfx.fillRect(86, FLOOR_Y - 44, 34, 2);
+  gfx.fillRect(86, FLOOR_Y - 22, 34, 2);
+  // Wheels
+  gfx.fillStyle(0x222222);
+  gfx.fillCircle(90, FLOOR_Y - 2, 2);
+  gfx.fillCircle(116, FLOOR_Y - 2, 2);
+  // Coffee maker on top
+  gfx.fillStyle(0x111111);
+  gfx.fillRect(92, FLOOR_Y - 62, 16, 18);
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(94, FLOOR_Y - 52, 12, 2);
+  gfx.fillStyle(0x4a2a1a);
+  gfx.fillRect(98, FLOOR_Y - 56, 6, 5);
+  // Coffee mug beside it
+  gfx.fillStyle(0xf4e4c0);
+  gfx.fillRect(112, FLOOR_Y - 54, 9, 10);
+  gfx.fillRect(121, FLOOR_Y - 51, 3, 4);
+  gfx.fillStyle(0x5a3a1a);
+  gfx.fillRect(113, FLOOR_Y - 53, 7, 2);
+  // Steam
+  gfx.lineStyle(1, 0xcccccc, 0.7);
+  gfx.lineBetween(115, FLOOR_Y - 56, 118, FLOOR_Y - 68);
+  gfx.lineBetween(118, FLOOR_Y - 56, 116, FLOOR_Y - 68);
+
+  // ── Fridge (right edge, preserves x=720 note zone) ──
+  const frX = SCREEN_W - 80, frY = FLOOR_Y - 120, frW = 64, frH = 120;
+  // Shadow
+  gfx.fillStyle(0x000000, 0.12);
+  gfx.fillRect(frX + 4, FLOOR_Y - 4, frW, 4);
+  // Body
+  gfx.fillStyle(0xe8ece8);
+  gfx.fillRect(frX, frY, frW, frH);
+  gfx.fillStyle(0xf4f8f4);
+  gfx.fillRect(frX, frY, 3, frH);
+  gfx.lineStyle(1, 0xaaaaaa);
+  gfx.strokeRect(frX, frY, frW, frH);
+  // Freezer seam
+  gfx.lineBetween(frX, frY + 36, frX + frW, frY + 36);
+  // Handles
+  gfx.fillStyle(0xb8b8b8);
+  gfx.fillRect(frX + frW - 8, frY + 8, 3, 22);
+  gfx.fillRect(frX + frW - 8, frY + 48, 3, 60);
+  // Yellow note + magnet
+  gfx.fillStyle(0xf0e080);
+  gfx.fillRect(frX + 12, frY + 14, 22, 18);
+  gfx.lineStyle(0.5, 0x6a5a0a, 0.7);
+  gfx.lineBetween(frX + 15, frY + 20, frX + 32, frY + 20);
+  gfx.lineBetween(frX + 15, frY + 24, frX + 32, frY + 24);
+  gfx.lineBetween(frX + 15, frY + 28, frX + 28, frY + 28);
+  gfx.fillStyle(0xcc3333);
+  gfx.fillCircle(frX + 23, frY + 13, 2);
+  // Family photo + extra magnet decoration
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(frX + 40, frY + 50, 18, 22);
+  gfx.fillStyle(0xffa060);
+  gfx.fillRect(frX + 42, frY + 54, 14, 12);
+  gfx.fillStyle(0x3a2a1a);
+  gfx.fillCircle(frX + 46, frY + 58, 2);
+  gfx.fillCircle(frX + 52, frY + 58, 2);
+  gfx.fillStyle(0xcc6699);
+  gfx.fillCircle(frX + 54, frY + 66, 1.5);
+
+  // ── Thanksgiving-ready sideboard under the eagle painting ──
+  const sbX = 544, sbY = FLOOR_Y - 42;
+  gfx.fillStyle(0x5a2a1a);
+  gfx.fillRect(sbX, sbY, 200, 34);
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(sbX + 4, sbY + 4, 58, 26);
+  gfx.fillRect(sbX + 70, sbY + 4, 58, 26);
+  gfx.fillRect(sbX + 136, sbY + 4, 58, 26);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(sbX + 33, sbY + 17, 1.5);
+  gfx.fillCircle(sbX + 99, sbY + 17, 1.5);
+  gfx.fillCircle(sbX + 165, sbY + 17, 1.5);
+
+  // ── American flag on a stand in the corner by the dining room ──
+  gfx.fillStyle(0x6a4a2a);
+  gfx.fillRect(SCREEN_W - 94, FLOOR_Y - 88, 3, 88);
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(SCREEN_W - 93, FLOOR_Y - 92, 3);
+  // Red stripes
+  gfx.fillStyle(0xcc2233);
+  for (let si = 0; si < 7; si++) {
+    gfx.fillRect(SCREEN_W - 91, FLOOR_Y - 86 + si * 6, 44, 3);
+  }
+  // White stripes (transparent background between reds; add crisp white between)
+  gfx.fillStyle(0xffffff);
+  for (let si = 0; si < 6; si++) {
+    gfx.fillRect(SCREEN_W - 91, FLOOR_Y - 83 + si * 6, 44, 3);
+  }
+  // Canton (blue field)
+  gfx.fillStyle(0x2a3a88);
+  gfx.fillRect(SCREEN_W - 91, FLOOR_Y - 86, 20, 18);
+  // Stars (small dots)
+  gfx.fillStyle(0xffffff);
+  for (let sr = 0; sr < 4; sr++) {
+    for (let sc = 0; sc < 4; sc++) {
+      gfx.fillRect(SCREEN_W - 89 + sc * 5, FLOOR_Y - 84 + sr * 4, 1, 1);
+    }
+  }
 }
 
 export function drawFrontYard(gfx: Phaser.GameObjects.Graphics, state: DadState): void {

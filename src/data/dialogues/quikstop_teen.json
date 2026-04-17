@@ -7,10 +7,11 @@
       "text": "",
       "routes": [
         { "conditions": [{ "field": "flags.teen_weed_invite", "op": "==", "value": true }], "nextNode": "already_asked" },
-        { "conditions": [{ "field": "flags.foundWeed", "op": "==", "value": true }], "nextNode": "has_weed" }
+        { "conditions": [{ "field": "flags.weedSmoked", "op": "==", "value": true }], "nextNode": "teen_offers" }
       ],
       "next": "intro"
     },
+
     "intro": {
       "id": "intro",
       "text": "",
@@ -22,38 +23,81 @@
         { "text": "\"Just... nodding\"", "nextNode": "close" }
       ]
     },
+
     "close": {
       "id": "close",
       "text": "You nod. He nods. Neither of you says anything else. This is a language."
     },
-    "has_weed": {
-      "id": "has_weed",
+
+    "teen_offers": {
+      "id": "teen_offers",
       "text": "",
       "beats": [
-        { "speaker": "Dad", "text": "Hey. Uh. You ever... yeah.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
-        { "speaker": "Quikstop Teen", "text": "Yo for real? For REAL real?", "mouth": "grin", "eyes": "wide" },
-        { "speaker": "Quikstop Teen", "text": "Dude my mom like, literally would KILL me. Let's go.", "mouth": "grin", "eyes": "wide" }
+        { "speaker": "Quikstop Teen", "text": "Yo.", "mouth": "smirk", "eyes": "lidded" },
+        { "text": "He's staring at you. Not at your face. AT you. Sniffing, almost. His nostrils flare the way a cat's do when it smells a dying bird.", "mouth": "neutral" },
+        { "speaker": "Quikstop Teen", "text": "...Bro. You reek.", "mouth": "grin", "eyes": "wide" },
+        { "speaker": "Dad", "text": "I, uh — I don't — ", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Quikstop Teen", "text": "Nah, nah, chill. I'm sayin' like — RESPECT. You chiefed today. I can smell it on the khakis.", "mouth": "grin", "eyes": "lidded" },
+        { "speaker": "Quikstop Teen", "text": "Got some STICKY in the alley if you wanna go another round. My guy cuts it with something. It hits different.", "mouth": "smirk", "eyes": "lidded" },
+        { "text": "Your hand is already itching. The high you had earlier is fraying at the edges. You know this feeling. It's the jonesing feeling. The one that talks in your own voice and says things like 'just a little bit more, it's Saturday.'", "mouth": "sleepy", "eyebrows": "worried" }
       ],
       "choices": [
         {
-          "text": "\"Wanna smoke in the alley?\"",
+          "text": "\"...yeah. Yeah, alright. Alley. Let's go.\"",
           "nextNode": "to_alley",
           "effects": [
             { "type": "set", "field": "flags.teen_weed_invite", "value": true }
           ]
         },
-        { "text": "\"Nvm\"", "nextNode": "nvm" }
+        {
+          "text": "\"I shouldn't. I have a BBQ.\"",
+          "nextNode": "try_to_decline"
+        },
+        {
+          "text": "\"I am a GROWN MAN I do NOT — \" [walk away]",
+          "nextNode": "nvm",
+          "effects": [
+            { "type": "add", "field": "reputation", "value": 2 }
+          ]
+        }
       ]
     },
+
+    "try_to_decline": {
+      "id": "try_to_decline",
+      "text": "",
+      "beats": [
+        { "speaker": "Quikstop Teen", "text": "BBQ. Yeah. So you WILL be smokin' burgers, like — conceptually, it's the same.", "mouth": "grin", "eyes": "lidded" },
+        { "speaker": "Dad", "text": "That's not — that's not the same — ", "mouth": "frown", "eyes": "wide" },
+        { "text": "But you can already smell it through the baggie in his hoodie. Dank. Piney. Expensive. Your mouth fills with saliva like you're looking at a steak. This is embarrassing. This is who you are.", "mouth": "sleepy", "eyebrows": "worried" },
+        { "speaker": "Dad", "text": "...Lead the way, Tyler.", "mouth": "smirk", "eyes": "lidded" },
+        { "speaker": "Quikstop Teen", "text": "My name's not Tyler. But aight.", "mouth": "grin", "eyes": "wide" }
+      ],
+      "choices": [
+        {
+          "text": "Follow him to the alley",
+          "nextNode": "to_alley",
+          "effects": [
+            { "type": "set", "field": "flags.teen_weed_invite", "value": true }
+          ]
+        }
+      ]
+    },
+
     "to_alley": {
       "id": "to_alley",
-      "text": "He's already walking. You follow a man-child toward a dumpster.",
+      "text": "He's already walking. You follow a man-child toward a dumpster, telling yourself this is research. For the novel you are not writing.",
       "exitScene": "teen_alley"
     },
+
     "nvm": {
       "id": "nvm",
-      "text": "'Oh. OK. Cool cool cool.' He goes back to his vape. You die a little."
+      "text": "You walk away. He watches you go. Somewhere in your chest, a small part of you is genuinely proud. The rest of you is SEETHING.",
+      "effects": [
+        { "type": "set", "field": "flags.resisted_teen_weed", "value": true }
+      ]
     },
+
     "already_asked": {
       "id": "already_asked",
       "text": "",

@@ -33,16 +33,20 @@
     },
     "t2_offer": {
       "id": "t2_offer",
-      "text": "Behind the QuikStop again. A guy in a tracksuit nods at you. 'You're the duffel bag guy. I got more work if you want it. You got a face people trust. It's the khakis.'",
+      "text": "",
+      "beats": [
+        { "speaker": "Fence Guy", "text": "'You're the duffel bag guy. Got stuff to move?'", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "He opens the trunk of a Buick. It's full of laptops, a 'decorative vase' that is DEFINITELY not a decorative vase, and a pink scooter.", "mouth": "sleepy" },
+        { "speaker": "Fence Guy", "text": "'Three items. Haggle me up. Push too hard, I walk. Got it, khakis?'", "mouth": "neutral" }
+      ],
       "choices": [
         {
-          "text": "\"What kind of work?\"",
-          "nextNode": "t2",
-          "timeCost": 60,
+          "text": "\"Let's do it\" — start haggling",
+          "nextNode": "haggle_launch",
+          "timeCost": 30,
           "effects": [
-            { "type": "add", "field": "cash", "value": 400 },
             { "type": "add", "field": "vices.theft", "value": 1 },
-            { "type": "add", "field": "suspicion", "value": 15 }
+            { "type": "add", "field": "suspicion", "value": 10 }
           ]
         },
         {
@@ -51,9 +55,10 @@
         }
       ]
     },
-    "t2": {
-      "id": "t2",
-      "text": "You fence stolen electronics at a swap meet. You sell three laptops and a 'decorative vase' that is definitely not a decorative vase. Your sales skills from the 2019 fiscal quarter are finally being applied. A woman tries to haggle. You counter-offer. She accepts. You feel alive in a way that quarterly reviews never provided."
+    "haggle_launch": {
+      "id": "haggle_launch",
+      "text": "",
+      "exitScene": "MINIGAME:haggle_fence"
     },
     "t2_decline": {
       "id": "t2_decline",

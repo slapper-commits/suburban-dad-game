@@ -51,8 +51,22 @@
           "nextNode": "no_cash",
           "conditions": [{ "field": "flags.cash", "op": "<", "value": 50 }]
         },
+        {
+          "text": "\"Got anything to fence?\" (Tony → haggle)",
+          "nextNode": "tony_fence_launch",
+          "conditions": [{ "field": "vices.theft", "op": ">=", "value": 1 }]
+        },
         { "text": "\"Hard pass, Tony.\"", "nextNode": "pass" }
       ]
+    },
+
+    "tony_fence_launch": {
+      "id": "tony_fence_launch",
+      "text": "",
+      "beats": [
+        { "speaker": "Tony", "text": "\"Atta boy. Come out back.\"", "mouth": "grin", "eyes": "shades" }
+      ],
+      "exitScene": "MINIGAME:haggle_tony"
     },
 
     "bet_50": {

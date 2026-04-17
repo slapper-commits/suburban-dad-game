@@ -110,6 +110,7 @@ import stripClubBartender from '../data/dialogues/strip_club_bartender.json';
 import stripClubDancer from '../data/dialogues/strip_club_dancer.json';
 import stripClubVip from '../data/dialogues/strip_club_vip.json';
 import stripClubTony from '../data/dialogues/strip_club_tony.json';
+import pawnShop from '../data/dialogues/pawn_shop.json';
 import girlsApartmentHub from '../data/dialogues/girls_apartment_hub.json';
 import trapHouseHub from '../data/dialogues/trap_house_hub.json';
 import trapDealer from '../data/dialogues/trap_dealer.json';
@@ -292,6 +293,7 @@ export class GameScene extends Phaser.Scene {
       strip_club_dancer: stripClubDancer as unknown as DialogueTree,
       strip_club_vip: stripClubVip as unknown as DialogueTree,
       strip_club_tony: stripClubTony as unknown as DialogueTree,
+      pawn_shop: pawnShop as unknown as DialogueTree,
       girls_apartment_hub: girlsApartmentHub as unknown as DialogueTree,
       trap_house_hub: trapHouseHub as unknown as DialogueTree,
       trap_dealer: trapDealer as unknown as DialogueTree,
@@ -732,6 +734,42 @@ export class GameScene extends Phaser.Scene {
         playerState: this.reg.playerState,
         parentSceneKey: 'GameScene',
       });
+    } else if (gameId.startsWith('haggle_')) {
+      // Haggle minigame — sell stolen items for cash.
+      // Pick item list by haggle source (fence, pawn, tony, etc.)
+      const haggleItems: Record<string, Array<{ label: string; basePrice: number }>> = {
+        haggle_fence: [
+          { label: "Someone's laptop (no password)", basePrice: 120 },
+          { label: "'Decorative vase' (definitely stolen)", basePrice: 200 },
+          { label: "Pink scooter (kid's?)", basePrice: 80 },
+        ],
+        haggle_pawn: [
+          { label: "Grandpa's wedding ring", basePrice: 180 },
+          { label: "Busted PlayStation", basePrice: 60 },
+        ],
+        haggle_tony: [
+          { label: "Rolex (probably fake)", basePrice: 250 },
+          { label: "Box of iPhone 11s", basePrice: 400 },
+          { label: "Rare baseball card", basePrice: 150 },
+        ],
+      };
+      const items = haggleItems[gameId] ?? haggleItems.haggle_fence;
+      const config: MiniGameConfig = {
+        id: gameId,
+        type: 'custom',
+        name: 'Haggle',
+        description: 'Lock in the best price before they walk.',
+        difficulty: { speed: 0.5, precision: 0.5, duration: 600, wobble: 0 },
+        rewards: [],
+        penalties: [],
+      };
+      this.scene.pause();
+      this.scene.launch('HaggleGame', {
+        config,
+        playerState: this.reg.playerState,
+        parentSceneKey: 'GameScene',
+        items,
+      });
     } else {
       const config: MiniGameConfig = {
         id: gameId,
@@ -817,6 +855,20 @@ export class GameScene extends Phaser.Scene {
       // Add time cost for mowing
       this.reg.timeClock.advance(90);
       this.reg.playerState.recoverSobriety(90);
+    } else if (result.gameId.startsWith('haggle_')) {
+      // Haggle — apply earnings to cash and show inspect text with summary
+      const earnings = (this.reg.playerState.state.flags.haggleEarnings as number) ?? 0;
+      const currentCash = (this.reg.playerState.state.flags.cash as number) ?? 0;
+      this.reg.playerState.state.flags.cash = currentCash + earnings;
+      if (earnings >= 400) {
+        this.reg.playerState.state.flags.cash_bulge = true;
+      }
+      this.reg.timeClock.advance(20);
+      const msg = earnings > 0
+        ? `You pocket $${earnings}. The fence slaps the hood of his Buick. 'Pleasure doin' business, khakis.'`
+        : `You came out empty-handed. The fence is already on his phone to someone more reliable.`;
+      this.showInspectText(msg);
+      delete this.reg.playerState.state.flags.haggleEarnings;
     } else {
       // Grill game
       if (result.result === 'success') {

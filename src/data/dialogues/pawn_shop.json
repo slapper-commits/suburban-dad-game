@@ -1,0 +1,39 @@
+{
+  "id": "pawn_shop",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "A bell jingles. The pawnbroker does not look up from his crossword.", "mouth": "neutral" },
+        { "speaker": "Pawnbroker", "text": "'Selling, buying, or looking?'", "mouth": "sleepy", "eyes": "normal" },
+        { "speaker": "Dad", "text": "\"Selling, maybe.\"", "mouth": "neutral", "eyebrows": "raised" },
+        { "speaker": "Pawnbroker", "text": "'Show me. I lowball on principle. You haggle back on principle. That's the dance.'", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Sell grandpa's ring + a busted PlayStation (haggle)",
+          "nextNode": "haggle_launch",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        },
+        {
+          "text": "\"I don't have anything.\"",
+          "nextNode": "leave"
+        }
+      ]
+    },
+    "haggle_launch": {
+      "id": "haggle_launch",
+      "text": "",
+      "exitScene": "MINIGAME:haggle_pawn"
+    },
+    "leave": {
+      "id": "leave",
+      "text": "'Come back when you do, chief.' He goes back to his crossword. Four across is HUBRIS."
+    }
+  }
+}

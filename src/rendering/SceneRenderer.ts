@@ -1240,16 +1240,33 @@ export function drawStripMall(gfx: Phaser.GameObjects.Graphics, state: DadState)
   gfx.fillStyle(0x555555);
   gfx.fillRect(180, GROUND_Y - 50, 25, 50);
 
-  // Store 2 — Check Cashing (yellow facade)
+  // Store 2 — Pawn Shop (yellow facade with BIG "PAWN" sign)
   gfx.fillStyle(0xd4c870);
   gfx.fillRect(230, GROUND_Y - 120, 150, 120);
   gfx.fillStyle(0xb8a840);
   gfx.fillRect(230, GROUND_Y - 130, 150, 14);
-  // Window
+  // PAWN sign — red background, black letters
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(240, GROUND_Y - 128, 130, 10);
+  gfx.fillStyle(0x111111);
+  // Crude "PAWN" letter blocks
+  for (let i = 0; i < 4; i++) {
+    gfx.fillRect(248 + i * 30, GROUND_Y - 126, 22, 6);
+  }
+  // Window with "$" sign
   gfx.fillStyle(0x87ceeb, 0.6);
   gfx.fillRect(250, GROUND_Y - 90, 60, 40);
+  gfx.fillStyle(0x22aa22);
+  gfx.fillRect(275, GROUND_Y - 82, 10, 24);
+  gfx.fillRect(268, GROUND_Y - 78, 24, 3);
+  gfx.fillRect(268, GROUND_Y - 68, 24, 3);
+  // 3 gold balls (pawnshop symbol)
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(340, GROUND_Y - 96, 4);
+  gfx.fillCircle(352, GROUND_Y - 96, 4);
+  gfx.fillCircle(346, GROUND_Y - 104, 4);
   // Door
-  gfx.fillStyle(0x555555);
+  gfx.fillStyle(0x333333);
   gfx.fillRect(330, GROUND_Y - 50, 25, 50);
 
   // Store 3 — Karate Dojo (white facade)

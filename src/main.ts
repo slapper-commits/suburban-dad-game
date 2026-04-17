@@ -5,6 +5,7 @@ import { EndingScene } from './scenes/EndingScene';
 import { GrillGame } from './minigames/GrillGame';
 import { MowGame } from './minigames/MowGame';
 import { DrivingGame } from './minigames/DrivingGame';
+import { HaggleGame } from './minigames/HaggleGame';
 
 /**
  * Suburban Dad: Secret Saturday
@@ -29,6 +30,7 @@ const config: Phaser.Types.Core.GameConfig = {
     GrillGame,
     MowGame,
     DrivingGame,
+    HaggleGame,
   ],
   physics: {
     default: 'arcade',

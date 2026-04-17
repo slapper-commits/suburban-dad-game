@@ -517,6 +517,13 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         },
       },
       {
+        id: 'pawn_shop',
+        label: 'Pawn Shop',
+        x: 270,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'pawn_shop' },
+      },
+      {
         id: 'club_entrance',
         label: 'Club Purrrple',
         x: 620,

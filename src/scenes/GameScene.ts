@@ -9,7 +9,7 @@ import { sceneZones } from '../data/scene-zones';
 import {
   drawKitchen, drawFrontYard, drawGarage, drawBackyard, drawDougs, drawBBQ,
   drawSidewalk, drawCraigs, drawKevins, drawKidsPorch, drawQuikstop, drawGasStation,
-  drawStripMall, drawSketchy, drawHighway, drawGasStationStore,
+  drawStripMall, drawSketchy, drawHighway, drawGasStationStore, drawMotelRoom,
   drawStripClub, drawStripClubVip, drawGirlsApartment, drawTrapHouse,
   drawIntoxOverlay, setSceneAnimTime,
 } from '../rendering/SceneRenderer';
@@ -113,6 +113,8 @@ import stripClubVip from '../data/dialogues/strip_club_vip.json';
 import stripClubTony from '../data/dialogues/strip_club_tony.json';
 import pawnShop from '../data/dialogues/pawn_shop.json';
 import dougsPoker from '../data/dialogues/dougs_poker.json';
+import motelRoomData from '../data/scenes/motel_room.json';
+import motelEncounter from '../data/dialogues/motel_encounter.json';
 import girlsApartmentHub from '../data/dialogues/girls_apartment_hub.json';
 import trapHouseHub from '../data/dialogues/trap_house_hub.json';
 import trapDealer from '../data/dialogues/trap_dealer.json';
@@ -233,6 +235,7 @@ export class GameScene extends Phaser.Scene {
       sketchy: sketchyData as unknown as SceneData,
       highway: highwayData as unknown as SceneData,
       gas_station_store: gasStationStoreData as unknown as SceneData,
+      motel_room: motelRoomData as unknown as SceneData,
       strip_club: stripClubData as unknown as SceneData,
       strip_club_vip: stripClubVipData as unknown as SceneData,
       girls_apartment: girlsApartmentData as unknown as SceneData,
@@ -298,6 +301,7 @@ export class GameScene extends Phaser.Scene {
       strip_club_tony: stripClubTony as unknown as DialogueTree,
       pawn_shop: pawnShop as unknown as DialogueTree,
       dougs_poker: dougsPoker as unknown as DialogueTree,
+      motel_encounter: motelEncounter as unknown as DialogueTree,
       girls_apartment_hub: girlsApartmentHub as unknown as DialogueTree,
       trap_house_hub: trapHouseHub as unknown as DialogueTree,
       trap_dealer: trapDealer as unknown as DialogueTree,
@@ -683,6 +687,7 @@ export class GameScene extends Phaser.Scene {
       sketchy: drawSketchy,
       highway: drawHighway,
       gas_station_store: drawGasStationStore,
+      motel_room: drawMotelRoom,
       strip_club: drawStripClub,
       strip_club_vip: drawStripClubVip,
       girls_apartment: drawGirlsApartment,
@@ -943,8 +948,10 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    // Confrontation at suspicion >= 60
-    if (state.suspicion >= 60 && !this.confrontationFired && !this.dialogueActive) {
+    // Confrontation at suspicion >= 60 — only when player actually gets home.
+    // Karen can't confront you while you're still at the gas station.
+    const home = state.currentLocation === 'frontyard' || state.currentLocation === 'kitchen';
+    if (home && state.suspicion >= 60 && !this.confrontationFired && !this.dialogueActive) {
       this.confrontationFired = true;
       const tree = this.dialogueMap['confrontation'];
       if (tree) {

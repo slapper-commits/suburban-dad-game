@@ -496,10 +496,10 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
       {
         id: 'sharon_motel',
-        label: 'The Motel',
+        label: 'The Motel (Room 12)',
         x: 550,
         radius: 40,
-        action: { type: 'dialogue', treeId: 'gas_prostitution_t2' },
+        action: { type: 'scene', sceneId: 'motel_room', timeCost: 10 },
         visibleWhen: [
           { field: 'vices.prostitution', op: '>=', value: 1 },
           { field: 'suspicion', op: '<', value: 70 },
@@ -652,6 +652,28 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         x: 80,
         radius: 30,
         action: { type: 'scene', sceneId: 'sidewalk', timeCost: 5 },
+      },
+    ],
+  },
+
+  motel_room: {
+    groundY: 340,
+    walkBounds: { minX: 50, maxX: 750 },
+    dadEntryX: 200,
+    zones: [
+      {
+        id: 'motel_bed',
+        label: 'Sharon (bed)',
+        x: 460,
+        radius: 60,
+        action: { type: 'dialogue', treeId: 'motel_encounter' },
+      },
+      {
+        id: 'motel_exit',
+        label: 'Leave',
+        x: 70,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'gas_station', timeCost: 5 },
       },
     ],
   },

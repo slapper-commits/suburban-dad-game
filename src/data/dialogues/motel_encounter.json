@@ -1,0 +1,64 @@
+{
+  "id": "motel_encounter",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "The door closes behind you. Heart-shaped bed. Mirrored ceiling. A framed print of three dogs playing poker.", "mouth": "sleepy" },
+        { "speaker": "Sharon", "text": "'Make yourself comfortable, khakis.'", "mouth": "pouty", "eyes": "sultry" },
+        { "speaker": "Dad", "text": "'I feel like I should call my wife.'", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Sharon", "text": "'Do that later.'", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Stay. (90 min)",
+          "nextNode": "stay",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -10 },
+            { "type": "add", "field": "suspicion", "value": 25 },
+            { "type": "add", "field": "vices.prostitution", "value": 1 },
+            { "type": "set", "field": "flags.lipstick", "value": true },
+            { "type": "set", "field": "flags.perfume", "value": true },
+            { "type": "add", "field": "flags.cash", "value": -200 }
+          ]
+        },
+        {
+          "text": "\"I can't do this.\" (leave)",
+          "nextNode": "bail",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        }
+      ]
+    },
+
+    "stay": {
+      "id": "stay",
+      "text": "",
+      "beats": [
+        { "text": "*curtain closes*", "mouth": "sleepy" },
+        { "text": "Ninety minutes you can't un-spend.", "mouth": "sleepy" },
+        { "speaker": "Sharon", "text": "'You're a nice guy, khakis. That's the problem.'", "mouth": "pouty", "eyes": "lidded" },
+        { "text": "The perfume on your polo is going to be a forensic situation. The lipstick on your collar is going to be an archaeological dig.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "'I need to go.'", "mouth": "frown", "eyes": "wide" },
+        { "speaker": "Sharon", "text": "'Yeah. You do.'", "mouth": "smirk" }
+      ],
+      "exitScene": "gas_station"
+    },
+
+    "bail": {
+      "id": "bail",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "'I'm sorry. I can't.'", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Sharon", "text": "'OK, khakis. Go home.'", "mouth": "smile" },
+        { "text": "You walk out of Room 12. You feel taller. Two hundred dollars heavier in the wallet.", "mouth": "sleepy" }
+      ],
+      "exitScene": "gas_station"
+    }
+  }
+}

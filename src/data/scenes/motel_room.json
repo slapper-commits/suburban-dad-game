@@ -1,0 +1,8 @@
+{
+  "id": "motel_room",
+  "name": "Room 12",
+  "description": "Heart-shaped bed. Mirrored ceiling. Sharon closed the curtains. You did not ask about the mirrored ceiling.",
+  "background": "motel_room",
+  "isHome": false,
+  "hotspots": []
+}

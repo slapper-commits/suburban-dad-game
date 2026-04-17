@@ -1884,6 +1884,104 @@ export function drawStripClub(gfx: Phaser.GameObjects.Graphics, _state: DadState
   drawMoodLight(gfx, 664, 330, 0xff3377, 28);
 }
 
+export function drawMotelRoom(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
+  // Low-rent love motel vibe: dim interior, pink mood light, heart bed, bedside lamp, cheap art
+  drawDimInterior(gfx, { wall: 0x3a1a2a, floor: 0x2a1a22, vignetteAlpha: 0.55 });
+
+  // Pink mood light from the bedside lamp
+  drawMoodLight(gfx, 620, 220, 0xff3388, 180);
+  drawMoodLight(gfx, 180, 100, 0xaa3366, 120);
+
+  // Mirrored ceiling — subtle grey band at top
+  gfx.fillStyle(0x555566, 0.4);
+  gfx.fillRect(0, 0, 800, 28);
+  gfx.fillStyle(0x222233);
+  gfx.fillRect(0, 28, 800, 3);
+
+  // Heart-shaped bed — centered
+  const bx = 400, by = 310;
+  // Shadow
+  gfx.fillStyle(0x000000, 0.4);
+  gfx.fillEllipse(bx, by + 50, 280, 14);
+
+  // Red satin sheets — two overlapping circles + triangle = heart
+  gfx.fillStyle(0xcc2255);
+  gfx.fillCircle(bx - 50, by + 5, 55);
+  gfx.fillCircle(bx + 50, by + 5, 55);
+  gfx.fillTriangle(bx - 95, by + 15, bx + 95, by + 15, bx, by + 90);
+  // Heart outline/shine
+  gfx.fillStyle(0xff5588, 0.6);
+  gfx.fillCircle(bx - 48, by + 2, 12);
+  gfx.fillCircle(bx + 52, by + 2, 10);
+  // Wooden bed frame base
+  gfx.fillStyle(0x3a1a0a);
+  gfx.fillRect(bx - 110, by + 40, 220, 8);
+  // Legs
+  gfx.fillRect(bx - 108, by + 48, 6, 14);
+  gfx.fillRect(bx + 102, by + 48, 6, 14);
+
+  // Pillows — two white
+  gfx.fillStyle(0xf0f0f0);
+  gfx.fillRect(bx - 70, by - 10, 50, 18);
+  gfx.fillRect(bx + 20, by - 10, 50, 18);
+
+  // Nightstand (right)
+  gfx.fillStyle(0x4a2a2a);
+  gfx.fillRect(600, 310, 50, 30);
+  // Lamp
+  gfx.fillStyle(0x888888);
+  gfx.fillRect(618, 282, 4, 28);
+  gfx.fillStyle(0xffaacc);
+  gfx.fillTriangle(605, 282, 635, 282, 620, 258);
+
+  // Ceiling fan — slowly rotating (animated via time)
+  const t = state.currentTime / 10;
+  const cx = 400, cy = 40;
+  gfx.fillStyle(0x222222);
+  gfx.fillCircle(cx, cy, 6);
+  for (let i = 0; i < 3; i++) {
+    const a = t + (i * Math.PI * 2) / 3;
+    const ex = cx + Math.cos(a) * 40;
+    const ey = cy + Math.sin(a) * 4; // foreshortened
+    gfx.fillStyle(0x444444);
+    gfx.fillRect(cx, cy - 1, ex - cx, 3);
+    void ey;
+  }
+
+  // Painting above bed — crooked, "Dogs Playing Poker" style cheap art
+  gfx.fillStyle(0x5a3a1a);
+  gfx.fillRect(bx - 70, 80, 140, 60);
+  gfx.fillStyle(0xa0a0a0);
+  gfx.fillRect(bx - 64, 86, 128, 48);
+  gfx.fillStyle(0x884400);
+  gfx.fillCircle(bx - 40, 110, 8);
+  gfx.fillCircle(bx - 10, 110, 8);
+  gfx.fillCircle(bx + 20, 110, 8);
+  // Slight tilt line to show crooked
+  gfx.lineStyle(1, 0x222222, 0.3);
+  gfx.lineBetween(bx - 70, 80, bx + 70, 83);
+
+  // Door (left)
+  gfx.fillStyle(0x5a2a2a);
+  gfx.fillRect(40, 220, 60, 170);
+  gfx.fillStyle(0x3a1a1a);
+  gfx.fillRect(40, 220, 60, 6);
+  // Door knob
+  gfx.fillStyle(0xd4a020);
+  gfx.fillCircle(88, 310, 3);
+  // EXIT tag above door
+  gfx.fillStyle(0xcc2233);
+  gfx.fillRect(44, 204, 52, 14);
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(50, 210, 4, 4);
+  gfx.fillRect(58, 210, 4, 4);
+  gfx.fillRect(66, 210, 4, 4);
+  gfx.fillRect(74, 210, 4, 4);
+
+  // Sharon seated on the edge of the bed
+  drawNpc(gfx, 'sharon', 460, by + 36);
+}
+
 export function drawStripClubVip(gfx: Phaser.GameObjects.Graphics, _state: DadState): void {
   drawDimInterior(gfx, { wall: 0x2a0a2a, floor: 0x3a1a3a, vignetteAlpha: 0.6 });
 

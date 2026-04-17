@@ -1,77 +1,215 @@
 {
   "id": "confrontation",
-  "startNode": "karen_arrives",
+  "startNode": "router",
   "nodes": {
-    "karen_arrives": {
-      "id": "karen_arrives",
-      "text": "Karen is in the driveway. Arms crossed. The posture that ends marriages.",
-      "speaker": "Karen",
-      "next": "karen_speaks"
-    },
-    "karen_speaks": {
-      "id": "karen_speaks",
-      "speaker": "Karen",
-      "text": "\"Where have you BEEN? I've been texting you for hours. You smell like... what is that? Is that BEER?\"",
-      "choices": [
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
         {
-          "text": "\"I can explain.\"",
-          "nextNode": "explain",
-          "timeCost": 10,
-          "effects": [
-            { "type": "add", "field": "suspicion", "value": -10 }
-          ]
+          "conditions": [
+            { "field": "flags.lipstick", "op": "==", "value": true },
+            { "field": "flags.perfume", "op": "==", "value": true },
+            { "field": "sobriety", "op": "<", "value": 50 }
+          ],
+          "nextNode": "jackpot"
         },
         {
-          "text": "Go in for the hug",
-          "nextNode": "hug",
-          "timeCost": 5,
-          "effects": [
-            { "type": "add", "field": "suspicion", "value": -5 }
-          ]
+          "conditions": [
+            { "field": "flags.lipstick", "op": "==", "value": true }
+          ],
+          "nextNode": "lipstick_alone"
         },
         {
-          "text": "Mumble incoherently",
-          "nextNode": "mumble",
-          "timeCost": 5,
-          "effects": [
-            { "type": "add", "field": "suspicion", "value": 10 }
-          ]
+          "conditions": [
+            { "field": "flags.perfume", "op": "==", "value": true }
+          ],
+          "nextNode": "perfume_alone"
+        },
+        {
+          "conditions": [
+            { "field": "sobriety", "op": "<", "value": 40 }
+          ],
+          "nextNode": "very_drunk"
         }
+      ],
+      "next": "just_suspicious"
+    },
+
+    "jackpot": {
+      "id": "jackpot",
+      "text": "",
+      "beats": [
+        { "text": "Karen is in the driveway. Arms crossed. The posture that ends marriages.", "mouth": "shock" },
+        { "speaker": "Karen", "text": "\"Where. Have. You. Been.\"", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "text": "You open your mouth. She holds up a hand. She's doing the inventory.", "mouth": "sleepy" },
+        { "speaker": "Karen", "text": "\"You SMELL like beer.\"", "mouth": "frown", "eyebrows": "angry" },
+        { "speaker": "Karen", "text": "\"You ALSO smell like... is that perfume?\"", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Karen", "text": "\"What. Is. That. On. Your. NECK.\"", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" },
+        { "text": "Lipstick. It's lipstick. Karen has reached a state of stillness usually reserved for hostage negotiators.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 15 },
+        { "type": "set", "field": "flags.karen_saw_lipstick", "value": true }
+      ],
+      "choices": [
+        { "text": "\"I can explain.\"", "nextNode": "explain_fail", "timeCost": 5 },
+        { "text": "Say absolutely nothing.", "nextNode": "silence_damning", "timeCost": 5 },
+        { "text": "\"It's ketchup.\"", "nextNode": "ketchup", "timeCost": 5, "effects": [{"type": "add", "field": "suspicion", "value": 10}] }
       ]
     },
+
+    "lipstick_alone": {
+      "id": "lipstick_alone",
+      "text": "",
+      "beats": [
+        { "text": "Karen is in the driveway. Hands on hips.", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"Come here. Closer.\"", "mouth": "neutral" },
+        { "text": "She flicks your collar. Her face does a thing.", "mouth": "sleepy" },
+        { "speaker": "Karen", "text": "\"Who wears that shade?\"", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 10 },
+        { "type": "set", "field": "flags.karen_saw_lipstick", "value": true }
+      ],
+      "choices": [
+        { "text": "\"It's ketchup.\"", "nextNode": "ketchup", "timeCost": 5 },
+        { "text": "\"I... don't know.\"", "nextNode": "silence_damning", "timeCost": 5 }
+      ]
+    },
+
+    "perfume_alone": {
+      "id": "perfume_alone",
+      "text": "",
+      "beats": [
+        { "text": "Karen is in the driveway. She sniffs the air.", "mouth": "neutral" },
+        { "speaker": "Karen", "text": "\"Why do you smell like vanilla and regret?\"", "mouth": "frown", "eyebrows": "raised" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 8 }
+      ],
+      "choices": [
+        { "text": "\"Doug's new air freshener.\"", "nextNode": "cover_fail", "timeCost": 5 },
+        { "text": "\"I don't smell anything.\"", "nextNode": "silence_damning", "timeCost": 5 }
+      ]
+    },
+
+    "very_drunk": {
+      "id": "very_drunk",
+      "text": "",
+      "beats": [
+        { "text": "Karen is in the driveway. Arms crossed. The posture that ends marriages.", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"Oh my god. It's 3 PM.\"", "mouth": "shock" },
+        { "speaker": "Karen", "text": "\"You smell like a BAR.\"", "mouth": "frown", "eyebrows": "angry" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 10 }
+      ],
+      "choices": [
+        { "text": "Hug her.", "nextNode": "hug", "timeCost": 5, "effects": [{"type": "add", "field": "suspicion", "value": -5}] },
+        { "text": "\"I can explain.\"", "nextNode": "explain", "timeCost": 10 },
+        { "text": "Sway gently.", "nextNode": "silence_damning", "timeCost": 5, "effects": [{"type": "add", "field": "suspicion", "value": 8}] }
+      ]
+    },
+
+    "just_suspicious": {
+      "id": "just_suspicious",
+      "text": "",
+      "beats": [
+        { "text": "Karen is in the driveway. Her thumb hasn't stopped scrolling through her contacts.", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"I called Doug's wife. Doug hasn't seen you.\"", "mouth": "neutral", "eyebrows": "angry" },
+        { "speaker": "Karen", "text": "\"Where WERE you?\"", "mouth": "frown", "eyes": "angry" }
+      ],
+      "choices": [
+        { "text": "\"Errands. Just errands.\"", "nextNode": "cover_fail", "timeCost": 5 },
+        { "text": "\"I was at the hardware store.\"", "nextNode": "hardware_lie", "timeCost": 5, "effects": [{"type": "add", "field": "suspicion", "value": 5}] },
+        { "text": "Hug her.", "nextNode": "hug", "timeCost": 5, "effects": [{"type": "add", "field": "suspicion", "value": -5}] }
+      ]
+    },
+
+    "ketchup": {
+      "id": "ketchup",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "\"Ketchup is RED, David. That is PINK.\"", "mouth": "shock", "eyes": "wide" },
+        { "text": "She walks inside without another word. The screen door is a guillotine.", "mouth": "sleepy" }
+      ]
+    },
+
+    "explain_fail": {
+      "id": "explain_fail",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "\"Go on.\"", "mouth": "frown" },
+        { "text": "You open your mouth. Nothing comes out. She gives you three full seconds.", "mouth": "shock" },
+        { "speaker": "Karen", "text": "\"Cool. Cool cool cool.\"", "mouth": "smirk", "eyes": "angry" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 10 }
+      ]
+    },
+
     "explain": {
       "id": "explain",
-      "speaker": "Dave",
-      "text": "\"I was at Doug's. We were just talking. I lost track of time. The lawn's mostly done. The grill's... I'm handling it.\"",
-      "next": "karen_reacts"
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "\"I was at Doug's. We were just talking. Lost track of time.\"", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"Doug. Of course it's Doug.\"", "mouth": "frown" },
+        { "speaker": "Karen", "text": "\"Go shower. Please. Please just shower.\"", "mouth": "sleepy", "eyebrows": "worried" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": -5 }
+      ]
     },
+
     "hug": {
       "id": "hug",
-      "text": "You wrap your arms around her. She's stiff at first. Then slightly less stiff. \"You still smell like beer.\" But she doesn't pull away.",
-      "next": "karen_softens"
+      "text": "",
+      "beats": [
+        { "text": "You wrap your arms around her. She's stiff.", "mouth": "neutral" },
+        { "speaker": "Karen", "text": "\"You smell like — a lot of things.\"", "mouth": "frown" },
+        { "text": "But she doesn't pull away. Small mercies.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": -5 }
+      ]
     },
-    "mumble": {
-      "id": "mumble",
-      "speaker": "Dave",
-      "text": "\"I was... the thing is... Doug had this...\" You trail off. She's already walking back inside.",
+
+    "silence_damning": {
+      "id": "silence_damning",
+      "text": "",
+      "beats": [
+        { "text": "The silence lasts nine seconds. You counted.", "mouth": "shock" },
+        { "speaker": "Karen", "text": "\"Right. OK.\"", "mouth": "smirk", "eyes": "angry" },
+        { "text": "She walks inside. The door does not slam. That's somehow worse.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 8 }
+      ]
+    },
+
+    "cover_fail": {
+      "id": "cover_fail",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "\"Mm. OK.\"", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "She believes none of it. She just doesn't want the fight RIGHT NOW. That fight is for later. At the BBQ. In front of everyone.", "mouth": "sleepy" }
+      ],
       "effects": [
         { "type": "add", "field": "suspicion", "value": 5 }
       ]
     },
-    "karen_reacts": {
-      "id": "karen_reacts",
-      "speaker": "Karen",
-      "text": "\"Doug. Of course it's Doug. My mother is here in an HOUR. Get it together.\"",
+
+    "hardware_lie": {
+      "id": "hardware_lie",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "\"The hardware store. Which one.\"", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "\"...the one.\"", "mouth": "frown", "eyes": "wide" },
+        { "speaker": "Karen", "text": "\"Cool. Cool.\"", "mouth": "smirk" }
+      ],
       "effects": [
-        { "type": "add", "field": "suspicion", "value": -5 }
-      ]
-    },
-    "karen_softens": {
-      "id": "karen_softens",
-      "speaker": "Karen",
-      "text": "\"Just... finish the lawn. And shower. Please shower.\"",
-      "effects": [
-        { "type": "add", "field": "suspicion", "value": -5 }
+        { "type": "add", "field": "suspicion", "value": 8 }
       ]
     }
   }

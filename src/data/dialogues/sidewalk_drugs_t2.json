@@ -64,8 +64,13 @@
     },
     "t2": {
       "id": "t2",
-      "text": "The Girls lead you down an alley, up a fire escape, into an apartment that smells like incense and bad decisions. There's a lava lamp. You feel the walls breathing.",
-      "exitScene": "sketchy"
+      "beats": [
+        { "speaker": "The Girls", "text": "'Come on. We know a place.'", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "They lead you down an alley, around a dumpster, into a house with boarded windows and a very chill pit bull.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "\"This is a lot.\"", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "The Girls", "text": "'It's ALWAYS a lot.'", "mouth": "grin" }
+      ],
+      "exitScene": "trap_house"
     },
     "decline": {
       "id": "decline",

@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATURDAY 3D — M3 Walk + Drive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg-deep: #1a1612; --text-warm: #f0e6d3; --text-dim: #8a7e6e;
+    --accent-gold: #d4a54a; --accent-danger: #c45c3e;
+  }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-deep); color: var(--text-warm); font-family: 'Bitter', Georgia, serif; }
+  #webgl { position: fixed; inset: 0; display: block; width: 100vw; height: 100vh; }
+
+  #title-screen { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-deep); transition: opacity 1s ease, visibility 1s ease; }
+  #title-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .title-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 80%, rgba(212,165,74,0.08) 0%, transparent 60%); }
+  .title-text { position: relative; z-index: 1; text-align: center; }
+  .title-text h1 { font-family: 'Space Mono', monospace; font-size: clamp(3rem, 10vw, 7rem); font-weight: 700; letter-spacing: 0.3em; text-shadow: 0 0 80px rgba(212,165,74,0.2); margin-bottom: 0.2em; }
+  .title-sub { font-family: 'Space Mono', monospace; font-size: clamp(0.7rem, 1.6vw, 0.9rem); color: var(--accent-gold); letter-spacing: 0.3em; margin-bottom: 0.4em; }
+  .title-tagline { font-size: clamp(0.8rem, 2vw, 1.05rem); color: var(--text-dim); letter-spacing: 0.15em; margin-bottom: 3rem; font-weight: 300; }
+  .play-btn { position: relative; z-index: 1; font-family: 'Space Mono', monospace; font-size: 1rem; letter-spacing: 0.2em; color: var(--bg-deep); background: var(--accent-gold); border: none; padding: 1em 3em; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; }
+  .play-btn:hover { background: var(--text-warm); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,165,74,0.3); }
+  .title-controls { position: relative; z-index: 1; margin-top: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.15em; text-align: center; line-height: 1.8; }
+
+  #hud { position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 50; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--accent-gold); letter-spacing: 0.12em; pointer-events: none; text-shadow: 0 2px 6px rgba(0,0,0,0.8); }
+  #hud .label { color: var(--text-dim); font-size: 0.65rem; letter-spacing: 0.2em; display: block; margin-bottom: 0.2em; }
+  #hud .val { font-size: 1.5rem; font-weight: 700; }
+  #hud .unit { font-size: 0.7rem; color: var(--text-dim); margin-left: 0.3em; }
+  #help { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 50; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; pointer-events: none; text-align: right; line-height: 1.8; text-shadow: 0 2px 4px rgba(0,0,0,0.7); transition: opacity 1.5s ease; }
+  #help.faded { opacity: 0.25; }
+  #prompt { position: fixed; bottom: 35%; left: 50%; transform: translateX(-50%); z-index: 50; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--text-warm); letter-spacing: 0.2em; pointer-events: none; background: rgba(26,22,18,0.85); border: 1px solid rgba(212,165,74,0.4); padding: 0.7em 1.4em; border-radius: 2px; opacity: 0; transition: opacity 0.2s ease; text-transform: uppercase; }
+  #prompt.visible { opacity: 1; }
+  #prompt .key { color: var(--accent-gold); font-weight: 700; margin-right: 0.4em; }
+
+  /* Dialogue overlay — inherits visual language from the 2D game */
+  #dialogue { position: fixed; inset: 0; z-index: 80; background: rgba(26,22,18,0.82); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; padding: 2rem; }
+  #dialogue.active { display: flex; }
+  .dlg-panel { max-width: 640px; width: 100%; animation: dlgIn 0.5s ease; }
+  @keyframes dlgIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .dlg-who { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 0.3em; margin-bottom: 1rem; text-transform: uppercase; }
+  .dlg-narr { font-family: 'Bitter', Georgia, serif; font-size: clamp(1rem, 2.4vw, 1.2rem); line-height: 1.75; color: var(--text-warm); font-weight: 300; margin-bottom: 1.2rem; }
+  .dlg-detail { font-family: 'Bitter', Georgia, serif; font-style: italic; font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 2.2rem; }
+  .dlg-choices { border-top: 1px solid rgba(138,126,110,0.2); }
+  .dlg-choice { display: flex; align-items: center; width: 100%; text-align: left; font-family: 'Bitter', Georgia, serif; font-size: clamp(0.95rem, 2vw, 1.05rem); color: var(--text-warm); background: transparent; border: none; border-bottom: 1px solid rgba(138,126,110,0.1); padding: 1.1em 0.6em; cursor: pointer; transition: all 0.2s ease; position: relative; }
+  .dlg-choice::before { content:''; position:absolute; left:0; top:0; bottom:0; width:0; background: rgba(212,165,74,0.06); transition: width 0.25s ease; }
+  .dlg-choice:hover::before { width: 100%; }
+  .dlg-choice:hover { color: var(--accent-gold); padding-left: 1.2em; }
+  .dlg-icon { width: 24px; margin-right: 0.9em; color: var(--text-dim); font-size: 0.85rem; flex-shrink: 0; }
+  .dlg-choice:hover .dlg-icon { color: var(--accent-gold); }
+  .dlg-continue { margin-top: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.2em; text-align: center; }
+
+  /* State chip (top-left, compact) */
+  #state-chip { position: fixed; top: 1.5rem; left: 1.5rem; z-index: 50; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; pointer-events: none; text-shadow: 0 2px 4px rgba(0,0,0,0.7); line-height: 1.8; }
+  #state-chip .k { color: var(--text-dim); }
+  #state-chip .v { color: var(--accent-gold); font-weight: 700; margin-left: 0.4em; }
+  #state-chip .v.warn { color: var(--accent-danger); }
+
+  /* Floating NPC nametag */
+  .npc-tag { position: fixed; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-warm); letter-spacing: 0.2em; pointer-events: none; text-shadow: 0 2px 4px rgba(0,0,0,0.9); transform: translate(-50%, -100%); background: rgba(26,22,18,0.7); padding: 0.25em 0.7em; border-radius: 2px; border: 1px solid rgba(212,165,74,0.3); transition: opacity 0.2s ease; opacity: 0; }
+  .npc-tag.visible { opacity: 1; }
+
+  /* Intro note — shown once when the game begins */
+  #intro { position: fixed; inset: 0; z-index: 95; display: none; align-items: center; justify-content: center; background: rgba(26,22,18,0.94); padding: 2rem; }
+  #intro.active { display: flex; }
+  .intro-panel { max-width: 560px; width: 100%; animation: introIn 0.6s ease; }
+  @keyframes introIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .intro-date { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 0.35em; margin-bottom: 1.2rem; text-transform: uppercase; }
+  .intro-note { border-left: 2px solid var(--accent-gold); padding: 0.2em 0 0.2em 1.4em; margin-bottom: 2rem; }
+  .intro-note p { font-family: 'Bitter', Georgia, serif; font-size: clamp(1rem, 2.4vw, 1.15rem); line-height: 1.8; color: var(--text-warm); font-weight: 300; margin-bottom: 0.8em; }
+  .intro-note p:last-child { margin-bottom: 0; }
+  .intro-note .signoff { font-style: italic; color: var(--text-dim); font-size: 0.9em; margin-top: 1rem; }
+  .intro-goals { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.2em; text-transform: uppercase; line-height: 2.4; margin-bottom: 2rem; }
+  .intro-goals .g { display: flex; align-items: center; }
+  .intro-goals .g::before { content: '□'; color: var(--accent-gold); margin-right: 0.8em; font-size: 1.1em; }
+  .intro-goals .g .time { color: var(--accent-gold); margin-left: 0.6em; }
+  .intro-dismiss { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.25em; text-align: center; text-transform: uppercase; }
+  .intro-dismiss .k { color: var(--accent-gold); font-weight: 700; }
+
+  /* Toast for state changes ("+1 beer", "suspicion +5", etc.) */
+  #toast { position: fixed; top: 30%; left: 50%; transform: translateX(-50%); z-index: 70; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--accent-gold); letter-spacing: 0.2em; pointer-events: none; opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; text-shadow: 0 2px 8px rgba(0,0,0,0.8); text-transform: uppercase; }
+  #toast.visible { opacity: 1; transform: translateX(-50%) translateY(-8px); }
+
+  /* Phone text — slides down from top, ported from 2D game's .text-message */
+  #phone-text { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%) translateY(-200px); width: min(420px, 92vw); background: #1e1b17; border: 1px solid rgba(212,165,74,0.22); border-radius: 12px; padding: 1rem 1.2rem; z-index: 75; transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 14px 40px rgba(0,0,0,0.55); pointer-events: none; }
+  #phone-text.visible { transform: translateX(-50%) translateY(0); pointer-events: auto; }
+  .pt-head { display: flex; align-items: center; gap: 0.6em; margin-bottom: 0.6rem; }
+  .pt-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-danger); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--bg-deep); font-family: 'Space Mono', monospace; }
+  .pt-name { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 0.08em; }
+  .pt-time { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text-dim); margin-left: auto; }
+  .pt-body { font-size: 0.95rem; color: var(--text-warm); line-height: 1.5; font-family: 'Bitter', Georgia, serif; font-weight: 300; }
+  .pt-replies { margin-top: 0.9rem; border-top: 1px solid rgba(138,126,110,0.15); }
+  .pt-reply { display: block; width: 100%; text-align: left; font-family: 'Bitter', Georgia, serif; font-size: 0.85rem; color: var(--text-warm); background: transparent; border: none; border-bottom: 1px solid rgba(138,126,110,0.08); padding: 0.7em 0.2em; cursor: pointer; transition: color 0.2s ease, padding 0.2s ease; }
+  .pt-reply:hover { color: var(--accent-gold); padding-left: 0.6em; }
+  .pt-reply:last-child { border-bottom: none; }
+  .pt-reply .lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text-dim); letter-spacing: 0.2em; margin-right: 0.6em; }
+  .pt-ignore-timer { margin-top: 0.5rem; height: 2px; background: rgba(138,126,110,0.15); border-radius: 1px; overflow: hidden; }
+  .pt-ignore-timer .bar { height: 100%; background: var(--accent-danger); width: 100%; transition: width linear; }
+</style>
+</head>
+<body>
+
+<div id="title-screen">
+  <div class="title-bg"></div>
+  <div class="title-text">
+    <div class="title-sub">M3 · WALK + DRIVE</div>
+    <h1>SATURDAY</h1>
+    <div class="title-tagline">Dad's keys are in his pocket. The day is long.</div>
+  </div>
+  <button class="play-btn" id="play-btn">BEGIN</button>
+  <div class="title-controls">WASD TO MOVE &nbsp;·&nbsp; E TO ENTER/EXIT CAR</div>
+</div>
+
+<canvas id="webgl"></canvas>
+
+<div id="hud" style="display:none;">
+  <span class="label" id="hud-label">ON FOOT</span>
+  <span class="val" id="hud-val">0</span><span class="unit" id="hud-unit">MPH</span>
+</div>
+
+<div id="help" style="display:none;">
+  <b style="color:var(--accent-gold)">ON FOOT</b><br>
+  W/S walk · A/D turn<br>
+  SHIFT to jog<br>
+  E near car to drive
+</div>
+
+<div id="prompt"><span class="key">[E]</span><span id="prompt-text">ENTER CAR</span></div>
+
+<div id="state-chip" style="display:none;">
+  <div><span class="k">TIME</span><span class="v" id="s-time">7:00</span></div>
+  <div><span class="k">SOBRIETY</span><span class="v" id="s-sob">100</span></div>
+  <div><span class="k">LAWN</span><span class="v" id="s-lawn">0%</span></div>
+</div>
+
+<div id="toast"></div>
+
+<div id="intro">
+  <div class="intro-panel">
+    <div class="intro-date">Saturday · 7:00 AM</div>
+    <div class="intro-note">
+      <p>Hey. I'm taking the kids to my mother's for the morning — we'll be back by five for the party.</p>
+      <p>I left cash on the counter. The grill is in the garage. <b>The lawn hasn't been touched in three weeks and my mom will SEE it.</b></p>
+      <p>Mow. BBQ. Don't get weird. I love you.</p>
+      <p class="signoff">— S.</p>
+    </div>
+    <div class="intro-goals">
+      <div class="g">Mow the lawn</div>
+      <div class="g">Host the BBQ <span class="time">· 5:00 PM</span></div>
+    </div>
+    <div class="intro-dismiss"><span class="k">[CLICK]</span> OR <span class="k">[E]</span> TO BEGIN</div>
+  </div>
+</div>
+
+<div id="npc-tags"></div>
+
+<div id="phone-text">
+  <div class="pt-head">
+    <div class="pt-avatar">S</div>
+    <div class="pt-name" id="pt-name">SARAH</div>
+    <div class="pt-time" id="pt-time">7:00 AM</div>
+  </div>
+  <div class="pt-body" id="pt-body"></div>
+  <div class="pt-replies" id="pt-replies"></div>
+  <div class="pt-ignore-timer"><div class="bar" id="pt-bar"></div></div>
+</div>
+
+<div id="dialogue">
+  <div class="dlg-panel">
+    <div class="dlg-who" id="dlg-who">DOUG</div>
+    <p class="dlg-narr" id="dlg-narr"></p>
+    <p class="dlg-detail" id="dlg-detail"></p>
+    <div class="dlg-choices" id="dlg-choices"></div>
+    <div class="dlg-continue" id="dlg-continue" style="display:none;">[E] OR CLICK TO CONTINUE</div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+// ============================================================================
+// TUNING — car
+// ============================================================================
+const CAR_MAX_SPEED     = 32;
+const CAR_REVERSE_SPEED = 10;
+const CAR_ACCEL         = 18;
+const CAR_FRICTION      = 4;
+const CAR_BRAKE         = 40;
+const CAR_TURN_RATE     = 2.2;
+const CAR_TURN_SPEED_REF= 18;
+const CAR_TURN_MIN      = 0.5;
+
+// ============================================================================
+// TUNING — player (on foot)
+// ============================================================================
+const WALK_SPEED        = 5.2;   // m/s — brisk game-walk (reality ~1.4, but games lie)
+const JOG_SPEED         = 9.5;   // m/s — dad-jog with something on his mind
+const WALK_ACCEL        = 22;    // quick to reach target speed (no car-like inertia)
+const WALK_FRICTION     = 18;    // stops quickly when keys released
+const WALK_TURN_RATE    = 4.2;   // rad/sec turn rate on foot
+const PLAYER_HEIGHT     = 1.75;
+
+// ============================================================================
+// TUNING — cameras
+// ============================================================================
+const CAM_CAR_DISTANCE  = 9;
+const CAM_CAR_HEIGHT    = 4.2;
+const CAM_CAR_LERP      = 0.09;
+const CAM_CAR_LOOK_LERP = 0.14;
+
+const CAM_WALK_DISTANCE = 4.6;
+const CAM_WALK_HEIGHT   = 2.6;
+const CAM_WALK_LERP     = 0.18;
+const CAM_WALK_LOOK_LERP= 0.22;
+
+const ENTER_RADIUS      = 3.2;   // how close to car to mount
+const EXIT_OFFSET       = 1.6;   // how far from car to place player on dismount
+
+// Palette
+const COLORS = {
+  sky:      0xd9a574,
+  skyTop:   0x5a4a3a,
+  ground:   0x4e5a3a,
+  carBody:  0xc45c3e,
+  carRoof:  0x8a3b26,
+  wheel:    0x1a1612,
+  marker1:  0x3a5a4a,
+  marker2:  0xa88a5a,
+  marker3:  0x6b4a3a,
+  fog:      0xc99460,
+  skin:     0xd9a77a,
+  shirt:    0x6b8f6b,   // accent-safe from 2D
+  pants:    0x3a3226,
+  hair:     0x2a1f15,
+};
+
+// ============================================================================
+// SCENE
+// ============================================================================
+const canvas = document.getElementById('webgl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(COLORS.sky);
+scene.fog = new THREE.Fog(COLORS.fog, 60, 360);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+const hemi = new THREE.HemisphereLight(COLORS.sky, COLORS.ground, 0.75);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xffe0b0, 1.1);
+sun.position.set(80, 120, 40);
+scene.add(sun);
+
+// Gradient sky dome
+{
+  const skyGeo = new THREE.SphereGeometry(500, 24, 16);
+  const skyMat = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: {
+      topColor:    { value: new THREE.Color(COLORS.skyTop) },
+      bottomColor: { value: new THREE.Color(COLORS.sky) },
+      offset:      { value: 50 },
+      exponent:    { value: 0.7 },
+    },
+    vertexShader: `varying vec3 vWorld; void main(){ vWorld=(modelMatrix*vec4(position,1.0)).xyz; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `varying vec3 vWorld; uniform vec3 topColor; uniform vec3 bottomColor; uniform float offset; uniform float exponent; void main(){ float h=normalize(vWorld+vec3(0.0,offset,0.0)).y; gl_FragColor=vec4(mix(bottomColor,topColor,max(pow(max(h,0.0),exponent),0.0)),1.0); }`,
+  });
+  scene.add(new THREE.Mesh(skyGeo, skyMat));
+}
+
+// Ground
+{
+  const size = 800, seg = 80;
+  const geo = new THREE.PlaneGeometry(size, size, seg, seg);
+  geo.rotateX(-Math.PI / 2);
+  const colors = new Float32Array(geo.attributes.position.count * 3);
+  const base = new THREE.Color(COLORS.ground);
+  for (let i = 0; i < geo.attributes.position.count; i++) {
+    const j = (Math.random() - 0.5) * 0.12;
+    colors[i*3+0] = base.r + j*0.3;
+    colors[i*3+1] = base.g + j*0.5;
+    colors[i*3+2] = base.b + j*0.2;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  scene.add(new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true })));
+}
+
+// Scattered markers
+{
+  const markers = new THREE.Group();
+  let seed = 1337;
+  const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  const markerColors = [COLORS.marker1, COLORS.marker2, COLORS.marker3];
+  for (let i = 0; i < 90; i++) {
+    const angle = rand() * Math.PI * 2;
+    const dist = 20 + rand() * 260;
+    const x = Math.cos(angle) * dist;
+    const z = Math.sin(angle) * dist;
+    const type = Math.floor(rand() * 3);
+    let geo, h;
+    if (type === 0)      { h = 2 + rand() * 3;  geo = new THREE.ConeGeometry(1.2, h, 6); }
+    else if (type === 1) { h = 1 + rand() * 2;  geo = new THREE.BoxGeometry(2, h, 2); }
+    else                 { h = 4 + rand() * 6;  geo = new THREE.CylinderGeometry(0.6, 0.8, h, 6); }
+    const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: markerColors[type], flatShading: true }));
+    m.position.set(x, h/2, z);
+    m.rotation.y = rand() * Math.PI * 2;
+    markers.add(m);
+  }
+  scene.add(markers);
+}
+
+// ============================================================================
+// CAR
+// ============================================================================
+const car = new THREE.Group();
+{
+  const bodyMat = new THREE.MeshLambertMaterial({ color: COLORS.carBody, flatShading: true });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.7, 3.6), bodyMat);
+  body.position.y = 0.7;
+  car.add(body);
+
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.55, 1.8), new THREE.MeshLambertMaterial({ color: COLORS.carRoof, flatShading: true }));
+  roof.position.set(0, 1.3, -0.2);
+  car.add(roof);
+
+  const wheelGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.35, 12);
+  wheelGeo.rotateZ(Math.PI / 2);
+  const wheelMat = new THREE.MeshLambertMaterial({ color: COLORS.wheel, flatShading: true });
+  car.wheels = [];
+  for (const [x, y, z] of [[0.95,0.42,1.25],[-0.95,0.42,1.25],[0.95,0.42,-1.25],[-0.95,0.42,-1.25]]) {
+    const w = new THREE.Mesh(wheelGeo, wheelMat);
+    w.position.set(x, y, z);
+    car.add(w); car.wheels.push(w);
+  }
+
+  const hlMat = new THREE.MeshBasicMaterial({ color: 0xfff0c0 });
+  const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.3,0.2,0.1), hlMat); hlL.position.set(-0.55,0.8,1.81); car.add(hlL);
+  const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.3,0.2,0.1), hlMat); hlR.position.set( 0.55,0.8,1.81); car.add(hlR);
+}
+scene.add(car);
+const carState = { speed: 0, heading: 0 };
+
+// ============================================================================
+// PLAYER (DAD)
+// ============================================================================
+const player = new THREE.Group();
+{
+  // Smooth shading (no flatShading) + rounded primitives = PS1/low-poly-character vibe rather than Minecraft
+  const skinMat  = new THREE.MeshLambertMaterial({ color: COLORS.skin  });
+  const shirtMat = new THREE.MeshLambertMaterial({ color: COLORS.shirt });
+  const pantsMat = new THREE.MeshLambertMaterial({ color: COLORS.pants });
+  const hairMat  = new THREE.MeshLambertMaterial({ color: COLORS.hair  });
+
+  // Torso — slightly tapered capsule
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.26, 0.45, 4, 10), shirtMat);
+  torso.position.y = 1.12;
+  player.add(torso);
+
+  // Belly / belt band — a squashed torus gives a waistline without adding polys
+  const belt = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.05, 6, 12), pantsMat);
+  belt.rotation.x = Math.PI / 2;
+  belt.position.y = 0.82;
+  belt.scale.set(1, 0.7, 1);
+  player.add(belt);
+
+  // Neck
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.1, 10), skinMat);
+  neck.position.y = 1.46;
+  player.add(neck);
+
+  // Head — sphere, slightly squashed vertically for a more human silhouette
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.18, 14, 12), skinMat);
+  head.scale.set(1, 1.08, 0.95);
+  head.position.y = 1.62;
+  player.add(head);
+
+  // Hair cap — half-sphere
+  const hairGeo = new THREE.SphereGeometry(0.19, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.55);
+  const hair = new THREE.Mesh(hairGeo, hairMat);
+  hair.position.y = 1.66;
+  player.add(hair);
+
+  // Nose (tiny, just enough to read facing direction)
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.08, 6), skinMat);
+  nose.rotation.x = Math.PI / 2;
+  nose.position.set(0, 1.60, 0.18);
+  player.add(nose);
+
+  // Arm helper — capsule with origin translated so it hangs from the shoulder
+  const armGeo = new THREE.CapsuleGeometry(0.075, 0.52, 4, 8);
+  armGeo.translate(0, -0.31, 0);
+  player.leftArm  = new THREE.Group(); player.leftArm.position.set( 0.30, 1.38, 0);  player.add(player.leftArm);
+  player.rightArm = new THREE.Group(); player.rightArm.position.set(-0.30, 1.38, 0); player.add(player.rightArm);
+  player.leftArm.add( new THREE.Mesh(armGeo, shirtMat));
+  player.rightArm.add(new THREE.Mesh(armGeo, shirtMat));
+
+  // Hands — little spheres at the end of each arm
+  const handGeo = new THREE.SphereGeometry(0.08, 8, 6);
+  const lh = new THREE.Mesh(handGeo, skinMat); lh.position.y = -0.66; player.leftArm.add(lh);
+  const rh = new THREE.Mesh(handGeo, skinMat); rh.position.y = -0.66; player.rightArm.add(rh);
+
+  // Legs — capsules hanging from the hip pivot
+  const legGeo = new THREE.CapsuleGeometry(0.10, 0.55, 4, 8);
+  legGeo.translate(0, -0.33, 0);
+  player.leftLeg  = new THREE.Group(); player.leftLeg.position.set( 0.13, 0.78, 0);  player.add(player.leftLeg);
+  player.rightLeg = new THREE.Group(); player.rightLeg.position.set(-0.13, 0.78, 0); player.add(player.rightLeg);
+  player.leftLeg.add( new THREE.Mesh(legGeo, pantsMat));
+  player.rightLeg.add(new THREE.Mesh(legGeo, pantsMat));
+
+  // Shoes
+  const shoeGeo = new THREE.BoxGeometry(0.17, 0.09, 0.28);
+  const shoeMat = new THREE.MeshLambertMaterial({ color: COLORS.hair });
+  const ls = new THREE.Mesh(shoeGeo, shoeMat); ls.position.set(0, -0.70, 0.05); player.leftLeg.add(ls);
+  const rs = new THREE.Mesh(shoeGeo, shoeMat); rs.position.set(0, -0.70, 0.05); player.rightLeg.add(rs);
+}
+scene.add(player);
+const playerState = { speed: 0, heading: 0, animPhase: 0 };
+
+// ============================================================================
+// NEIGHBORHOOD GEOMETRY — your house + Doug's house across the street
+// ============================================================================
+function makeHouse({ x, z, rotY = 0, bodyColor = 0xc9a878, roofColor = 0x6b3a2a, doorColor = 0x3a2a1a }) {
+  const g = new THREE.Group();
+  const bodyMat = new THREE.MeshLambertMaterial({ color: bodyColor, flatShading: true });
+  const roofMat = new THREE.MeshLambertMaterial({ color: roofColor, flatShading: true });
+  const doorMat = new THREE.MeshLambertMaterial({ color: doorColor, flatShading: true });
+  const winMat  = new THREE.MeshLambertMaterial({ color: 0x9bb7c4, flatShading: true });
+
+  // Main body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(7, 4, 5), bodyMat);
+  body.position.y = 2;
+  g.add(body);
+
+  // Pitched roof — triangular prism from extruded shape
+  const roofShape = new THREE.Shape();
+  roofShape.moveTo(-3.8, 0);
+  roofShape.lineTo( 3.8, 0);
+  roofShape.lineTo( 0,   2.4);
+  roofShape.lineTo(-3.8, 0);
+  const roof = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(roofShape, { depth: 5.4, bevelEnabled: false }),
+    roofMat
+  );
+  roof.rotation.y = Math.PI / 2;
+  roof.position.set(2.7, 4, 0); // offset so the extruded prism sits on top of the body
+  g.add(roof);
+
+  // Door
+  const door = new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.2, 0.15), doorMat);
+  door.position.set(0, 1.1, 2.55);
+  g.add(door);
+
+  // Windows (one on each side of the door + two upstairs)
+  const winGeo = new THREE.BoxGeometry(1.1, 1.1, 0.1);
+  for (const [wx, wy] of [[-2.3, 1.4], [2.3, 1.4], [-1.6, 3.1], [1.6, 3.1]]) {
+    const w = new THREE.Mesh(winGeo, winMat);
+    w.position.set(wx, wy, 2.55);
+    g.add(w);
+  }
+
+  // Front stoop
+  const stoop = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.25, 0.9), new THREE.MeshLambertMaterial({ color: 0x6b6560, flatShading: true }));
+  stoop.position.set(0, 0.12, 3.0);
+  g.add(stoop);
+
+  g.position.set(x, 0, z);
+  g.rotation.y = rotY;
+  return g;
+}
+
+// Lawns — rectangular patches slightly different green from the world ground so houses sit on something
+function makeLawn({ x, z, w = 14, d = 11, color = 0x6a8a5a }) {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, d),
+    new THREE.MeshLambertMaterial({ color, flatShading: true })
+  );
+  m.rotation.x = -Math.PI / 2;
+  m.position.set(x, 0.01, z); // +0.01 to beat z-fighting with ground
+  return m;
+}
+
+function makeDriveway({ x, z, w = 3.2, d = 8, rotY = 0 }) {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, d),
+    new THREE.MeshLambertMaterial({ color: 0x3a3632, flatShading: true })
+  );
+  m.rotation.x = -Math.PI / 2;
+  m.position.set(x, 0.02, z);
+  m.rotation.z = rotY;
+  return m;
+}
+
+// A simple road strip running east-west across the neighborhood
+{
+  const road = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 6),
+    new THREE.MeshLambertMaterial({ color: 0x2a2824, flatShading: true })
+  );
+  road.rotation.x = -Math.PI / 2;
+  road.position.set(0, 0.015, -18);
+  scene.add(road);
+
+  // Dashed center line
+  for (let i = -90; i <= 90; i += 10) {
+    const dash = new THREE.Mesh(
+      new THREE.PlaneGeometry(3, 0.2),
+      new THREE.MeshLambertMaterial({ color: 0xc9a878 })
+    );
+    dash.rotation.x = -Math.PI / 2;
+    dash.position.set(i, 0.02, -18);
+    scene.add(dash);
+  }
+}
+
+// YOUR HOUSE (south of road; door faces -z toward road)
+scene.add(makeLawn({ x: 0, z: -12 }));
+scene.add(makeHouse({ x: 0, z: -6, rotY: Math.PI }));
+scene.add(makeDriveway({ x: 5, z: -12 }));
+
+// DOUG'S HOUSE (north of road; door faces +z toward road)
+scene.add(makeLawn({ x: 0, z: -24, color: 0x5e7a4e }));
+scene.add(makeHouse({ x: 0, z: -30, rotY: 0, bodyColor: 0xa67a52, roofColor: 0x4a2a1a }));
+scene.add(makeDriveway({ x: -5, z: -24 }));
+
+// Doug's grill in his front yard — this is where he's standing
+function makeGrill({ x, z }) {
+  const g = new THREE.Group();
+  const kettleMat = new THREE.MeshLambertMaterial({ color: 0x1a1612, flatShading: true });
+  const kettle = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 10, 0, Math.PI*2, Math.PI*0.1, Math.PI*0.5), kettleMat);
+  kettle.position.y = 0.95;
+  g.add(kettle);
+  const lid = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 10, 0, Math.PI*2, 0, Math.PI*0.4), kettleMat);
+  lid.position.y = 0.95;
+  g.add(lid);
+  const leg = new THREE.CylinderGeometry(0.04, 0.04, 0.9, 6);
+  for (const a of [0, 2.1, 4.2]) {
+    const l = new THREE.Mesh(leg, kettleMat);
+    l.position.set(Math.cos(a) * 0.3, 0.45, Math.sin(a) * 0.3);
+    g.add(l);
+  }
+  // A lazy ribbon of "smoke"
+  const smoke = new THREE.Mesh(
+    new THREE.ConeGeometry(0.18, 1.2, 6),
+    new THREE.MeshLambertMaterial({ color: 0xaea69a, transparent: true, opacity: 0.4 })
+  );
+  smoke.position.y = 2.1;
+  g.add(smoke);
+  g.userData.smoke = smoke;
+  g.position.set(x, 0, z);
+  return g;
+}
+const dougGrill = makeGrill({ x: 3, z: -23 });
+scene.add(dougGrill);
+
+// ============================================================================
+// NPC — DOUG
+// ============================================================================
+function makeNPC({ shirtColor = 0x6b8f6b, pantsColor = 0x3a3226, hairColor = 0x2a1f15, skinColor = 0xd9a77a, bald = false }) {
+  const g = new THREE.Group();
+  const skinMat  = new THREE.MeshLambertMaterial({ color: skinColor });
+  const shirtMat = new THREE.MeshLambertMaterial({ color: shirtColor });
+  const pantsMat = new THREE.MeshLambertMaterial({ color: pantsColor });
+  const hairMat  = new THREE.MeshLambertMaterial({ color: hairColor });
+
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.30, 0.50, 4, 10), shirtMat);
+  torso.position.y = 1.12; g.add(torso);
+  const belt = new THREE.Mesh(new THREE.TorusGeometry(0.30, 0.05, 6, 12), pantsMat);
+  belt.rotation.x = Math.PI/2; belt.position.y = 0.82; belt.scale.set(1, 0.7, 1); g.add(belt);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.1, 10), skinMat);
+  neck.position.y = 1.48; g.add(neck);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.19, 14, 12), skinMat);
+  head.scale.set(1, 1.08, 0.95); head.position.y = 1.64; g.add(head);
+  if (!bald) {
+    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.20, 14, 10, 0, Math.PI*2, 0, Math.PI*0.55), hairMat);
+    hair.position.y = 1.68; g.add(hair);
+  }
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.08, 6), skinMat);
+  nose.rotation.x = Math.PI/2; nose.position.set(0, 1.62, 0.19); g.add(nose);
+
+  const armGeo = new THREE.CapsuleGeometry(0.08, 0.54, 4, 8); armGeo.translate(0, -0.32, 0);
+  const la = new THREE.Group(); la.position.set( 0.34, 1.38, 0); la.add(new THREE.Mesh(armGeo, shirtMat)); g.add(la);
+  const ra = new THREE.Group(); ra.position.set(-0.34, 1.38, 0); ra.add(new THREE.Mesh(armGeo, shirtMat)); g.add(ra);
+  const hand = new THREE.SphereGeometry(0.085, 8, 6);
+  const lh = new THREE.Mesh(hand, skinMat); lh.position.y = -0.68; la.add(lh);
+  const rh = new THREE.Mesh(hand, skinMat); rh.position.y = -0.68; ra.add(rh);
+
+  const legGeo = new THREE.CapsuleGeometry(0.11, 0.58, 4, 8); legGeo.translate(0, -0.34, 0);
+  const ll = new THREE.Group(); ll.position.set( 0.14, 0.78, 0); ll.add(new THREE.Mesh(legGeo, pantsMat)); g.add(ll);
+  const rl = new THREE.Group(); rl.position.set(-0.14, 0.78, 0); rl.add(new THREE.Mesh(legGeo, pantsMat)); g.add(rl);
+  const shoeMat = new THREE.MeshLambertMaterial({ color: 0x1a1612 });
+  const shoeGeo = new THREE.BoxGeometry(0.17, 0.09, 0.28);
+  const ls = new THREE.Mesh(shoeGeo, shoeMat); ls.position.set(0, -0.70, 0.05); ll.add(ls);
+  const rs = new THREE.Mesh(shoeGeo, shoeMat); rs.position.set(0, -0.70, 0.05); rl.add(rs);
+
+  // Expose limb groups so callers (e.g. the seated kid) can pose them
+  g.leftLeg = ll; g.rightLeg = rl; g.leftArm = la; g.rightArm = ra;
+  g.userData.idleBob = { phase: Math.random() * Math.PI * 2, head, torso };
+  return g;
+}
+const doug = makeNPC({ shirtColor: 0xc45c3e, pantsColor: 0x2a3a4e, hairColor: 0x6b4a3a });
+doug.position.set(2.3, 0, -22.5);
+doug.rotation.y = Math.PI; // facing south across the street toward you
+scene.add(doug);
+
+// Beer can in Doug's hand
+{
+  const can = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.18, 10), new THREE.MeshLambertMaterial({ color: 0xc0382a }));
+  can.position.set(-0.25, 1.05, 0.15);
+  doug.add(can);
+}
+
+// ============================================================================
+// MORE HOUSES
+// ============================================================================
+// Mason's house — east of yours (south side of road)
+scene.add(makeLawn({ x: 20, z: -12 }));
+scene.add(makeHouse({ x: 20, z: -6, rotY: Math.PI, bodyColor: 0xbaa47c, roofColor: 0x5a3a28 }));
+scene.add(makeDriveway({ x: 25, z: -12 }));
+
+// Craig's house — east of Doug's (north side of road)
+scene.add(makeLawn({ x: 22, z: -24, color: 0x607848 }));
+scene.add(makeHouse({ x: 22, z: -30, rotY: 0, bodyColor: 0x8a6a48, roofColor: 0x3a241a }));
+
+// Craig's wide driveway (pickup lives here) — runs from the road up to his house
+const craigDrive = new THREE.Mesh(
+  new THREE.PlaneGeometry(6, 10),
+  new THREE.MeshLambertMaterial({ color: 0x3a3632, flatShading: true })
+);
+craigDrive.rotation.x = -Math.PI / 2;
+craigDrive.position.set(28, 0.02, -24);
+scene.add(craigDrive);
+
+// Kevin's OWN house — further east on the north side, past Craig's
+scene.add(makeLawn({ x: 44, z: -24, color: 0x5a7848 }));
+scene.add(makeHouse({ x: 44, z: -30, rotY: 0, bodyColor: 0xcab48a, roofColor: 0x5a4028 }));
+scene.add(makeDriveway({ x: 49, z: -24 }));
+
+// ============================================================================
+// PROP — PICKUP TRUCK in Craig's driveway (static, just decor for now)
+// ============================================================================
+function makePickup({ x, z, rotY = 0, color = 0x3a4a3a }) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.9, 2.2), new THREE.MeshLambertMaterial({ color, flatShading: true }));
+  body.position.y = 0.85; g.add(body);
+  const cab  = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.9, 1.6), new THREE.MeshLambertMaterial({ color, flatShading: true }));
+  cab.position.set(0, 1.55, 0.4); g.add(cab);
+  const bed  = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.4, 1.8), new THREE.MeshLambertMaterial({ color: 0x2a2a2a, flatShading: true }));
+  bed.position.set(0, 1.15, -1.0); g.add(bed);
+  const whGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.35, 12); whGeo.rotateZ(Math.PI/2);
+  const whMat = new THREE.MeshLambertMaterial({ color: 0x1a1612, flatShading: true });
+  for (const [wx,wy,wz] of [[1,0.42,0.9],[-1,0.42,0.9],[1,0.42,-0.9],[-1,0.42,-0.9]]) {
+    const w = new THREE.Mesh(whGeo, whMat); w.position.set(wx,wy,wz); g.add(w);
+  }
+  // Tarp-covered cargo in the bed (ominous lump)
+  const lump = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.5, 1.3), new THREE.MeshLambertMaterial({ color: 0x4a4236, flatShading: true }));
+  lump.position.set(0, 1.6, -1.0); g.add(lump);
+  g.position.set(x, 0, z); g.rotation.y = rotY;
+  return g;
+}
+const craigTruck = makePickup({ x: 28, z: -25, rotY: 0 });
+scene.add(craigTruck);
+
+// ============================================================================
+// PROP — FOLDING TABLE for Kevin's pyramid-scheme stand
+// ============================================================================
+function makeFoldingTable({ x, z }) {
+  const g = new THREE.Group();
+  const topMat = new THREE.MeshLambertMaterial({ color: 0xe6e0d4, flatShading: true });
+  const legMat = new THREE.MeshLambertMaterial({ color: 0x3a3632, flatShading: true });
+  const top = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.06, 0.7), topMat);
+  top.position.y = 0.75; g.add(top);
+  for (const [lx,lz] of [[0.6,0.3],[-0.6,0.3],[0.6,-0.3],[-0.6,-0.3]]) {
+    const l = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.75, 6), legMat);
+    l.position.set(lx, 0.37, lz); g.add(l);
+  }
+  // A stack of "product boxes" — flashy orange
+  const prodMat = new THREE.MeshLambertMaterial({ color: 0xd07a2a, flatShading: true });
+  const b1 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.35, 0.25), prodMat); b1.position.set(-0.4, 0.97, 0); g.add(b1);
+  const b2 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.35, 0.25), prodMat); b2.position.set(-0.1, 0.97, 0); g.add(b2);
+  const b3 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.35, 0.25), prodMat); b3.position.set( 0.2, 0.97, 0); g.add(b3);
+  // A "sign" banner behind the table
+  const banner = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.45, 0.03), new THREE.MeshLambertMaterial({ color: 0xfff1c4 }));
+  banner.position.set(0, 1.35, -0.35); g.add(banner);
+  g.position.set(x, 0, z);
+  return g;
+}
+const kevinTable = makeFoldingTable({ x: 44, z: -22.5 });
+scene.add(kevinTable);
+
+// ============================================================================
+// PROP — LAPTOP for Kid
+// ============================================================================
+function makeLaptop({ x, y, z, rotY = 0 }) {
+  const g = new THREE.Group();
+  const matte = new THREE.MeshLambertMaterial({ color: 0x1f1f22, flatShading: true });
+  const screen = new THREE.MeshBasicMaterial({ color: 0x6bb78a }); // glowy green terminal vibes
+  const base = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.03, 0.32), matte);
+  g.add(base);
+  const lid = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.3, 0.02), matte);
+  lid.position.set(0, 0.16, -0.15);
+  lid.rotation.x = -0.2;
+  g.add(lid);
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.27), screen);
+  scr.position.set(0, 0.16, -0.139);
+  scr.rotation.x = -0.2;
+  g.add(scr);
+  g.position.set(x, y, z); g.rotation.y = rotY;
+  return g;
+}
+// Mason's front porch bench — on the stoop side of his house (z=-9.5 area)
+const kidBench = new THREE.Mesh(
+  new THREE.BoxGeometry(1.6, 0.2, 0.5),
+  new THREE.MeshLambertMaterial({ color: 0x6b4a2a, flatShading: true })
+);
+kidBench.position.set(20, 0.5, -9.5);
+scene.add(kidBench);
+scene.add(makeLaptop({ x: 20, y: 0.6, z: -9.2, rotY: Math.PI }));
+
+// ============================================================================
+// NPCs — KEVIN, CRAIG, KID
+// ============================================================================
+const kevin = makeNPC({ shirtColor: 0xfff1c4, pantsColor: 0x1a2842, hairColor: 0x1a1612 });
+kevin.position.set(44, 0, -23.2);
+kevin.rotation.y = Math.PI; // facing south across his table toward the street
+scene.add(kevin);
+// Clipboard in Kevin's hand
+{
+  const clip = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.3, 0.03), new THREE.MeshLambertMaterial({ color: 0xe6dfc9, flatShading: true }));
+  clip.position.set(0.28, 1.05, 0.1);
+  clip.rotation.x = -0.4;
+  kevin.add(clip);
+}
+
+const craig = makeNPC({ shirtColor: 0x3a4a5a, pantsColor: 0x2a241e, hairColor: 0x2a1f15 });
+craig.position.set(28, 0, -23);
+craig.rotation.y = 0; // facing the truck bed (south end of the truck)
+scene.add(craig);
+// A wrench in Craig's hand
+{
+  const wrench = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.28, 0.05), new THREE.MeshLambertMaterial({ color: 0x8a8680, flatShading: true }));
+  wrench.position.set(0.28, 1.1, 0.1);
+  craig.add(wrench);
+}
+
+const kid = makeNPC({ shirtColor: 0x3a2a4e, pantsColor: 0x1a1612, hairColor: 0x6b4a2a, skinColor: 0xe6c8a8 });
+kid.position.set(20, 0.7, -9.5); // seated on the bench on Mason's front porch
+kid.rotation.y = Math.PI; // facing the street (south)
+scene.add(kid);
+// Seat the kid — bend the leg groups forward so it reads as sitting
+kid.leftLeg.rotation.x = -Math.PI / 2;
+kid.rightLeg.rotation.x = -Math.PI / 2;
+kid.userData.seated = true;
+
+// ============================================================================
+// INTERACTABLES — triggers the player can activate with E
+// ============================================================================
+// Each: { pos, radius, label, getAction(state) -> {type, data} or null, tag? }
+const interactables = [
+  {
+    id: 'car',
+    get pos() { return car.position; },
+    radius: ENTER_RADIUS,
+    label: () => (mode === 'driving' ? 'EXIT CAR' : 'ENTER CAR'),
+    action: () => { if (mode === 'walking') enterCar(); else exitCar(); },
+    availableInDriving: true,
+  },
+  { id: 'doug',  pos: doug.position,  radius: 3.2, label: () => 'TALK TO DOUG',  action: () => openDialogue('doug_approach'),  availableInDriving: false },
+  { id: 'kevin', pos: kevin.position, radius: 3.0, label: () => 'TALK TO KEVIN', action: () => openDialogue('kevin_approach'), availableInDriving: false },
+  { id: 'craig', pos: craig.position, radius: 3.2, label: () => 'TALK TO CRAIG', action: () => openDialogue('craig_approach'), availableInDriving: false },
+  { id: 'kid',   pos: kid.position,   radius: 3.0, label: () => 'TALK TO THE KID', action: () => openDialogue('kid_approach'), availableInDriving: false },
+];
+
+// Registry of NPCs that should have a floating nametag
+const npcRegistry = [
+  { id: 'doug',  obj: doug,  name: 'DOUG' },
+  { id: 'kevin', obj: kevin, name: 'KEVIN' },
+  { id: 'craig', obj: craig, name: 'CRAIG' },
+  { id: 'kid',   obj: kid,   name: 'MASON' },
+];
+
+// ============================================================================
+// GAME STATE — subset of 2D game's state, rendering-agnostic
+// ============================================================================
+const gameState = {
+  time: 7.0,        // hours, 7.0 = 7am start
+  sobriety: 100,
+  suspicion: 0,
+  cash: 60,
+  lawnStatus: 0,
+  viceDepth: { alcohol: 0, drugs: 0, gambling: 0 },
+  evidence: new Set(),
+  talked: new Set(),  // NPC ids that have had at least one conversation
+};
+
+function advanceTime(hours) { gameState.time = Math.min(24, gameState.time + hours); }
+function fmtTime(t) {
+  const h = Math.floor(t), m = Math.round((t - h) * 60);
+  const hh = ((h + 11) % 12) + 1;
+  return `${hh}:${String(m).padStart(2,'0')}`;
+}
+function updateStateChip() {
+  document.getElementById('s-time').textContent = fmtTime(gameState.time);
+  const sob = document.getElementById('s-sob');
+  sob.textContent = gameState.sobriety;
+  sob.className = 'v' + (gameState.sobriety < 60 ? ' warn' : '');
+  document.getElementById('s-lawn').textContent = gameState.lawnStatus + '%';
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('visible'), 1800);
+}
+
+// ============================================================================
+// DIALOGUE — extensible scene graph (one vice wired for M4; more in M5)
+// ============================================================================
+const dialogueScenes = {
+  doug_approach: {
+    who: 'DOUG',
+    narr: "Doug waves you over with a beer in his hand. The grill's already smoking. \"Saturday, brother! Get over here.\"",
+    detail: () => gameState.time < 9 ? "It's barely past seven." : "You've got things to do. You know you do.",
+    choices: [
+      { icon:'◆', text:"Accept a beer. Just one.",
+        effect: () => { gameState.viceDepth.alcohol = Math.max(gameState.viceDepth.alcohol, 1); gameState.sobriety -= 18; advanceTime(0.5); toast("+1 beer · sobriety −18"); },
+        next: 'doug_one_beer' },
+      { icon:'◆', text:"Say you'll come back once the lawn's done.",
+        effect: () => { advanceTime(0.1); toast("smooth exit"); },
+        next: 'doug_defer' },
+      { icon:'◆', text:"Wave politely and keep walking.",
+        effect: () => { advanceTime(0.05); },
+        next: 'doug_ignore' },
+    ],
+  },
+  doug_one_beer: {
+    who: 'DOUG',
+    narr: "The first sip hits the back of your throat before you've thought about it. Doug is already mid-story — something about his brother-in-law's boat.",
+    detail: "The lawn looks further away than it did a minute ago.",
+    choices: [
+      { icon:'◆', text:"Another one. It's Saturday.",
+        effect: () => { gameState.viceDepth.alcohol = 2; gameState.sobriety -= 22; gameState.evidence.add('smell'); advanceTime(0.7); toast("+2 beers · sobriety −22"); },
+        next: 'doug_two_beers' },
+      { icon:'◆', text:"Cap it. Lawn's waiting.",
+        effect: () => { advanceTime(0.1); toast("clean exit"); },
+        next: 'doug_clean_out' },
+    ],
+  },
+  doug_two_beers: {
+    who: 'DOUG',
+    narr: "Two in. The sun is warm. Doug's brother-in-law apparently \"doesn't get it.\" You don't either but you're nodding anyway.",
+    detail: "You should go. You know you should go.",
+    choices: [
+      { icon:'◆', text:"Go. Now. Actually go this time.",
+        effect: () => { advanceTime(0.1); toast("escaped"); },
+        next: null },
+    ],
+  },
+  doug_defer: {
+    who: 'DOUG',
+    narr: "\"Alright, homeowner. Go be responsible. I'll be here.\" He toasts you with the can.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Nod and go.", effect: () => {}, next: null } ],
+  },
+  doug_ignore: {
+    who: 'DOUG',
+    narr: "\"That's fine!\" he yells at your back. \"That is FINE.\"",
+    detail: "You can feel him not letting it go.",
+    choices: [ { icon:'◆', text:"Keep walking.", effect: () => {}, next: null } ],
+  },
+  doug_clean_out: {
+    who: 'DOUG',
+    narr: "\"Your loss, brother.\" He's not wrong but he's not right either.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Back to the yard.", effect: () => {}, next: null } ],
+  },
+
+  // ========================= KEVIN (pyramid scheme) =========================
+  kevin_approach: {
+    who: 'KEVIN',
+    narr: "Kevin's set up a folding table in Craig's driveway. \"Brother. Brother. I have been WAITING for you to walk by.\" He spins a clipboard toward you.",
+    detail: "The banner reads ELEVATE™ in a font that was designed by a committee.",
+    choices: [
+      { icon:'◆', text:"Humor him. Hear the pitch.",
+        effect: () => { advanceTime(0.3); toast("five minutes of your life"); },
+        next: 'kevin_pitch' },
+      { icon:'◆', text:"Say you already have a job.",
+        effect: () => { advanceTime(0.1); },
+        next: 'kevin_defense' },
+      { icon:'◆', text:"Pretend not to hear him.",
+        effect: () => { advanceTime(0.05); gameState.evidence.add('awkward'); },
+        next: null },
+    ],
+  },
+  kevin_pitch: {
+    who: 'KEVIN',
+    narr: "\"Three hundred gets you in. You move four units, you break even by Thursday. I did it. My sister did it. It's not a scheme — it's a LIFESTYLE.\"",
+    detail: "Craig, across the driveway, does not look up.",
+    choices: [
+      { icon:'◆', text:"Put three hundred in. Just to see.",
+        effect: () => { gameState.cash -= 300; gameState.viceDepth.pyramid = Math.max(gameState.viceDepth.pyramid || 0, 1); advanceTime(0.3); toast("−$300 · in the scheme"); },
+        next: 'kevin_invest' },
+      { icon:'◆', text:"Push back — ask who's actually buying these.",
+        effect: () => { advanceTime(0.2); },
+        next: 'kevin_pushback' },
+      { icon:'◆', text:"Back away slowly.",
+        effect: () => { advanceTime(0.1); },
+        next: null },
+    ],
+  },
+  kevin_invest: {
+    who: 'KEVIN',
+    narr: "He shakes your hand for so long it becomes a different kind of interaction. \"You're going to THANK me.\" You already don't believe him.",
+    detail: "You are now a distributor of something you cannot name.",
+    choices: [ { icon:'◆', text:"Walk away before you sign anything else.", effect: () => {}, next: null } ],
+  },
+  kevin_pushback: {
+    who: 'KEVIN',
+    narr: "\"That — that's not how you have to think about it, brother. Think downline. Think RECRUITMENT.\" He's lost you and he knows it.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Good luck, Kev.", effect: () => { advanceTime(0.05); }, next: null } ],
+  },
+
+  // ========================= CRAIG (guns) ===================================
+  craig_approach: {
+    who: 'CRAIG',
+    narr: "Craig is loading something heavy into the truck bed under a tarp. He looks up. \"Hey. Neighbor. Got a second?\"",
+    detail: () => gameState.time < 10 ? "The morning light makes everything look normal." : "The afternoon shadows make everything look less so.",
+    choices: [
+      { icon:'◆', text:"Give him a hand.",
+        effect: () => { advanceTime(0.2); },
+        next: 'craig_help' },
+      { icon:'◆', text:"Ask what he's got under there.",
+        effect: () => { advanceTime(0.15); },
+        next: 'craig_ask' },
+      { icon:'◆', text:"Wave and keep moving.",
+        effect: () => { advanceTime(0.05); },
+        next: null },
+    ],
+  },
+  craig_help: {
+    who: 'CRAIG',
+    narr: "The tarp slides. You see what he's loading. You freeze for half a second. He doesn't.",
+    detail: "\"Cousin's estate sale. Cash only, and frankly I'm doing him a favor.\"",
+    choices: [
+      { icon:'◆', text:"Help him finish loading. Ask no questions.",
+        effect: () => { gameState.viceDepth.guns = Math.max(gameState.viceDepth.guns || 0, 1); gameState.evidence.add('injury'); advanceTime(0.4); toast("accessory"); },
+        next: 'craig_commit' },
+      { icon:'◆', text:"Suddenly remember the lawn.",
+        effect: () => { advanceTime(0.1); toast("smooth"); },
+        next: null },
+    ],
+  },
+  craig_ask: {
+    who: 'CRAIG',
+    narr: "He pulls the tarp back an inch. He watches your face. \"Still interested?\"",
+    detail: null,
+    choices: [
+      { icon:'◆', text:"Nope. Nope nope nope.",
+        effect: () => { advanceTime(0.1); },
+        next: null },
+      { icon:'◆', text:"Tell him you know a guy who'd pay double.",
+        effect: () => { gameState.viceDepth.guns = 2; gameState.cash += 200; gameState.evidence.add('cash_bulge'); advanceTime(0.5); toast("+$200 · in business"); },
+        next: 'craig_deal' },
+    ],
+  },
+  craig_commit: {
+    who: 'CRAIG',
+    narr: "He slaps your shoulder hard enough that you'll feel it at the BBQ. \"Good man. I'll remember this.\"",
+    detail: "You will remember this too, probably at 3am for the next several years.",
+    choices: [ { icon:'◆', text:"Get back to the yard.", effect: () => {}, next: null } ],
+  },
+  craig_deal: {
+    who: 'CRAIG',
+    narr: "\"Bring him around. Tonight. After the party.\" He actually smiles. You'd rather he hadn't.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Back to the yard.", effect: () => {}, next: null } ],
+  },
+
+  // ========================= KID (digital) ==================================
+  kid_approach: {
+    who: 'MASON',
+    narr: "The kid doesn't look up from the laptop. \"Sup Mr. P. You want to see something kinda illegal?\"",
+    detail: "He's sixteen. He speaks in hyperlinks.",
+    choices: [
+      { icon:'◆', text:"Sure, show me.",
+        effect: () => { advanceTime(0.15); },
+        next: 'kid_show' },
+      { icon:'◆', text:"You're sixteen. No.",
+        effect: () => { advanceTime(0.05); },
+        next: 'kid_no' },
+      { icon:'◆', text:"I'm not here. I was never here.",
+        effect: () => { advanceTime(0.05); },
+        next: null },
+    ],
+  },
+  kid_show: {
+    who: 'MASON',
+    narr: "He tilts the screen. Columns of someone else's credit card numbers scroll past. \"Point-of-sale skimmer. I pointed it at a gas station. It's so bad, Mr. P. Their security is, like, embarrassing.\"",
+    detail: "He looks proud. He is sixteen.",
+    choices: [
+      { icon:'◆', text:"Pay him a hundred bucks to bury it.",
+        effect: () => { gameState.cash -= 100; gameState.viceDepth.digital = 1; advanceTime(0.2); toast("−$100 · buried"); },
+        next: 'kid_buried' },
+      { icon:'◆', text:"Ask if the dump's for sale.",
+        effect: () => { gameState.cash -= 50; gameState.viceDepth.digital = 2; gameState.evidence.add('cash_bulge'); advanceTime(0.3); toast("−$50 · got the file"); },
+        next: 'kid_buy' },
+      { icon:'◆', text:"Tell his mother.",
+        effect: () => { advanceTime(0.1); gameState.suspicion = Math.max(0, gameState.suspicion - 5); toast("responsible adult"); },
+        next: 'kid_tell' },
+    ],
+  },
+  kid_no: {
+    who: 'MASON',
+    narr: "He shrugs. \"Okay boomer.\" He doesn't look up.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Keep walking.", effect: () => {}, next: null } ],
+  },
+  kid_buried: {
+    who: 'MASON',
+    narr: "\"Bet. Gone. Didn't exist.\" He closes the lid with one hand, pockets your cash with the other.",
+    detail: "You just paid for a crime to not happen. The legal status of this is murky.",
+    choices: [ { icon:'◆', text:"Back to the yard.", effect: () => {}, next: null } ],
+  },
+  kid_buy: {
+    who: 'MASON',
+    narr: "He airdrops a file to your phone before you've agreed to take it. \"Don't do it from your home wifi, Mr. P.\"",
+    detail: null,
+    choices: [ { icon:'◆', text:"Put the phone away. Back to the yard.", effect: () => {}, next: null } ],
+  },
+  kid_tell: {
+    who: 'MASON',
+    narr: "\"Bro,\" he says. \"Bro. BRO.\" His mother is at work. You know this because he's told you. Still — point made.",
+    detail: null,
+    choices: [ { icon:'◆', text:"Walk away.", effect: () => {}, next: null } ],
+  },
+};
+
+// Attach viceDepth fields that may not exist yet
+gameState.viceDepth.pyramid = gameState.viceDepth.pyramid || 0;
+gameState.viceDepth.guns    = gameState.viceDepth.guns    || 0;
+gameState.viceDepth.digital = gameState.viceDepth.digital || 0;
+
+let currentDialogue = null;
+
+function openDialogue(sceneId) {
+  const sc = dialogueScenes[sceneId];
+  if (!sc) return;
+  currentDialogue = sceneId;
+  gameState.talked.add('doug'); // mark contact once any dialogue opens
+  const dlg = document.getElementById('dialogue');
+  document.getElementById('dlg-who').textContent = sc.who;
+  document.getElementById('dlg-narr').textContent = typeof sc.narr === 'function' ? sc.narr() : sc.narr;
+  const detailEl = document.getElementById('dlg-detail');
+  const d = typeof sc.detail === 'function' ? sc.detail() : sc.detail;
+  if (d) { detailEl.textContent = d; detailEl.style.display = 'block'; }
+  else   { detailEl.style.display = 'none'; }
+  const choicesEl = document.getElementById('dlg-choices');
+  choicesEl.innerHTML = '';
+  sc.choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'dlg-choice';
+    btn.innerHTML = `<span class="dlg-icon">${c.icon || '◆'}</span>${c.text}`;
+    btn.addEventListener('click', () => {
+      if (c.effect) c.effect();
+      updateStateChip();
+      if (c.next) openDialogue(c.next);
+      else closeDialogue();
+    });
+    choicesEl.appendChild(btn);
+  });
+  dlg.classList.add('active');
+}
+
+function closeDialogue() {
+  currentDialogue = null;
+  document.getElementById('dialogue').classList.remove('active');
+}
+
+// ============================================================================
+// Start positions — dad wakes up on his own front lawn
+// ============================================================================
+car.position.set(5, 0, -10);
+carState.heading = Math.PI; // parked facing out of the driveway toward road
+car.rotation.y = carState.heading;
+
+player.position.set(0, 0, -12);
+playerState.heading = Math.PI; // facing north toward road / Doug across the street
+player.rotation.y = playerState.heading;
+
+// ============================================================================
+// INPUT
+// ============================================================================
+const input = { forward:false, back:false, left:false, right:false, brake:false, jog:false };
+const keyMap = {
+  'KeyW':'forward','ArrowUp':'forward',
+  'KeyS':'back','ArrowDown':'back',
+  'KeyA':'left','ArrowLeft':'left',
+  'KeyD':'right','ArrowRight':'right',
+  'Space':'brake',
+  'ShiftLeft':'jog','ShiftRight':'jog',
+};
+window.addEventListener('keydown', (e) => {
+  if (keyMap[e.code]) { input[keyMap[e.code]] = true; if (e.code==='Space') e.preventDefault(); }
+  if (e.code === 'KeyE' && gameStarted && !eDebounce) {
+    eDebounce = true;
+    if (introActive) dismissIntro();
+    else handleInteract();
+  }
+});
+window.addEventListener('keyup', (e) => {
+  if (keyMap[e.code]) input[keyMap[e.code]] = false;
+  if (e.code === 'KeyE') eDebounce = false;
+});
+let eDebounce = false;
+
+// ============================================================================
+// MODE: walking | driving
+// ============================================================================
+let mode = 'walking';
+
+function nearestInteractable() {
+  let best = null, bestDist = Infinity;
+  for (const it of interactables) {
+    if (mode === 'driving' && !it.availableInDriving) continue;
+    const dx = player.position.x - it.pos.x;
+    const dz = player.position.z - it.pos.z;
+    const d = Math.sqrt(dx*dx + dz*dz);
+    if (d < it.radius && d < bestDist) { best = it; bestDist = d; }
+  }
+  // When driving, also allow exiting the car even if you're inside its radius
+  if (mode === 'driving' && !best) {
+    return interactables.find(i => i.id === 'car');
+  }
+  return best;
+}
+
+function handleInteract() {
+  if (currentDialogue) return; // dialogue owns input while open
+  const it = nearestInteractable();
+  if (it) it.action();
+}
+
+function enterCar() {
+  mode = 'driving';
+  player.visible = false;
+  // Adopt the car's heading so camera doesn't snap
+  updateHelpText();
+}
+
+function exitCar() {
+  mode = 'walking';
+  // Place player beside the car (driver's side), inherit heading
+  const sideX = Math.cos(carState.heading);
+  const sideZ = -Math.sin(carState.heading);
+  player.position.set(
+    car.position.x + sideX * EXIT_OFFSET,
+    0,
+    car.position.z + sideZ * EXIT_OFFSET
+  );
+  playerState.heading = carState.heading;
+  playerState.speed = 0;
+  player.rotation.y = playerState.heading;
+  player.visible = true;
+  // Stop the car so the camera doesn't drift
+  carState.speed = 0;
+  updateHelpText();
+}
+
+// ============================================================================
+// SIMULATION
+// ============================================================================
+function updateCar(dt) {
+  if (input.brake) {
+    const d = CAR_BRAKE * dt;
+    if (carState.speed > 0)      carState.speed = Math.max(0, carState.speed - d);
+    else if (carState.speed < 0) carState.speed = Math.min(0, carState.speed + d);
+  } else if (input.forward) {
+    carState.speed = Math.min(CAR_MAX_SPEED, carState.speed + CAR_ACCEL * dt);
+  } else if (input.back) {
+    carState.speed = Math.max(-CAR_REVERSE_SPEED, carState.speed - CAR_ACCEL * dt);
+  } else {
+    const d = CAR_FRICTION * dt;
+    if (carState.speed > 0)      carState.speed = Math.max(0, carState.speed - d);
+    else if (carState.speed < 0) carState.speed = Math.min(0, carState.speed + d);
+  }
+  if (Math.abs(carState.speed) > CAR_TURN_MIN) {
+    const steer = (input.left?1:0) - (input.right?1:0);
+    const sf = Math.min(1, Math.abs(carState.speed) / CAR_TURN_SPEED_REF);
+    const dir = Math.sign(carState.speed);
+    carState.heading += steer * CAR_TURN_RATE * sf * dir * dt;
+  }
+  car.rotation.y = carState.heading;
+  const fx = Math.sin(carState.heading), fz = Math.cos(carState.heading);
+  car.position.x += fx * carState.speed * dt;
+  car.position.z += fz * carState.speed * dt;
+  const spin = carState.speed * dt / 0.42;
+  for (const w of car.wheels) w.rotation.x += spin;
+}
+
+function updatePlayer(dt) {
+  // Turning
+  const turn = (input.left?1:0) - (input.right?1:0);
+  playerState.heading += turn * WALK_TURN_RATE * dt;
+
+  // Throttle
+  const target = input.jog ? JOG_SPEED : WALK_SPEED;
+  let desired = 0;
+  if (input.forward) desired =  target;
+  else if (input.back) desired = -target * 0.55; // walking backward is slower
+  // Move speed toward desired via accel/friction
+  if (desired !== 0) {
+    if (playerState.speed < desired) playerState.speed = Math.min(desired, playerState.speed + WALK_ACCEL * dt);
+    else if (playerState.speed > desired) playerState.speed = Math.max(desired, playerState.speed - WALK_ACCEL * dt);
+  } else {
+    const d = WALK_FRICTION * dt;
+    if (playerState.speed > 0)      playerState.speed = Math.max(0, playerState.speed - d);
+    else if (playerState.speed < 0) playerState.speed = Math.min(0, playerState.speed + d);
+  }
+
+  player.rotation.y = playerState.heading;
+  const fx = Math.sin(playerState.heading), fz = Math.cos(playerState.heading);
+  player.position.x += fx * playerState.speed * dt;
+  player.position.z += fz * playerState.speed * dt;
+
+  // Walk animation — drive the phase by distance traveled so it syncs with speed
+  const strideRate = 2.4; // rad of swing per meter
+  playerState.animPhase += Math.abs(playerState.speed) * strideRate * dt;
+  const moving = Math.abs(playerState.speed) > 0.05;
+  const swingAmp = moving ? (input.jog ? 0.95 : 0.6) : 0;
+  const bob = moving ? Math.sin(playerState.animPhase * 2) * 0.03 : 0;
+  const legSwing = Math.sin(playerState.animPhase) * swingAmp;
+  const armSwing = -legSwing * 0.9;
+  player.leftLeg.rotation.x  =  legSwing;
+  player.rightLeg.rotation.x = -legSwing;
+  player.leftArm.rotation.x  =  armSwing;
+  player.rightArm.rotation.x = -armSwing;
+  // Settle toward zero when stopped
+  if (!moving) {
+    player.leftLeg.rotation.x  *= 0.85;
+    player.rightLeg.rotation.x *= 0.85;
+    player.leftArm.rotation.x  *= 0.85;
+    player.rightArm.rotation.x *= 0.85;
+  }
+  player.position.y = bob;
+}
+
+// ============================================================================
+// CAMERA
+// ============================================================================
+const camTargetPos = new THREE.Vector3();
+const camLookAt = new THREE.Vector3();
+const camLookAtSmoothed = new THREE.Vector3();
+
+function updateCamera(dt) {
+  let dist, height, posLerp, lookLerp, target, heading, lookHeight;
+  if (mode === 'driving') {
+    dist = CAM_CAR_DISTANCE; height = CAM_CAR_HEIGHT;
+    posLerp = CAM_CAR_LERP; lookLerp = CAM_CAR_LOOK_LERP;
+    target = car.position; heading = carState.heading; lookHeight = 1.2;
+  } else {
+    dist = CAM_WALK_DISTANCE; height = CAM_WALK_HEIGHT;
+    posLerp = CAM_WALK_LERP; lookLerp = CAM_WALK_LOOK_LERP;
+    target = player.position; heading = playerState.heading; lookHeight = PLAYER_HEIGHT * 0.55;
+  }
+  camTargetPos.set(
+    target.x - Math.sin(heading) * dist,
+    target.y + height,
+    target.z - Math.cos(heading) * dist
+  );
+  const pl = 1 - Math.pow(1 - posLerp, dt * 60);
+  camera.position.lerp(camTargetPos, pl);
+
+  camLookAt.set(
+    target.x + Math.sin(heading) * 3,
+    target.y + lookHeight,
+    target.z + Math.cos(heading) * 3
+  );
+  const ll = 1 - Math.pow(1 - lookLerp, dt * 60);
+  camLookAtSmoothed.lerp(camLookAt, ll);
+  camera.lookAt(camLookAtSmoothed);
+}
+
+// ============================================================================
+// HUD + PROMPT
+// ============================================================================
+const hudEl = document.getElementById('hud');
+const hudLabel = document.getElementById('hud-label');
+const hudVal = document.getElementById('hud-val');
+const hudUnit = document.getElementById('hud-unit');
+const promptEl = document.getElementById('prompt');
+const promptText = document.getElementById('prompt-text');
+const helpEl = document.getElementById('help');
+
+function updateHUD() {
+  if (mode === 'driving') {
+    hudLabel.textContent = 'SPEED';
+    hudVal.textContent = Math.round(Math.abs(carState.speed) * 2.237);
+    hudUnit.textContent = 'MPH';
+  } else {
+    hudLabel.textContent = input.jog ? 'JOGGING' : (Math.abs(playerState.speed) > 0.1 ? 'WALKING' : 'ON FOOT');
+    hudVal.textContent = Math.round(Math.abs(playerState.speed) * 2.237);
+    hudUnit.textContent = 'MPH';
+  }
+}
+
+function updatePrompt() {
+  if (currentDialogue) { promptEl.classList.remove('visible'); return; }
+  const it = nearestInteractable();
+  if (it) {
+    promptText.textContent = it.label();
+    promptEl.classList.add('visible');
+  } else {
+    promptEl.classList.remove('visible');
+  }
+}
+
+// Project a world-space point into screen pixels for the NPC nametag
+const _projV = new THREE.Vector3();
+function worldToScreen(v3) {
+  _projV.copy(v3).project(camera);
+  const x = (_projV.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-_projV.y * 0.5 + 0.5) * window.innerHeight;
+  const visible = _projV.z < 1;
+  return { x, y, visible };
+}
+
+// Build a floating nametag DOM element for each registered NPC
+const tagsRoot = document.getElementById('npc-tags');
+for (const n of npcRegistry) {
+  const el = document.createElement('div');
+  el.className = 'npc-tag';
+  el.textContent = n.name;
+  tagsRoot.appendChild(el);
+  n.tagEl = el;
+}
+
+function updateNPCTag() {
+  if (currentDialogue) {
+    for (const n of npcRegistry) n.tagEl.classList.remove('visible');
+    return;
+  }
+  for (const n of npcRegistry) {
+    const dx = player.position.x - n.obj.position.x;
+    const dz = player.position.z - n.obj.position.z;
+    const dist = Math.sqrt(dx*dx + dz*dz);
+    if (dist > 18) { n.tagEl.classList.remove('visible'); continue; }
+    const headPos = new THREE.Vector3(n.obj.position.x, n.obj.position.y + 2.1, n.obj.position.z);
+    const s = worldToScreen(headPos);
+    if (!s.visible) { n.tagEl.classList.remove('visible'); continue; }
+    n.tagEl.style.left = s.x + 'px';
+    n.tagEl.style.top  = s.y + 'px';
+    // Fade with distance so closer NPCs have brighter tags
+    n.tagEl.style.opacity = String(Math.max(0.3, 1 - dist / 18));
+    n.tagEl.classList.add('visible');
+  }
+}
+
+function updateAllNPCs(dt) {
+  for (const n of npcRegistry) {
+    const b = n.obj.userData.idleBob;
+    if (!b) continue;
+    b.phase += dt * 1.6;
+    b.head.position.y  = 1.64 + Math.sin(b.phase) * 0.01;
+    b.torso.position.y = 1.12 + Math.sin(b.phase) * 0.008;
+  }
+  // Doug's grill smoke
+  const smoke = dougGrill.userData.smoke;
+  smoke.position.y += dt * 0.4;
+  if (smoke.position.y > 3.6) smoke.position.y = 2.0;
+  smoke.material.opacity = 0.5 - (smoke.position.y - 2.0) * 0.25;
+}
+
+// (NPC idle animation is handled by updateAllNPCs in the animate loop)
+
+// Time tuning: ~12 game-minutes per real-minute baseline, faster when moving.
+// A full day (7am–8pm, 13 hrs) plays out in ~15 real minutes of moderate engagement.
+const TIME_BASE_RATE   = 0.0033;   // hours/real-sec, always on
+const TIME_WALK_BONUS  = 0.006;    // extra while walking at full speed
+const TIME_DRIVE_BONUS = 0.012;    // extra while driving at full speed
+function advanceTimeFromMotion(dt) {
+  gameState.time += dt * TIME_BASE_RATE;
+  if (mode === 'driving')         gameState.time += dt * TIME_DRIVE_BONUS * (Math.abs(carState.speed) / CAR_MAX_SPEED);
+  else if (playerState.speed > 0) gameState.time += dt * TIME_WALK_BONUS  * (playerState.speed / WALK_SPEED);
+  if (gameState.time > 24) gameState.time = 24;
+}
+
+function updateHelpText() {
+  if (mode === 'driving') {
+    helpEl.innerHTML = `<b style="color:var(--accent-gold)">DRIVING</b><br>W/↑ accel · S/↓ reverse<br>A/D steer · SPACE brake<br>E to get out`;
+  } else {
+    helpEl.innerHTML = `<b style="color:var(--accent-gold)">ON FOOT</b><br>W/S walk · A/D turn<br>SHIFT to jog<br>E near car to drive`;
+  }
+}
+
+// ============================================================================
+// WIFE TEXTS — scripted (time-keyed) + reactive (suspicion-keyed)
+// ============================================================================
+// Reply sets: each text has 2-4 replies. `sus` = suspicion delta applied when
+// that reply is sent. Ignoring (timer runs out) applies +5 suspicion.
+const SCRIPTED_TEXTS = [
+  { id:'s_830', at: 8.5, body: "how's it going out there? lawn started?", replies: [
+    { lbl:'TRUTH',  text: "on it. mower's out.",                 effect: () => {} },
+    { lbl:'HEDGE',  text: "gonna get to it soon ❤️",            effect: () => { gameState.suspicion += 3; } },
+    { lbl:'LIE',    text: "half done. looks great.",             effect: () => { gameState.suspicion += 8; } },
+  ]},
+  { id:'s_1000', at: 10.0, body: "don't forget ice. and buns. and whatever mom drinks now, the fizzy thing.", replies: [
+    { lbl:'SOLID',  text: "got it. making a run.",               effect: () => {} },
+    { lbl:'OK',     text: "k",                                    effect: () => { gameState.suspicion += 2; } },
+    { lbl:'PUSH',   text: "can your mom grab it?",                effect: () => { gameState.suspicion += 6; } },
+  ]},
+  { id:'s_1200', at: 12.0, body: "mom wants to know what beer you're serving. please say something normal.", replies: [
+    { lbl:'NORMAL', text: "the lager. don't worry.",              effect: () => {} },
+    { lbl:'JOKE',   text: "whatever doug's got 🍺",               effect: () => { gameState.suspicion += 7; } },
+    { lbl:'DODGE',  text: "we'll figure it out",                  effect: () => { gameState.suspicion += 4; } },
+  ]},
+  { id:'s_1400', at: 14.0, body: "we're leaving mom's in 30. how does it look?", replies: [
+    { lbl:'GOOD',   text: "all set. lawn done, grill ready.",     effect: () => { if (gameState.lawnStatus < 80) gameState.suspicion += 6; } },
+    { lbl:'HONEST', text: "still working on it.",                 effect: () => { gameState.suspicion += 2; } },
+    { lbl:'PANIC',  text: "how much time do i have",              effect: () => { gameState.suspicion += 5; } },
+  ]},
+  { id:'s_1530', at: 15.5, body: "pulling up in an hour. please tell me it looks good. please.", replies: [
+    { lbl:'PROMISE', text: "it will.",                            effect: () => {} },
+    { lbl:'HEDGE',   text: "almost there",                        effect: () => { gameState.suspicion += 4; } },
+  ]},
+  { id:'s_1630', at: 16.5, body: "where ARE you", replies: [
+    { lbl:'HOME',   text: "home. yard. everything's fine.",       effect: () => { if (gameState.sobriety < 70) gameState.suspicion += 8; } },
+    { lbl:'VAGUE',  text: "almost done",                          effect: () => { gameState.suspicion += 6; } },
+  ]},
+];
+const REACTIVE_TEXTS = [
+  { id:'r_30', atSus: 30, body: "doug posted a photo of you on his story. what are you doing", replies: [
+    { lbl:'DENY',  text: "he's being weird. i'm mowing.",         effect: () => { gameState.suspicion += 3; } },
+    { lbl:'OWN',   text: "one beer. it's fine.",                  effect: () => { gameState.suspicion += 1; } },
+  ]},
+  { id:'r_45', atSus: 45, body: "...are you drinking.", replies: [
+    { lbl:'NO',    text: "no.",                                   effect: () => { gameState.suspicion += 6; } },
+    { lbl:'KIND',  text: "doug handed me one. i'm good.",         effect: () => { gameState.suspicion += 2; } },
+    { lbl:'YES',   text: "yeah. i'll stop.",                      effect: () => { gameState.suspicion -= 4; } },
+  ]},
+  { id:'r_55', atSus: 55, body: "call me. now.", replies: [
+    { lbl:'BUSY',  text: "can't right now",                       effect: () => { gameState.suspicion += 10; } },
+    { lbl:'SOON',  text: "2 min, lawn's running",                 effect: () => { gameState.suspicion += 4; } },
+  ]},
+];
+
+const firedTexts = new Set();
+let currentText = null;            // { def, ignoreAt (real-time seconds), timerHandle }
+const TEXT_IGNORE_SECONDS = 45;    // real-time to reply before counted as ignore
+
+const phoneEl = document.getElementById('phone-text');
+const ptBodyEl = document.getElementById('pt-body');
+const ptRepliesEl = document.getElementById('pt-replies');
+const ptTimeEl = document.getElementById('pt-time');
+const ptBarEl = document.getElementById('pt-bar');
+
+function showText(def) {
+  if (currentText) return;         // one at a time; others queue on next check
+  currentText = { def };
+  ptBodyEl.textContent = def.body;
+  ptTimeEl.textContent = fmtTime(gameState.time);
+  ptRepliesEl.innerHTML = '';
+  def.replies.forEach(r => {
+    const btn = document.createElement('button');
+    btn.className = 'pt-reply';
+    btn.innerHTML = `<span class="lbl">${r.lbl}</span>${r.text}`;
+    btn.addEventListener('click', () => sendReply(r));
+    ptRepliesEl.appendChild(btn);
+  });
+  // Reset + animate the ignore-timer bar
+  ptBarEl.style.transition = 'none';
+  ptBarEl.style.width = '100%';
+  requestAnimationFrame(() => {
+    ptBarEl.style.transition = `width ${TEXT_IGNORE_SECONDS}s linear`;
+    ptBarEl.style.width = '0%';
+  });
+  phoneEl.classList.add('visible');
+  currentText.ignoreHandle = setTimeout(() => ignoreText(), TEXT_IGNORE_SECONDS * 1000);
+}
+
+function sendReply(reply) {
+  if (!currentText) return;
+  clearTimeout(currentText.ignoreHandle);
+  reply.effect();
+  if (gameState.suspicion < 0) gameState.suspicion = 0;
+  toast(`sent · ${reply.lbl.toLowerCase()}`);
+  dismissText();
+}
+
+function ignoreText() {
+  if (!currentText) return;
+  gameState.suspicion += 5;
+  toast("ignored · suspicion +5");
+  dismissText();
+}
+
+function dismissText() {
+  phoneEl.classList.remove('visible');
+  currentText = null;
+}
+
+function checkTexts() {
+  if (currentText) return;
+  for (const def of SCRIPTED_TEXTS) {
+    if (!firedTexts.has(def.id) && gameState.time >= def.at) {
+      firedTexts.add(def.id);
+      showText(def);
+      return;
+    }
+  }
+  for (const def of REACTIVE_TEXTS) {
+    if (!firedTexts.has(def.id) && gameState.suspicion >= def.atSus) {
+      firedTexts.add(def.id);
+      showText(def);
+      return;
+    }
+  }
+}
+
+// ============================================================================
+// LOOP
+// ============================================================================
+let gameStarted = false;
+let lastT = performance.now();
+
+function animate(t) {
+  const dt = Math.min(0.05, (t - lastT) / 1000);
+  lastT = t;
+  if (gameStarted) {
+    if (!currentDialogue && !introActive) {
+      if (mode === 'driving') updateCar(dt);
+      else                    updatePlayer(dt);
+    }
+    updateAllNPCs(dt);
+    updateCamera(dt);
+    advanceTimeFromMotion(dt);
+    updateHUD();
+    updatePrompt();
+    updateNPCTag();
+    updateStateChip();
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+let introActive = false;
+function showIntro() {
+  introActive = true;
+  document.getElementById('intro').classList.add('active');
+}
+function dismissIntro() {
+  introActive = false;
+  document.getElementById('intro').classList.remove('active');
+}
+document.getElementById('intro').addEventListener('click', dismissIntro);
+
+function startGame() {
+  document.getElementById('title-screen').classList.add('hidden');
+  hudEl.style.display = 'block';
+  helpEl.style.display = 'block';
+  document.getElementById('state-chip').style.display = 'block';
+  updateStateChip();
+  updateHelpText();
+  // Show the wife's note after the title screen clears
+  setTimeout(showIntro, 600);
+  setTimeout(() => helpEl.classList.add('faded'), 8000);
+  // Prime camera so first frame doesn't snap
+  const target = player.position;
+  const heading = playerState.heading;
+  camera.position.set(
+    target.x - Math.sin(heading) * CAM_WALK_DISTANCE,
+    target.y + CAM_WALK_HEIGHT,
+    target.z - Math.cos(heading) * CAM_WALK_DISTANCE
+  );
+  camLookAtSmoothed.set(
+    target.x + Math.sin(heading) * 3,
+    target.y + PLAYER_HEIGHT * 0.55,
+    target.z + Math.cos(heading) * 3
+  );
+  gameStarted = true;
+}
+
+document.getElementById('play-btn').addEventListener('click', startGame);
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+lastT = performance.now();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

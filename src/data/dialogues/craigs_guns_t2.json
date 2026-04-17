@@ -1,0 +1,110 @@
+{
+  "id": "craigs_guns_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.guns", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.guns", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "Craig",
+      "text": "Craig physically pushes you back. 'I said reliable. You are not reliable.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "Craig",
+      "text": "Craig grabs you. 'Cops asking questions. We're dark until further notice.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "Craig gives you a nod. The nod of a man who's seen you see things. You nod back. Two men, nodding, in a cul-de-sac. This is how wars start. Or end. You're not sure anymore."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Craig",
+      "text": "Need a driver. My truck, your hands on the wheel. Hour run to the warehouse. Three hundred cash. You don't ask questions. I don't answer them. Beautiful system.",
+      "choices": [
+        {
+          "text": "\"Three hundred? I'm driving\"",
+          "nextNode": "t2",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 300 },
+            { "type": "add", "field": "vices.guns", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        },
+        {
+          "text": "\"Craig, I drive a minivan\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "Craig tosses you his truck keys. 'Head out to the warehouse on Elm. Don't stop. Don't speed. And do NOT look in the boxes.' You get in the truck.",
+      "exitScene": "MINIGAME:drive_warehouse"
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "Craig respects it. 'Smart. The last driver asked too many questions. He's fine. He moved to Idaho. Voluntarily. Mostly.' Craig walks away whistling."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Craig",
+      "text": "The big one. Warehouse deal. A thousand cash. But if it goes south... well. Let's just say you'll want to update your life insurance first. I'm kidding. Mostly. Don't update your life insurance.",
+      "choices": [
+        {
+          "text": "\"A thousand dollars?\"",
+          "nextNode": "t3",
+          "timeCost": 150,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 1000 },
+            { "type": "add", "field": "vices.guns", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 30 },
+            { "type": "set", "field": "flags.injury", "value": true }
+          ]
+        },
+        {
+          "text": "\"Call the cops\"",
+          "nextNode": "heroic",
+          "timeCost": 90,
+          "effects": [
+            { "type": "set", "field": "flags.heroicFlag", "value": true },
+            { "type": "add", "field": "suspicion", "value": -20 }
+          ]
+        },
+        {
+          "text": "\"I'm out, Craig\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "The warehouse deal. Men in tactical vests. A brief, terrifying negotiation. Something falls and everyone draws. Nobody fires. The silence lasts approximately fourteen years compressed into three seconds. You collect your money with hands that won't stop shaking. Craig buys you a Gatorade on the way home. 'Electrolytes,' he says, like that fixes anything."
+    },
+    "heroic": {
+      "id": "heroic",
+      "text": "You slip away and call 911. The cops arrive. Craig is furious. But honestly? You sleep better tonight than you have in weeks. Your hands have stopped shaking. Karen comments that you seem 'calmer.' You don't explain why."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "'Understandable,' Craig says, and he means it. 'Not everyone's built for the warehouse life.' He gives you a tactical flashlight as a parting gift. It's actually really nice. You use it to find things in the garage."
+    }
+  }
+}

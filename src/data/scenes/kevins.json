@@ -1,0 +1,22 @@
+{
+  "id": "kevins",
+  "name": "Kevin's Garage",
+  "description": "The garage door is open. A whiteboard covered in arrows. Oh no.",
+  "background": "kevins",
+  "isHome": false,
+  "enterDialogue": "kevins_hub",
+  "hotspots": [
+    {
+      "id": "kevin",
+      "label": "Kevin",
+      "x": 40,
+      "y": 50,
+      "width": 12,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "kevins_pyramid"
+      }
+    }
+  ]
+}

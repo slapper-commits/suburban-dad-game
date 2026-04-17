@@ -1,0 +1,9 @@
+{
+  "id": "highway",
+  "name": "The Highway",
+  "description": "Open road. Mountains in the distance. The minivan hums. For a moment, you could just keep driving.",
+  "background": "highway",
+  "isHome": false,
+  "enterDialogue": "highway_hub",
+  "hotspots": []
+}

@@ -1,0 +1,57 @@
+{
+  "id": "backyard_hub",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "done" }],
+          "nextNode": "grill_done"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "burnt" }],
+          "nextNode": "grill_burnt"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "cooking" }],
+          "nextNode": "grill_cooking"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "prepped" }],
+          "nextNode": "grill_prepped"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "supplies_bought" }],
+          "nextNode": "grill_supplies"
+        }
+      ],
+      "next": "grill_cold"
+    },
+    "grill_cold": {
+      "id": "grill_cold",
+      "text": "The grill. Cold grates. No charcoal yet. String lights droop, waiting for dusk."
+    },
+    "grill_supplies": {
+      "id": "grill_supplies",
+      "text": "Charcoal bag on the patio. Lighter fluid next to it. Grill itself still cold. Time to build the pyramid."
+    },
+    "grill_prepped": {
+      "id": "grill_prepped",
+      "text": "Coals glowing white around the edges. Grill ready. Burgers in the fridge, waiting for their moment."
+    },
+    "grill_cooking": {
+      "id": "grill_cooking",
+      "text": "Burgers on the grates. Grease flare. You should probably be watching these."
+    },
+    "grill_done": {
+      "id": "grill_done",
+      "text": "Perfect char. Pink centers. You are a craftsman. The platter looks professional."
+    },
+    "grill_burnt": {
+      "id": "grill_burnt",
+      "text": "Hockey pucks. The smoke alarm inside has given up. Karen's silence is deafening."
+    }
+  }
+}

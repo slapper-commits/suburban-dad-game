@@ -1,0 +1,8 @@
+{
+  "id": "gas_station_store",
+  "name": "Gas Station Store",
+  "description": "Florescent buzz. The smell of taquitos rotating for six hours.",
+  "background": "gas_station_store",
+  "isHome": false,
+  "hotspots": []
+}

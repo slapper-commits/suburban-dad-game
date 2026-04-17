@@ -1,0 +1,10 @@
+{
+  "id": "craigs_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "Craig's driveway. A pickup truck idles. Boxes stacked by the tailgate. Craig nods — barely."
+    }
+  }
+}

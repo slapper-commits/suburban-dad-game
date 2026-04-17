@@ -1,0 +1,75 @@
+{
+  "id": "kevin_pitch",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "vices.pyramid", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        }
+      ],
+      "next": "pitch"
+    },
+    "pitch": {
+      "id": "pitch",
+      "speaker": "Kevin",
+      "text": "",
+      "beats": [
+        { "speaker": "Kevin", "text": "\"DAAAAVE! What a COINCIDENCE!\" It is not a coincidence.", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "Your shoulders drop two inches. Your soul considers an exit.", "mouth": "frown", "eyes": "sleepy", "eyebrows": "worried" },
+        { "speaker": "Kevin", "text": "\"Every person here — EVERY PERSON — is a POTENTIAL NODE in the network.\"", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "text": "Dad's soul briefly exits the body, tours the yard, comes back disappointed.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"Kevin, how did you find me?\"",
+          "nextNode": "find_you"
+        },
+        {
+          "text": "Walk away quickly",
+          "nextNode": "escape"
+        }
+      ]
+    },
+    "find_you": {
+      "id": "find_you",
+      "speaker": "Kevin",
+      "text": "\"I have a sixth sense for UNTAPPED MARKETS, Dave. Also I saw your minivan.\" He hands you more brochures. You already have brochures.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 2 }
+      ]
+    },
+    "escape": {
+      "id": "escape",
+      "text": "You power-walk away. Kevin calls after you: 'THE FUNNEL WAITS FOR NO MAN, DAVE!' Two strangers look concerned."
+    },
+    "maxed": {
+      "id": "maxed",
+      "speaker": "Kevin",
+      "text": "",
+      "beats": [
+        { "speaker": "Kevin", "text": "\"Dave! My TOP regional ambassador!\" He claps your shoulder. It hurts. Lovingly.", "mouth": "grin", "eyes": "wide", "eyebrows": "raised" },
+        { "speaker": "Kevin", "text": "\"I was just telling these good people about... Phase FOUR.\"", "mouth": "smirk", "eyes": "wide", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "Phase Four. There has never been a Phase Four. He is inventing it. Now. Live.", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "His belief is total. His belief does not require evidence. His belief is the evidence.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"There's a Phase FOUR?\"",
+          "nextNode": "phase_four"
+        },
+        {
+          "text": "\"Kevin, please stop\"",
+          "nextNode": "escape"
+        }
+      ]
+    },
+    "phase_four": {
+      "id": "phase_four",
+      "text": "Kevin's face lights up like Christmas. He doesn't know what Phase Four is yet but he's already drawing on the nearest flat surface. A receipt. It looks like a pyramid. It IS a pyramid. It always was."
+    }
+  }
+}

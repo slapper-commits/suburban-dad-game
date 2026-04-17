@@ -1,0 +1,130 @@
+{
+  "id": "gas_prostitution",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [{ "field": "flags.lipstick", "op": "==", "value": true }], "nextNode": "regular" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.prostitution", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.prostitution", "op": ">=", "value": 1 }],
+          "nextNode": "already_met"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "speaker": "Sharon",
+      "text": "Oh honey. You need to sit DOWN. I charge extra for therapy, and you look like you need the whole package."
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "Sharon",
+      "text": "You're having a DAY, huh? Want to talk about it? It's $50 either way."
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "text": "The phone booth is empty. Just a dangling receiver swinging in the breeze. Sharon knows when to disappear."
+    },
+    "regular": {
+      "id": "regular",
+      "speaker": "Sharon",
+      "text": "'Back so soon, khakis? You've already got my color on your collar. Might as well come back for round two.'"
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "text": "The phone booth is empty. Too early for that kind of business. Sharon isn't up yet."
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "Sharon",
+      "text": "'Last call, khakis. After 5, I've got MY OWN BBQ to go to. I have a whole life, you know.'",
+      "next": "intro"
+    },
+    "already_met": {
+      "id": "already_met",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.lipstick", "op": "==", "value": true }], "nextNode": "already_met_lipstick" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "already_met_drunk" }
+      ],
+      "next": "already_met_default"
+    },
+    "already_met_lipstick": {
+      "id": "already_met_lipstick",
+      "speaker": "Sharon",
+      "text": "'Back already? I figured. Regulars get a loyalty discount... jk. $75.'"
+    },
+    "already_met_drunk": {
+      "id": "already_met_drunk",
+      "speaker": "Sharon",
+      "text": "'Honey. Come back when you can see straight. I'm not a therapist.'"
+    },
+    "already_met_default": {
+      "id": "already_met_default",
+      "text": "She's still here. Waves. 'Business meeting?' she asks with air quotes."
+    },
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Sharon", "text": "She leans against the phone booth. The phone booth is older than cell phones.", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Sharon", "text": "Her eyes find yours across two gas pumps. You are located.", "mouth": "smirk", "eyes": "normal", "eyebrows": "raised" },
+        { "speaker": "Sharon", "text": "\"Hey honey. You look lost. Want some company?\"", "mouth": "grin", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"I'm, uh — pump three — gas — yep — gas.\" You drop the nozzle. Twice.", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" }
+      ],
+      "choices": [
+        {
+          "text": "\"I'm... just getting gas\"",
+          "nextNode": "curious",
+          "timeCost": 5
+        },
+        {
+          "text": "\"No thanks\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "curious": {
+      "id": "curious",
+      "text": "She laughs. 'Sure you are. I'm Destiny. Well, my real name's Sharon, but Destiny has better branding.'",
+      "choices": [
+        {
+          "text": "\"Nice to meet you, Sharon\"",
+          "nextNode": "t1",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "vices.prostitution", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        {
+          "text": "\"I should go\"",
+          "nextNode": "leave"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "You talk. Actually just talk. She's funnier than anyone at your office. This is somehow more dangerous than anything else today."
+    },
+    "leave": {
+      "id": "leave",
+      "text": "You leave. Sharon-Destiny waves goodbye. 'Come back anytime, gas man.'"
+    },
+    "decline": {
+      "id": "decline",
+      "text": "'Suit yourself, khakis.' She goes back to her phone."
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "id": "garage_fridge",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 6 }], "nextNode": "maxed" },
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 4 }], "nextNode": "beer_5" },
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 3 }], "nextNode": "beer_4" },
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 2 }], "nextNode": "beer_3" },
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 1 }], "nextNode": "beer_2" }
+      ],
+      "next": "beer_1"
+    },
+
+    "beer_1": {
+      "id": "beer_1",
+      "text": "",
+      "beats": [
+        { "text": "The mini fridge hums. Inside: six cold ones and something in Tupperware that has a half-life.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "It's... *checks watch*... yeah. Nobody's counting.", "mouth": "smirk" }
+      ],
+      "choices": [
+        {
+          "text": "Crack one open (10 min)",
+          "nextNode": "drink",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "add", "field": "flags.garageBeersHad", "value": 1 },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "set", "field": "flags.hadBeerInGarage", "value": true },
+            { "type": "animate", "value": "beer" }
+          ]
+        },
+        { "text": "Check the Tupperware", "nextNode": "mystery_food" },
+        { "text": "Close the fridge", "nextNode": "close" }
+      ]
+    },
+
+    "beer_2": {
+      "id": "beer_2",
+      "text": "",
+      "beats": [
+        { "text": "Five beers left. The first one went down EASY.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "One more. To balance the first one. It's science.", "mouth": "grin", "eyebrows": "raised" }
+      ],
+      "choices": [
+        {
+          "text": "Another one (10 min)",
+          "nextNode": "drink",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "add", "field": "flags.garageBeersHad", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 5 },
+            { "type": "animate", "value": "beer" }
+          ]
+        },
+        { "text": "Close the fridge", "nextNode": "close" }
+      ]
+    },
+
+    "beer_3": {
+      "id": "beer_3",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Three is my lucky number.", "mouth": "grin", "eyes": "drunk" },
+        { "text": "Three is not his lucky number.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Third beer (10 min)",
+          "nextNode": "drink",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "add", "field": "flags.garageBeersHad", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 5 },
+            { "type": "add", "field": "vices.alcohol", "value": 1 },
+            { "type": "animate", "value": "beer" }
+          ]
+        },
+        { "text": "Close the fridge (heroically)", "nextNode": "close" }
+      ]
+    },
+
+    "beer_4": {
+      "id": "beer_4",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Four. This is probably fine. What's a four on a Saturday?", "mouth": "sleepy", "eyes": "drunk" },
+        { "text": "A four on a Saturday is an eight on a Sunday morning.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Fourth beer (10 min)",
+          "nextNode": "drink",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -18 },
+            { "type": "add", "field": "flags.garageBeersHad", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 8 },
+            { "type": "animate", "value": "beer" }
+          ]
+        },
+        { "text": "Close the fridge", "nextNode": "close" }
+      ]
+    },
+
+    "beer_5": {
+      "id": "beer_5",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Five. FIIIIIIVE.", "mouth": "grin", "eyes": "drunk", "eyebrows": "raised" },
+        { "text": "He's started counting out loud. Nobody's counting but him.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Fifth beer (10 min)",
+          "nextNode": "drink",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -18 },
+            { "type": "add", "field": "flags.garageBeersHad", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 10 },
+            { "type": "animate", "value": "beer" }
+          ]
+        },
+        { "text": "Put it down. Walk away.", "nextNode": "close" }
+      ]
+    },
+
+    "drink": {
+      "id": "drink",
+      "text": "",
+      "beats": [
+        { "text": "*SNAP* *HISS*", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "Ahh. That's the stuff.", "mouth": "smile", "eyes": "drunk" }
+      ],
+      "next": "router"
+    },
+
+    "maxed": {
+      "id": "maxed",
+      "text": "",
+      "beats": [
+        { "text": "The fridge is empty except for the Tupperware. Six beers gone.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "Okay... okay... I'll just... stand up... and... NOPE.", "mouth": "shock", "eyes": "drunk", "eyebrows": "worried" },
+        { "text": "You slide down the fridge door to the concrete. Your phone has nine new messages from Karen. The light bulb is now TWO light bulbs.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 20 }
+      ],
+      "choices": [
+        { "text": "Crawl to the chair", "nextNode": "close", "timeCost": 15 }
+      ]
+    },
+
+    "mystery_food": {
+      "id": "mystery_food",
+      "text": "",
+      "beats": [
+        { "text": "You peel the lid. The potato salad from July inhales sharply.", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Dad", "text": "*gags* Not today, Satan.", "mouth": "frown", "eyebrows": "worried" }
+      ],
+      "effects": [
+        { "type": "add", "field": "energy", "value": -5 }
+      ],
+      "next": "close"
+    },
+
+    "close": {
+      "id": "close",
+      "text": "You close the fridge. The garage returns to its peaceful hum. The fridge does not judge. The fridge knows."
+    }
+  }
+}

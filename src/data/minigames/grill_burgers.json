@@ -1,0 +1,31 @@
+{
+  "id": "grill_burgers",
+  "type": "timing",
+  "name": "Grill Master",
+  "description": "Flip the burgers at just the right moment. Don't burn 'em, Dave.",
+  "difficulty": {
+    "speed": 0.5,
+    "precision": 0.4,
+    "duration": 20,
+    "wobble": 0.1
+  },
+  "rewards": [
+    { "type": "add", "field": "reputation", "value": 15 },
+    { "type": "flag", "field": "grilledPerfectly", "value": true }
+  ],
+  "penalties": [
+    { "type": "add", "field": "reputation", "value": -10 },
+    { "type": "add", "field": "suspicion", "value": 15 },
+    { "type": "flag", "field": "burnedBurgers", "value": true }
+  ],
+  "modifiers": [
+    {
+      "condition": { "field": "sobriety", "op": "<", "value": 50 },
+      "difficultyDelta": { "wobble": 0.4 }
+    },
+    {
+      "condition": { "field": "sobriety", "op": "<", "value": 25 },
+      "difficultyDelta": { "wobble": 0.7, "speed": 0.3 }
+    }
+  ]
+}

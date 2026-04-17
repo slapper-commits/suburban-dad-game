@@ -1,0 +1,122 @@
+{
+  "id": "craigs_guns",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [{ "field": "flags.dilated_pupils", "op": "==", "value": true }], "nextNode": "craig_sees_drugs" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.guns", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.guns", "op": ">=", "value": 1 }],
+          "nextNode": "already_helped"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "speaker": "Craig",
+      "text": "Craig shakes his head. 'Nope. You're a liability right now, Dave. Come back when you can walk a straight line. I don't need witnesses slurring my name.'"
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "Craig",
+      "text": "You been drinking? Keep it together, Dave. I need reliable."
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "speaker": "Craig",
+      "text": "Not today. Unmarked car was on the street this morning. You head back inside."
+    },
+    "craig_sees_drugs": {
+      "id": "craig_sees_drugs",
+      "speaker": "Craig",
+      "text": "Craig squints. 'Your eyes, man. What have you been doing?' He takes a step back. 'Come back when you've ... resolved whatever that is.'"
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "speaker": "Craig",
+      "text": "Craig barely looks up. 'I'm busy, Dave. Got a thing. Come back after lunch.'"
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "Craig",
+      "text": "'Gotta move FAST, Dave. Truck's gotta be loaded by 5. You in?'",
+      "next": "intro"
+    },
+    "already_helped": {
+      "id": "already_helped",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "already_helped_drunk" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "already_helped_cash" },
+        { "conditions": [{ "field": "flags.heroicFlag", "op": "==", "value": true }], "nextNode": "already_helped_heroic" }
+      ],
+      "next": "already_helped_default"
+    },
+    "already_helped_drunk": {
+      "id": "already_helped_drunk",
+      "speaker": "Craig",
+      "text": "Craig physically blocks the truck. 'Not today, brother. You can't even stand.'"
+    },
+    "already_helped_cash": {
+      "id": "already_helped_cash",
+      "speaker": "Craig",
+      "text": "Craig nods approvingly. 'You've been making moves. I can use a man with resources.'"
+    },
+    "already_helped_heroic": {
+      "id": "already_helped_heroic",
+      "speaker": "Craig",
+      "text": "Craig looks at you sideways. 'Heard you got soft. That true?' His hand stays on the boxes."
+    },
+    "already_helped_default": {
+      "id": "already_helped_default",
+      "speaker": "Craig",
+      "text": "Craig nods at the truck. 'Got another run if you're interested. Pays better this time. Meet me at the sketchy end of town.' He doesn't clarify which end. You both know."
+    },
+    "intro": {
+      "id": "intro",
+      "speaker": "Craig",
+      "text": "Hey. Need a hand loading the truck. Heavy stuff. Don't ask what's in them.",
+      "choices": [
+        {
+          "text": "\"Sure, what are neighbors for?\"",
+          "nextNode": "t1",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 50 },
+            { "type": "add", "field": "vices.guns", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I've got lawn stuff to do\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "speaker": "Craig", "text": "\"Auto parts. Just auto parts. Don't overthink it, Dave.\"", "mouth": "neutral", "eyes": "shades" },
+        { "speaker": "Dad", "text": "You squat. You lift. Your knees file a formal complaint.", "mouth": "frown", "eyes": "sleepy", "eyebrows": "worried" },
+        { "text": "CLANK. One box shifts. The sound is... rectangular. Oiled. Wrong.", "mouth": "shock" },
+        { "speaker": "Craig", "text": "He doesn't blink. He hands you fifty bucks. The bills are warm.", "mouth": "neutral", "eyes": "shades", "eyebrows": "neutral" },
+        { "speaker": "Dad", "text": "You don't ask. You will never ask. This is the deal.", "mouth": "frown", "eyes": "sleepy" }
+      ]
+    },
+    "decline": {
+      "id": "decline",
+      "text": "Craig shrugs. 'Suit yourself.' He loads the boxes alone with suspicious ease."
+    }
+  }
+}

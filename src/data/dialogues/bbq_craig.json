@@ -1,0 +1,108 @@
+{
+  "id": "bbq_craig",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "vices.guns", "op": ">=", "value": 3 }],
+          "nextNode": "deep"
+        },
+        {
+          "conditions": [{ "field": "vices.guns", "op": ">=", "value": 1 }],
+          "nextNode": "nod"
+        }
+      ],
+      "next": "small_talk"
+    },
+    "deep": {
+      "id": "deep",
+      "speaker": "Craig",
+      "text": "Craig catches your arm near the cooler. Steers you behind the shed. His jaw is tight. \"Dave. Listen to me. The warehouse thing— there's heat. Cops have been asking around. Unmarked car on Elm twice this week.\" He grips your shoulder. \"Keep your mouth shut, Dave. For both our sakes.\"",
+      "choices": [
+        {
+          "text": "\"I won't say anything.\"",
+          "nextNode": "deep_silence",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        {
+          "text": "\"Maybe we should cool it, Craig.\"",
+          "nextNode": "deep_cool_it",
+          "effects": [
+            { "type": "set", "field": "flags.heroicConsideration", "value": true }
+          ]
+        }
+      ]
+    },
+    "deep_silence": {
+      "id": "deep_silence",
+      "speaker": "Craig",
+      "text": "\"Good man.\" He releases your shoulder. Hands you a beer like nothing happened. \"Nice party, by the way.\" He walks back to the yard. You stand behind the shed for a moment, wondering how deep you're in."
+    },
+    "deep_cool_it": {
+      "id": "deep_cool_it",
+      "speaker": "Craig",
+      "text": "Craig stares at you. Something flickers behind his eyes— relief? Fear? \"Yeah. Maybe.\" He looks at the fence like he can see through it. \"Maybe you're right.\" He walks away without the beer. That might be the most unsettling thing that's happened all day."
+    },
+    "nod": {
+      "id": "nod",
+      "text": "Craig catches your eye from across the yard. He's by the fence, beer in hand, posture casual. But the look he gives you isn't casual at all. A slow, deliberate nod. The kind that carries weight.",
+      "speaker": "Craig",
+      "next": "nod_speak"
+    },
+    "nod_speak": {
+      "id": "nod_speak",
+      "speaker": "Craig",
+      "text": "\"Good man, Dave.\"",
+      "choices": [
+        {
+          "text": "Nod back",
+          "nextNode": "nod_end"
+        }
+      ]
+    },
+    "nod_end": {
+      "id": "nod_end",
+      "text": "You nod back. Craig turns to the fence again. Two men who understand each other. Or at least, two men who've agreed to pretend they do."
+    },
+    "small_talk": {
+      "id": "small_talk",
+      "speaker": "Craig",
+      "text": "\"Dave! Hell of a party.\" Craig gestures with his beer at nothing in particular. \"You see the new F-250 in my driveway? Tow package. Spray-in bedliner. The works.\"",
+      "choices": [
+        {
+          "text": "\"Nice truck, Craig.\"",
+          "nextNode": "truck"
+        },
+        {
+          "text": "\"How's the family?\"",
+          "nextNode": "family"
+        }
+      ]
+    },
+    "truck": {
+      "id": "truck",
+      "speaker": "Craig",
+      "text": "\"She's a BEAST. Got the 7.3 liter. Probably overkill for hauling mulch but you know what they say— better to have it and not need it.\" Nobody says that about trucks. Craig says that about trucks. He looks genuinely happy."
+    },
+    "family": {
+      "id": "family",
+      "speaker": "Craig",
+      "text": "\"Good, good. Braden's got travel ball, Kaylee's doing gymnastics. Sheila's got me on some kind of... keto thing? I don't know. I just eat what she puts in front of me and don't ask questions.\" He sips his beer. \"Marriage, am I right?\"",
+      "choices": [
+        {
+          "text": "\"You are absolutely right.\"",
+          "nextNode": "family_end"
+        }
+      ]
+    },
+    "family_end": {
+      "id": "family_end",
+      "text": "You clink beers. Two suburban dads, bonded by the shared experience of eating whatever is put in front of them. It's honest. It's simple. It's Saturday."
+    }
+  }
+}

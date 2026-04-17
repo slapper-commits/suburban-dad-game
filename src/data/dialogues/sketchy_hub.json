@@ -1,0 +1,10 @@
+{
+  "id": "sketchy_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "The sketchy part of town. Everything is concrete and chainlink. A man in a tracksuit nods at you. Your New Balance sneakers squeak on the sidewalk like a suburban alarm."
+    }
+  }
+}

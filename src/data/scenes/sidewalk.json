@@ -1,0 +1,61 @@
+{
+  "id": "sidewalk",
+  "name": "The Sidewalk",
+  "description": "Cracked concrete, fire hydrants, the rhythmic slap of a jogger's New Balances.",
+  "background": "sidewalk",
+  "isHome": false,
+  "enterDialogue": "sidewalk_hub",
+  "hotspots": [
+    {
+      "id": "the_girls",
+      "label": "The Girls",
+      "x": 30,
+      "y": 50,
+      "width": 14,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "sidewalk_drugs"
+      }
+    },
+    {
+      "id": "go_craigs",
+      "label": "Go to Craig's",
+      "x": 70,
+      "y": 40,
+      "width": 10,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "craigs",
+        "timeCost": 5
+      }
+    },
+    {
+      "id": "go_kevins",
+      "label": "Go to Kevin's",
+      "x": 85,
+      "y": 40,
+      "width": 10,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "kevins",
+        "timeCost": 5
+      }
+    },
+    {
+      "id": "go_kids_porch",
+      "label": "Go to Kid's Porch",
+      "x": 10,
+      "y": 40,
+      "width": 10,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "kids_porch",
+        "timeCost": 5
+      }
+    }
+  ]
+}

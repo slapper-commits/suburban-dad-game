@@ -1,0 +1,60 @@
+{
+  "id": "backyard",
+  "name": "Backyard",
+  "description": "The grill. The patio. String lights waiting for dusk.",
+  "background": "backyard",
+  "isHome": true,
+  "enterDialogue": "backyard_hub",
+  "hotspots": [
+    {
+      "id": "grill",
+      "label": "The Grill",
+      "x": 40,
+      "y": 55,
+      "width": 12,
+      "height": 15,
+      "action": {
+        "type": "dialogue",
+        "treeId": "backyard_grill"
+      }
+    },
+    {
+      "id": "patio_chair",
+      "label": "Patio Chair",
+      "x": 60,
+      "y": 65,
+      "width": 10,
+      "height": 12,
+      "action": {
+        "type": "dialogue",
+        "treeId": "backyard_sit"
+      }
+    },
+    {
+      "id": "go_frontyard",
+      "label": "Front Yard",
+      "x": 5,
+      "y": 40,
+      "width": 8,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "frontyard",
+        "timeCost": 3
+      }
+    },
+    {
+      "id": "go_garage",
+      "label": "Garage",
+      "x": 5,
+      "y": 70,
+      "width": 8,
+      "height": 15,
+      "action": {
+        "type": "scene",
+        "sceneId": "garage",
+        "timeCost": 3
+      }
+    }
+  ]
+}

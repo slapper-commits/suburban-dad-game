@@ -1,0 +1,9 @@
+{
+  "id": "sketchy",
+  "name": "Sketchy Part of Town",
+  "description": "Chain-link fences. Flickering streetlights. Your khakis have never felt more conspicuous.",
+  "background": "sketchy",
+  "isHome": false,
+  "enterDialogue": "sketchy_hub",
+  "hotspots": []
+}

@@ -1,0 +1,28 @@
+{
+  "id": "bbq_hub",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }],
+          "nextNode": "tense_arrival"
+        }
+      ],
+      "next": "normal_arrival"
+    },
+    "normal_arrival": {
+      "id": "normal_arrival",
+      "text": "5 PM. The BBQ. String lights glow. Guests mingle. Karen's mom is already judging the potato salad. Doug has a beer. This is it, Dave."
+    },
+    "tense_arrival": {
+      "id": "tense_arrival",
+      "text": "5 PM. The BBQ. Karen won't look at you. Her mom whispers something. Doug avoids eye contact. The string lights feel like interrogation lamps.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 5 }
+      ]
+    }
+  }
+}

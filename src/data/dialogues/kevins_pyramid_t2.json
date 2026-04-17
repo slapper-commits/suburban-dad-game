@@ -1,0 +1,93 @@
+{
+  "id": "kevins_pyramid_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.pyramid", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.pyramid", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "Kevin",
+      "text": "Kevin is THRILLED you're drunk. 'Dave. You're PRIMED. Let's SIGN THE PAPERWORK.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "Kevin",
+      "text": "Kevin is oblivious. 'Cops LOVE ELEVATÉ, Dave. They're a HUGE demographic.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "Kevin waves from across the street. You pretend not to see him. Your garage is full of ELEVAT\u00c9 boxes. Karen has questions. You have no answers. Only supplements."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Kevin",
+      "text": "Phase Two. Small investment \u2014 just two hundred \u2014 and you're a REGIONAL AMBASSADOR. I've got the paperwork RIGHT HERE. I've been carrying it around for weeks hoping I'd run into you. That's not weird. That's HUSTLE.",
+      "choices": [
+        {
+          "text": "\"Fine, give me the paperwork\"",
+          "nextNode": "t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "cash", "value": -200 },
+            { "type": "add", "field": "vices.pyramid", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"Kevin, no\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "You sign things. Kevin takes a photo of you holding a green binder. He's already posted it to Instagram with the caption 'WELCOME TO THE TEAM KING \ud83d\udc51\ud83d\udca5\ud83d\ude80.' He has fourteen followers. You are now a Regional Ambassador for ELEVAT\u00c9. Your garage will have boxes by Tuesday. The binder contains mostly motivational quotes and one recipe for a protein shake that tastes like revenge."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "Kevin's eye twitches. 'You're leaving MONEY on the TABLE.' He gestures at an actual table. There is no money on it. There are only ELEVAT\u00c9 brochures. Kevin doesn't see the difference anymore."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Kevin",
+      "text": "PHASE THREE. You recruit. You pitch. You ARE the funnel, Dave. The funnel doesn't question itself. The funnel FLOWS. I've been up since 3 AM watching motivational videos about this.",
+      "choices": [
+        {
+          "text": "\"I am the funnel\"",
+          "nextNode": "t3",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "vices.pyramid", "value": 1 },
+            { "type": "add", "field": "cash", "value": 100 }
+          ]
+        },
+        {
+          "text": "\"Kevin, I've made a huge mistake\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "You spend ninety minutes walking door to door pitching ELEVAT\u00c9 to your neighbors. Three people slam doors. One woman turns on her sprinklers. One old man invites you in for lemonade and buys $40 worth of supplements. Kevin weeps with joy. 'OUR FIRST DOWNLINE SALE,' he whispers, clutching your arm. You've made a hundred dollars and lost something you can't put a price on. Your dignity, probably."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "'NO REFUNDS,' Kevin says, already on the phone. He's calling someone named 'Diamond Steve.' You hear Diamond Steve sigh audibly through the phone. Even Diamond Steve is tired of Kevin."
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "gas_station",
+  "name": "Gas Station",
+  "description": "Gas pumps. A stoplight. A car that definitely isn't street legal.",
+  "background": "gas_station",
+  "isHome": false,
+  "enterDialogue": "gas_station_hub",
+  "hotspots": [
+    {
+      "id": "modded_car",
+      "label": "Modded Car",
+      "x": 55,
+      "y": 50,
+      "width": 18,
+      "height": 20,
+      "action": {
+        "type": "dialogue",
+        "treeId": "gas_racing"
+      }
+    },
+    {
+      "id": "gas_pump",
+      "label": "Gas Pump",
+      "x": 25,
+      "y": 45,
+      "width": 10,
+      "height": 25,
+      "action": {
+        "type": "inspect",
+        "text": "Premium is $6.49 a gallon. You don't even want to think about it."
+      }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "id": "sidewalk_drugs_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "vip_supply" },
+        {
+          "conditions": [{ "field": "vices.drugs", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.drugs", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "The Girls",
+      "text": "The Girls laugh hard. 'You're DONE, Dave. Come back tomorrow. Or next week. Whenever you rebuild your soul.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "The Girls",
+      "text": "Everyone's heads are on a swivel. 'Too many eyes. We're ghosts today.' They vanish."
+    },
+    "vip_supply": {
+      "id": "vip_supply",
+      "speaker": "The Girls",
+      "text": "The strip mall dealer sees your cash. 'You've been making MOVES. Respect. Premium supply for the serious customer. Follow me.' (He leads you somewhere worse.)"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "You've seen enough. The strip mall has lost its mystery. The lava lamp doesn't even impress you anymore. You're basically a shaman now."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "The Girls",
+      "text": "So... there's a private book club meeting. Behind the strip mall. Apartment 4B. It's more of a... chapter two situation.",
+      "choices": [
+        {
+          "text": "\"Lead the way\"",
+          "nextNode": "t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -35 },
+            { "type": "add", "field": "suspicion", "value": 15 },
+            { "type": "add", "field": "vices.drugs", "value": 1 },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "animate", "value": "crack" }
+          ]
+        },
+        {
+          "text": "\"I have a lawn to mow\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "The Girls lead you down an alley, up a fire escape, into an apartment that smells like incense and bad decisions. There's a lava lamp. You feel the walls breathing.",
+      "exitScene": "sketchy"
+    },
+    "decline": {
+      "id": "decline",
+      "text": "The Girls look at you with pity. 'Lawns,' one says. The other shakes her head. 'Lawns.' They say it like it's a terminal diagnosis."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "The Girls",
+      "text": "The ride. Out of town. You've earned this. The book club has voted and you've been promoted to... advanced reader.",
+      "choices": [
+        {
+          "text": "\"Get in\"",
+          "nextNode": "t3",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -50 },
+            { "type": "add", "field": "suspicion", "value": 25 },
+            { "type": "add", "field": "vices.drugs", "value": 1 },
+            { "type": "set", "field": "flags.dilated_pupils", "value": true }
+          ]
+        },
+        {
+          "text": "\"This is getting too real\"",
+          "nextNode": "t3_decline"
+        },
+        {
+          "text": "\"Wait — she's not okay. Someone call 911.\"",
+          "nextNode": "t3_heroic",
+          "timeCost": 90,
+          "effects": [
+            { "type": "set", "field": "flags.heroicFlag", "value": true },
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "Two hours. A town you don't recognize. Things happen that feel like a movie montage. You're in someone's backyard — no, a park — no, a Taco Bell parking lot. You've never felt more alive. At one point you're convinced you can hear the Earth rotating. You can't. But the conviction was powerful. Karen must never know."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "Smart man. The last PTA dad who went on the ride now sells crystals on Etsy. His wife left him. He seems happier, actually, but that's beside the point."
+    },
+    "t3_heroic": {
+      "id": "t3_heroic",
+      "text": "One of The Girls is slumped against the dumpster. The other one is laughing but it's the wrong kind of laughing. You pull out your phone — the same phone with the Home Depot app and three fantasy football notifications — and you dial 911. You stay until the ambulance arrives. You give a fake name. 'Doug,' you say, because of course you do. The paramedic nods. 'You did the right thing, Doug.' The Girls won't remember you were here. Nobody will. You drive home in silence, hands at ten and two, and pull into the driveway with four minutes to spare before Karen gets back from book club. Actual book club. You did the right thing. Nobody will ever know. You barely made it home in time."
+    }
+  }
+}

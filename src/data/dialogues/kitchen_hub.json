@@ -1,0 +1,76 @@
+{
+  "id": "kitchen_hub",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "Saturday, 7 AM. Kitchen smells like yesterday's coffee. Karen's note on the fridge: CHARCOAL (KINGSFORD!), BUNS, LAWN. PARTY AT 5.",
+      "choices": [
+        {
+          "text": "Grab keys. Head out front.",
+          "nextNode": "end_frontyard",
+          "timeCost": 5
+        },
+        {
+          "text": "Peek in the garage first",
+          "nextNode": "end_garage",
+          "timeCost": 3
+        },
+        {
+          "text": "Pour another coffee",
+          "nextNode": "coffee",
+          "timeCost": 10
+        }
+      ]
+    },
+    "coffee": {
+      "id": "coffee",
+      "speaker": "Dave",
+      "text": "The mug says #1 DAD. You bought it yourself. The lawn waits. Everything waits.",
+      "effects": [
+        { "type": "add", "field": "energy", "value": 10 }
+      ],
+      "choices": [
+        {
+          "text": "Enough stalling. Front yard.",
+          "nextNode": "end_frontyard",
+          "timeCost": 5
+        },
+        {
+          "text": "Check your phone",
+          "nextNode": "phone",
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "phone": {
+      "id": "phone",
+      "text": "Sports scores. A text from Doug: 'Beer o'clock, brother.' Nothing from Karen yet. That's good. Or very bad.",
+      "choices": [
+        {
+          "text": "Front yard. Now.",
+          "nextNode": "end_frontyard",
+          "timeCost": 5
+        },
+        {
+          "text": "Garage.",
+          "nextNode": "end_garage",
+          "timeCost": 3
+        }
+      ]
+    },
+    "end_frontyard": {
+      "id": "end_frontyard",
+      "text": "You head for the front door.",
+      "exitScene": "frontyard"
+    },
+    "end_garage": {
+      "id": "end_garage",
+      "text": "You slip into the garage.",
+      "exitScene": "garage"
+    }
+  }
+}

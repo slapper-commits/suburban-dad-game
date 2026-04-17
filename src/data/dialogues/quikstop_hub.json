@@ -1,0 +1,10 @@
+{
+  "id": "quikstop_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "The QuikStop. Fluorescent buzz. A teen vapes by the dumpster. The rotating hot dogs have been rotating since the Clinton administration."
+    }
+  }
+}

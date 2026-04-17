@@ -1,0 +1,140 @@
+{
+  "id": "dougs_gambling_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.gambling", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.gambling", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "Doug",
+      "text": "Doug looks at you with pity. 'Brother. You're too cooked. The poker table is for the LIVING.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "Doug",
+      "text": "Doug whispers: 'Cops on the street. Game's canceled.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "Your poker days are done. Doug still owes you a hundred bucks. Every time you bring it up he changes the subject to his boat. Doug doesn't have a boat."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Doug",
+      "text": "Forget that penny-ante stuff. Real game. Fifty-dollar hands. I know a guy. He's got a table in his basement. It's got cup holders and everything.",
+      "choices": [
+        {
+          "text": "\"Deal me in\"",
+          "nextNode": "t2_play",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"Fifty dollars a hand? I'm out\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2_play": {
+      "id": "t2_play",
+      "text": "The basement game. Six guys. One lamp. The cup holders are, admittedly, very nice. The stakes are real. Your palms are sweating. Doug is wearing sunglasses indoors.",
+      "choices": [
+        {
+          "text": "\"Go all in\" (risky play)",
+          "nextNode": "t2_win",
+          "effects": [
+            { "type": "add", "field": "cash", "value": 200 }
+          ]
+        },
+        {
+          "text": "\"Play it safe\" (conservative)",
+          "nextNode": "t2_lose",
+          "effects": [
+            { "type": "add", "field": "cash", "value": -150 }
+          ]
+        }
+      ]
+    },
+    "t2_win": {
+      "id": "t2_win",
+      "text": "You win $200. Doug is visibly impressed. 'You got a GIFT, brother.' He takes off his sunglasses to look at you with his actual eyes. This is the most respect Doug has ever shown another human being."
+    },
+    "t2_lose": {
+      "id": "t2_lose",
+      "text": "You lose $150. Doug pats your shoulder. 'That's poker, baby.' Easy for him to say. He's up three hundred. The sunglasses are back on. He's insufferable."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "Doug shakes his head slowly. 'Small time, brother. Small time.' He puts on his sunglasses and walks away. It's 11 AM."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Doug",
+      "text": "Underground game. Serious players. Minimum buy-in is five hundred. There's a bouncer. At a poker game. In a suburb. We live in incredible times.",
+      "choices": [
+        {
+          "text": "\"I'm in\"",
+          "nextNode": "t3_play",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"Five hundred? Are you insane?\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3_play": {
+      "id": "t3_play",
+      "text": "The underground game. It's in a dentist's office after hours. The bouncer checks your ID and your dental records. This is the most surreal Saturday of your life.",
+      "choices": [
+        {
+          "text": "\"Read the table\" (trust your gut)",
+          "nextNode": "t3_win",
+          "effects": [
+            { "type": "add", "field": "cash", "value": 1000 }
+          ]
+        },
+        {
+          "text": "\"Bluff big\" (go for glory)",
+          "nextNode": "t3_lose",
+          "effects": [
+            { "type": "add", "field": "cash", "value": -500 },
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "t3_win": {
+      "id": "t3_win",
+      "text": "You win a thousand dollars. Cash. In an envelope. This is your life now. The dentist nods at you with something approaching reverence. Doug is filming this on his phone. You'll need to have a conversation about that."
+    },
+    "t3_lose": {
+      "id": "t3_lose",
+      "text": "You lose five hundred dollars. The table goes quiet. Someone offers you a cigarette. You don't smoke. You take it. The dentist offers you a complimentary cleaning. Small mercies."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "'Five hundred dollars is a riding mower, Doug.' Doug stares at you. 'You know what's wrong with you? You think too much about mowers.' He's not wrong."
+    }
+  }
+}

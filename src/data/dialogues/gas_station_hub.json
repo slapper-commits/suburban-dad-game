@@ -1,0 +1,10 @@
+{
+  "id": "gas_station_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "Gas station. The pumps hum. A modded Honda Civic sits under the stoplight, bass rattling the windows of a nearby Subaru."
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "bbq",
+  "name": "The BBQ",
+  "description": "5 PM. Guests trickling in. String lights on.",
+  "background": "bbq",
+  "isHome": true,
+  "enterDialogue": "bbq_hub",
+  "hotspots": [
+    {
+      "id": "mil",
+      "label": "Mother-in-Law",
+      "x": 20,
+      "y": 55,
+      "width": 10,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "bbq_mil"
+      }
+    },
+    {
+      "id": "doug_bbq",
+      "label": "Doug",
+      "x": 40,
+      "y": 55,
+      "width": 10,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "bbq_doug"
+      }
+    },
+    {
+      "id": "grill_bbq",
+      "label": "The Grill",
+      "x": 60,
+      "y": 55,
+      "width": 12,
+      "height": 15,
+      "action": {
+        "type": "dialogue",
+        "treeId": "bbq_grill"
+      }
+    }
+  ]
+}

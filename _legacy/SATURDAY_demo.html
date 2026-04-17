@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATURDAY — Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg-deep: #1a1612; --bg-scene: #2d261f; --text-warm: #f0e6d3; --text-dim: #8a7e6e;
+    --accent-gold: #d4a54a; --accent-danger: #c45c3e; --accent-safe: #6b8f6b; --accent-purple: #9b6b9b;
+    --shadow: rgba(0,0,0,0.6);
+  }
+  body { background: var(--bg-deep); color: var(--text-warm); font-family: 'Bitter', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
+  #title-screen { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-deep); transition: opacity 1s ease, visibility 1s ease; }
+  #title-screen.hidden { opacity: 0; visibility: hidden; }
+  .title-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 80%, rgba(212,165,74,0.08) 0%, transparent 60%), radial-gradient(ellipse at 30% 20%, rgba(196,92,62,0.04) 0%, transparent 50%); }
+  .title-text { position: relative; z-index: 1; text-align: center; }
+  .title-text h1 { font-family: 'Space Mono', monospace; font-size: clamp(4rem, 12vw, 9rem); font-weight: 700; letter-spacing: 0.3em; color: var(--text-warm); text-shadow: 0 0 80px rgba(212,165,74,0.2); margin-bottom: 0.2em; animation: titlePulse 4s ease-in-out infinite; }
+  @keyframes titlePulse { 0%, 100% { text-shadow: 0 0 80px rgba(212,165,74,0.15); } 50% { text-shadow: 0 0 120px rgba(212,165,74,0.3); } }
+  .title-tagline { font-size: clamp(0.8rem, 2vw, 1.1rem); color: var(--text-dim); letter-spacing: 0.15em; margin-bottom: 3rem; font-weight: 300; }
+  .play-btn { position: relative; z-index: 1; font-family: 'Space Mono', monospace; font-size: 1rem; letter-spacing: 0.2em; color: var(--bg-deep); background: var(--accent-gold); border: none; padding: 1em 3em; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; }
+  .play-btn:hover { background: var(--text-warm); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,165,74,0.3); }
+  .title-price { position: relative; z-index: 1; margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-dim); letter-spacing: 0.1em; }
+  #game { display: none; max-width: 800px; margin: 0 auto; min-height: 100vh; }
+  #game.active { display: block; }
+  .phone-bar { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: min(800px, 100%); z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: linear-gradient(to bottom, var(--bg-deep) 60%, transparent); pointer-events: none; }
+  .phone-time { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--accent-gold); letter-spacing: 0.1em; }
+  .phone-notif { font-size: 0.75rem; color: var(--accent-danger); opacity: 0; transition: opacity 0.5s ease; display: flex; align-items: center; gap: 0.4em; }
+  .phone-notif.visible { opacity: 1; animation: notifPulse 2s ease-in-out infinite; }
+  @keyframes notifPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .phone-notif-dot { width: 6px; height: 6px; background: var(--accent-danger); border-radius: 50%; }
+  .scene { opacity: 0; transform: translateY(20px); transition: all 0.8s ease; padding: 0 1.5rem; }
+  .scene.active { opacity: 1; transform: translateY(0); }
+  .scene-illustration { width: 100%; aspect-ratio: 16/9; border-radius: 2px; margin: 4rem 0 0 0; position: relative; overflow: hidden; }
+  .scene-illustration canvas { width: 100%; height: 100%; }
+  .scene-narration { font-size: clamp(1rem, 2.5vw, 1.2rem); line-height: 1.8; color: var(--text-warm); margin: 2rem 0; font-weight: 300; opacity: 0; animation: fadeUp 1s ease forwards; animation-delay: 0.5s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .scene-detail { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 2.5rem; font-style: italic; opacity: 0; animation: fadeUp 1s ease forwards; animation-delay: 1s; }
+  .choices { display: flex; flex-direction: column; gap: 0; margin: 0 0 4rem 0; border-top: 1px solid rgba(138,126,110,0.15); opacity: 0; animation: fadeUp 0.8s ease forwards; animation-delay: 1.5s; }
+  .choice-btn { display: flex; align-items: center; width: 100%; text-align: left; font-family: 'Bitter', Georgia, serif; font-size: clamp(0.95rem, 2vw, 1.05rem); font-weight: 400; color: var(--text-warm); background: transparent; border: none; border-bottom: 1px solid rgba(138,126,110,0.1); padding: 1.2em 0.5em; cursor: pointer; transition: all 0.25s ease; position: relative; }
+  .choice-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: rgba(212,165,74,0.05); transition: width 0.3s ease; }
+  .choice-btn:hover::before { width: 100%; }
+  .choice-btn:hover { color: var(--accent-gold); padding-left: 1.2em; }
+  .choice-icon { width: 24px; margin-right: 1em; text-align: center; font-size: 0.8rem; color: var(--text-dim); transition: color 0.25s ease; flex-shrink: 0; }
+  .choice-btn:hover .choice-icon { color: var(--accent-gold); }
+  .text-message { position: fixed; top: 3.5rem; left: 50%; transform: translateX(-50%) translateY(-120px); width: min(380px, 90vw); background: #1e1b17; border: 1px solid rgba(212,165,74,0.15); border-radius: 12px; padding: 1rem 1.2rem; z-index: 60; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+  .text-message.visible { transform: translateX(-50%) translateY(0); }
+  .text-msg-header { display: flex; align-items: center; gap: 0.6em; margin-bottom: 0.6rem; }
+  .text-msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-danger); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--bg-deep); }
+  .text-msg-name { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 0.05em; }
+  .text-msg-body { font-size: 0.9rem; color: var(--text-warm); line-height: 1.5; }
+  .text-msg-time { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text-dim); margin-top: 0.5rem; text-align: right; }
+  .sound-toggle { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 50; width: 40px; height: 40px; border-radius: 50%; background: rgba(30,27,23,0.8); border: 1px solid rgba(138,126,110,0.2); color: var(--text-dim); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+  .sound-toggle:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+  .scene-transition { position: fixed; inset: 0; background: var(--bg-deep); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+  .scene-transition.active { opacity: 1; pointer-events: all; }
+  .intox-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 40; transition: all 1s ease; }
+  .ending-screen { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+  .ending-screen.active { display: flex; }
+  .ending-screen h2 { font-family: 'Space Mono', monospace; font-size: clamp(1.5rem, 4vw, 2.5rem); color: var(--accent-gold); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .ending-screen p { font-size: 1.1rem; line-height: 1.8; color: var(--text-warm); max-width: 550px; font-weight: 300; margin-bottom: 2rem; }
+  .ending-screen .play-btn { font-size: 0.85rem; }
+  @media (max-width: 600px) {
+    .phone-bar { padding: 0.8rem 1rem; }
+    .scene { padding: 0 1rem; }
+    .scene-illustration { margin-top: 3rem; }
+  }
+</style>
+</head>
+<body>
+<div id="title-screen">
+  <div class="title-bg"></div>
+  <div class="title-text">
+    <h1>SATURDAY</h1>
+    <div class="title-tagline">Two tasks. Nine temptations. One suburban dad.</div>
+  </div>
+  <button class="play-btn">PLAY</button>
+  <div class="title-price">50¢ suggested · pay what you want</div>
+</div>
+<!-- This is a stylistic REFERENCE file showing the demo's CSS & title screen only. Full game is in index.html. -->
+</body>
+</html>

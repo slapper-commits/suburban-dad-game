@@ -1,0 +1,102 @@
+{
+  "id": "garage_chair",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "wasted_sit" },
+        { "conditions": [{ "field": "flags.garageBeersHad", "op": ">=", "value": 3 }], "nextNode": "buzzed_sit" }
+      ],
+      "next": "normal_sit"
+    },
+
+    "normal_sit": {
+      "id": "normal_sit",
+      "text": "",
+      "beats": [
+        { "text": "Folding patio chair. Two cushions. Definitely meant for the backyard. Definitely lives here now.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "This chair and I have a contract.", "mouth": "smirk" }
+      ],
+      "choices": [
+        { "text": "Sit and think (15 min)", "nextNode": "sit_think", "timeCost": 15 },
+        { "text": "Stand back up", "nextNode": "leave" }
+      ]
+    },
+
+    "buzzed_sit": {
+      "id": "buzzed_sit",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "The chair is calling to me.", "mouth": "smile", "eyes": "drunk" },
+        { "text": "The chair is calling to him.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        { "text": "Sit and close your eyes (30 min)", "nextNode": "sit_rest", "timeCost": 30 },
+        { "text": "Stand up. Stay strong.", "nextNode": "leave" }
+      ]
+    },
+
+    "wasted_sit": {
+      "id": "wasted_sit",
+      "text": "",
+      "beats": [
+        { "text": "You collapse into the chair. The garage spins politely.", "mouth": "sleepy", "eyes": "drunk" },
+        { "speaker": "Dad", "text": "Just... five minutes.", "mouth": "sleepy", "eyes": "drunk" }
+      ],
+      "choices": [
+        {
+          "text": "Nap (60 min)",
+          "nextNode": "nap",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": 20 },
+            { "type": "add", "field": "energy", "value": 15 }
+          ]
+        },
+        { "text": "Fight it. Get up.", "nextNode": "leave" }
+      ]
+    },
+
+    "sit_think": {
+      "id": "sit_think",
+      "text": "",
+      "beats": [
+        { "text": "You sit. You think. A spider moves across the ceiling. You think about the spider. Then you think about taxes. Then about whether the spider has to pay taxes.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "I need to mow the lawn.", "mouth": "neutral" },
+        { "text": "He does not mow the lawn.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "energy", "value": 5 }
+      ]
+    },
+
+    "sit_rest": {
+      "id": "sit_rest",
+      "text": "",
+      "beats": [
+        { "text": "Half an hour of pure, unstructured garage time. You feel... better? Less buzzed? Probably both. Definitely both.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "sobriety", "value": 10 },
+        { "type": "add", "field": "energy", "value": 10 }
+      ]
+    },
+
+    "nap": {
+      "id": "nap",
+      "text": "",
+      "beats": [
+        { "text": "You wake up with a crease on your face and a beer can in your hand that was full when you closed your eyes.", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Dad", "text": "That wasn't supposed to happen.", "mouth": "frown", "eyebrows": "worried" },
+        { "text": "Your neck will remember this choice for six days.", "mouth": "sleepy" }
+      ]
+    },
+
+    "leave": {
+      "id": "leave",
+      "text": "You stand up. The chair sighs. Betrayal."
+    }
+  }
+}

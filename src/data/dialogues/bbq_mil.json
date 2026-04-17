@@ -1,0 +1,143 @@
+{
+  "id": "bbq_mil",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.crooked_mow", "op": "==", "value": true }],
+          "nextNode": "crooked_mow"
+        },
+        {
+          "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }],
+          "nextNode": "drunk_convo"
+        },
+        {
+          "conditions": [{ "field": "suspicion", "op": ">=", "value": 50 }],
+          "nextNode": "suspicious_convo"
+        }
+      ],
+      "next": "normal_convo"
+    },
+    "crooked_mow": {
+      "id": "crooked_mow",
+      "speaker": "Mother-in-Law",
+      "text": "",
+      "beats": [
+        { "speaker": "Mother-in-Law", "text": "She gestures at the lawn with one manicured nail. The nail is a verdict.", "mouth": "neutral", "eyes": "angry", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"It's a — a design choice, Barb. Very modern. Very... Scandinavian.\"", "mouth": "smile", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Mother-in-Law", "text": "\"Mm. It's certainly... interesting.\"", "mouth": "smile", "eyes": "angry", "eyebrows": "raised" },
+        { "text": "When Barb says 'interesting,' small mammals go quiet. Lawyers get involved.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"It's a European style, Barb.\"",
+          "nextNode": "barb_skeptical"
+        },
+        {
+          "text": "\"The mower pulls to the left\"",
+          "nextNode": "barb_reply"
+        }
+      ]
+    },
+    "normal_convo": {
+      "id": "normal_convo",
+      "speaker": "Mother-in-Law",
+      "text": "\"David. The lawn looks... adequate. Have you put on weight?\" Her perfume predates the Cold War.",
+      "choices": [
+        {
+          "text": "\"Great to see you too, Barb.\"",
+          "nextNode": "barb_reply",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": -5 }
+          ]
+        },
+        {
+          "text": "Mumble and walk away",
+          "nextNode": "barb_offended",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        }
+      ]
+    },
+    "suspicious_convo": {
+      "id": "suspicious_convo",
+      "speaker": "Mother-in-Law",
+      "text": "\"You look... disheveled. Karen called me earlier. She sounded upset.\" The stare could peel paint.",
+      "choices": [
+        {
+          "text": "\"Just been busy with the grill, Barb.\"",
+          "nextNode": "barb_skeptical",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": -3 }
+          ]
+        },
+        {
+          "text": "Avoid eye contact",
+          "nextNode": "barb_offended",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 8 }
+          ]
+        }
+      ]
+    },
+    "drunk_convo": {
+      "id": "drunk_convo",
+      "speaker": "Mother-in-Law",
+      "text": "",
+      "beats": [
+        { "speaker": "Mother-in-Law", "text": "She leans in. Sniffs. Twice. Recoils a millimeter.", "mouth": "frown", "eyes": "angry", "eyebrows": "raised" },
+        { "speaker": "Mother-in-Law", "text": "\"David. Are you... feeling quite yourself today?\"", "mouth": "neutral", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"Barb! Never better. Totally fine. 100%. Fine.\"", "mouth": "smile", "eyes": "drunk", "eyebrows": "raised" },
+        { "speaker": "Mother-in-Law", "text": "\"Karen deserves a partner who shows up. Pass the potato salad, dear.\"", "mouth": "smile", "eyes": "angry", "eyebrows": "neutral" }
+      ],
+      "choices": [
+        {
+          "text": "\"It's a BBQ, Barb. People drink at BBQs.\"",
+          "nextNode": "barb_furious",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        },
+        {
+          "text": "\"Sunstroke. I was mowing all day.\"",
+          "nextNode": "barb_skeptical",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "barb_reply": {
+      "id": "barb_reply",
+      "text": "She almost smiles. Almost. That's a win in this family."
+    },
+    "barb_skeptical": {
+      "id": "barb_skeptical",
+      "text": "She narrows her eyes but lets it go. For now. She'll bring it up at Thanksgiving."
+    },
+    "barb_offended": {
+      "id": "barb_offended",
+      "text": "She turns to Karen. Whispers. Karen's jaw tightens. You've made it worse.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 3 }
+      ]
+    },
+    "barb_furious": {
+      "id": "barb_furious",
+      "text": "\"I TOLD Karen about you.\" She pulls out her phone. Probably texting her lawyer daughter.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 5 }
+      ]
+    }
+  }
+}

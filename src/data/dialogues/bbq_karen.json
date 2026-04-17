@@ -1,0 +1,283 @@
+{
+  "id": "bbq_karen",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.lipstick", "op": "==", "value": true }],
+          "nextNode": "lipstick"
+        },
+        {
+          "conditions": [{ "field": "flags.perfume", "op": "==", "value": true }],
+          "nextNode": "perfume"
+        },
+        {
+          "conditions": [{ "field": "flags.smell", "op": "==", "value": true }],
+          "nextNode": "smell"
+        },
+        {
+          "conditions": [{ "field": "sobriety", "op": "<", "value": 40 }],
+          "nextNode": "wasted"
+        },
+        {
+          "conditions": [{ "field": "sobriety", "op": "<", "value": 60 }],
+          "nextNode": "buzzed"
+        },
+        {
+          "conditions": [{ "field": "flags.crooked_mow", "op": "==", "value": true }],
+          "nextNode": "crooked_lawn"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": "<", "value": 50 }],
+          "nextNode": "lawn_angry"
+        }
+      ],
+      "next": "normal"
+    },
+    "crooked_lawn": {
+      "id": "crooked_lawn",
+      "speaker": "Karen",
+      "text": "\"The lawn looks... creative.\" She says 'creative' like it's a felony. \"Did you mow it drunk?\"",
+      "choices": [
+        {
+          "text": "\"It's called organic mowing\"",
+          "nextNode": "crooked_excuse",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        {
+          "text": "\"The mower has a mind of its own\"",
+          "nextNode": "crooked_blame",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "crooked_excuse": {
+      "id": "crooked_excuse",
+      "text": "\"Organic. Mowing.\" She closes her eyes. Doug stifles a laugh from across the yard. \"At least you MOWED it,\" she concedes. Progress."
+    },
+    "crooked_blame": {
+      "id": "crooked_blame",
+      "text": "\"That mower is five years old. It works fine when I use it.\" She has never used the mower. But the point stands."
+    },
+    "normal": {
+      "id": "normal",
+      "speaker": "Karen",
+      "text": "\"Hey babe. How was your day?\" She searches your face for clues. She always searches your face for clues.",
+      "choices": [
+        {
+          "text": "\"Great! Got everything done.\"",
+          "nextNode": "karen_ok"
+        },
+        {
+          "text": "\"You know. Saturday stuff.\"",
+          "nextNode": "karen_suspicious",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "karen_ok": {
+      "id": "karen_ok",
+      "text": "She nods. For once, she seems satisfied. This might be the best moment of your entire marriage."
+    },
+    "karen_suspicious": {
+      "id": "karen_suspicious",
+      "text": "\"'Saturday stuff.'\" She repeats it slowly. Making a mental note. Karen always makes mental notes. She has volumes."
+    },
+    "lipstick": {
+      "id": "lipstick",
+      "speaker": "Karen",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "She stops mid-sentence. Her finger rises. It points. It accuses.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Karen", "text": "\"What. Color. Is. That. On. Your. Collar.\"", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "\"It's — ha — it's ketchup! BBQ sauce! A rogue cherry tomato!\"", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Karen", "text": "She does not speak. She stares. A sparrow outside falls silent.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "text": "The temperature in the backyard drops four degrees. Guests check their phones and leave.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"It's... ketchup? From the grill?\"",
+          "nextNode": "lipstick_lie",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 20 }
+          ]
+        },
+        {
+          "text": "\"I helped a neighbor move furniture\"",
+          "nextNode": "lipstick_excuse",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "lipstick_lie": {
+      "id": "lipstick_lie",
+      "text": "\"Ketchup. Doesn't. Come. In. That. Color.\" She walks away. Your mother-in-law is already on the phone."
+    },
+    "lipstick_excuse": {
+      "id": "lipstick_excuse",
+      "text": "\"Which neighbor?\" You hesitate one second too long. Karen files this away in the permanent record."
+    },
+    "perfume": {
+      "id": "perfume",
+      "speaker": "Karen",
+      "text": "She hugs you, then freezes. Sniffs. \"Why do you smell like vanilla and regret?\"",
+      "choices": [
+        {
+          "text": "\"Doug's new air freshener\"",
+          "nextNode": "perfume_dodge",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 8 }
+          ]
+        },
+        {
+          "text": "\"I don't smell anything\"",
+          "nextNode": "perfume_deny",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 15 }
+          ]
+        }
+      ]
+    },
+    "perfume_dodge": {
+      "id": "perfume_dodge",
+      "text": "\"Doug doesn't use air freshener. His car smells like beef jerky and broken dreams.\" She knows Doug too well."
+    },
+    "perfume_deny": {
+      "id": "perfume_deny",
+      "text": "\"You don't—\" She closes her eyes. Counts to ten. Only gets to four. Walks away."
+    },
+    "smell": {
+      "id": "smell",
+      "speaker": "Karen",
+      "text": "She gets close. Sniffs. \"You smell... weird. Like incense? Since when do you burn INCENSE?\"",
+      "choices": [
+        {
+          "text": "\"The neighbor's doing a... cleansing ritual?\"",
+          "nextNode": "smell_excuse",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        {
+          "text": "\"Must be the charcoal\"",
+          "nextNode": "smell_charcoal",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "smell_excuse": {
+      "id": "smell_excuse",
+      "text": "\"A cleansing ritual.\" She stares at you. \"In the suburbs.\" You shrug. She walks away to get more wine."
+    },
+    "smell_charcoal": {
+      "id": "smell_charcoal",
+      "text": "\"Kingsford doesn't smell like patchouli, David.\" Fair point."
+    },
+    "wasted": {
+      "id": "wasted",
+      "speaker": "Karen",
+      "text": "",
+      "beats": [
+        { "speaker": "Karen", "text": "She scans you top to bottom. Like a TSA agent. With grievances.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "You sway. Imperceptibly. Very perceptibly. The lawn tilts.", "mouth": "smile", "eyes": "drunk", "eyebrows": "raised" },
+        { "speaker": "Karen", "text": "\"Three. Two. One. In front of my MOTHER, David.\"", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "\"I'm — I'm so — the grill needed me.\"", "mouth": "frown", "eyes": "drunk", "eyebrows": "worried" }
+      ],
+      "choices": [
+        {
+          "text": "\"I'm celebrating... Saturday?\"",
+          "nextNode": "wasted_response",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 15 }
+          ]
+        },
+        {
+          "text": "Try to act sober",
+          "nextNode": "wasted_act",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "wasted_response": {
+      "id": "wasted_response",
+      "text": "\"We're going to talk about this. AFTER everyone leaves. Go stand by the grill and try not to fall in it.\""
+    },
+    "wasted_act": {
+      "id": "wasted_act",
+      "text": "You straighten your polo. Stand tall. Almost topple over. Karen catches you by the elbow. \"Grill. Now. Don't talk to anyone.\""
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "Karen",
+      "text": "\"Have you been drinking?\" She asks it like a lawyer who already knows the answer.",
+      "choices": [
+        {
+          "text": "\"Just one with Doug. It's a BBQ!\"",
+          "nextNode": "buzzed_ok",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        },
+        {
+          "text": "\"Define 'drinking'\"",
+          "nextNode": "buzzed_bad",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 8 }
+          ]
+        }
+      ]
+    },
+    "buzzed_ok": {
+      "id": "buzzed_ok",
+      "text": "She sighs. \"Just... pace yourself. My mom is HERE.\" She hands you a water bottle with the intensity of a hostage negotiator."
+    },
+    "buzzed_bad": {
+      "id": "buzzed_bad",
+      "text": "\"I will DEFINE it for you later. With a PowerPoint. In the bedroom. Where you'll be sleeping. On the floor.\""
+    },
+    "lawn_angry": {
+      "id": "lawn_angry",
+      "speaker": "Karen",
+      "text": "\"The lawn.\" Two words. The temperature drops ten degrees. Guests stop mid-conversation.",
+      "choices": [
+        {
+          "text": "\"I ran out of time—\"",
+          "nextNode": "lawn_excuse",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        },
+        {
+          "text": "\"I'll do it tomorrow\"",
+          "nextNode": "lawn_tomorrow",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        }
+      ]
+    },
+    "lawn_excuse": {
+      "id": "lawn_excuse",
+      "text": "\"You had TEN HOURS.\" She's doing the math. She always does the math. The math is not in your favor."
+    },
+    "lawn_tomorrow": {
+      "id": "lawn_tomorrow",
+      "text": "\"Tomorrow.\" She says it like she's tasting poison. \"Tomorrow.\" Your mother-in-law shakes her head from across the yard."
+    }
+  }
+}

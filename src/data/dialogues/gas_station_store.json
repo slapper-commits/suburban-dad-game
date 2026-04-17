@@ -1,0 +1,167 @@
+{
+  "id": "gas_station_store",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.gasStoreVisited", "op": "==", "value": true }], "nextNode": "menu" }
+      ],
+      "next": "first_entry"
+    },
+
+    "first_entry": {
+      "id": "first_entry",
+      "text": "",
+      "beats": [
+        { "text": "The bell jingles. The clerk doesn't look up. Florescent buzz. The smell of taquitos.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "I just need charcoal. Ice, maybe. In and out.", "mouth": "neutral", "eyebrows": "raised" },
+        { "text": "That is what every suburban dad says.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "set", "field": "flags.gasStoreVisited", "value": true }
+      ],
+      "next": "menu"
+    },
+
+    "menu": {
+      "id": "menu",
+      "speaker": "Clerk",
+      "text": "What can I get you, chief? (Cash: ${{flags.cash}})",
+      "choices": [
+        {
+          "text": "That'll do — I'm done shopping",
+          "nextNode": "leave"
+        },
+        {
+          "text": "Charcoal — $15",
+          "nextNode": "buy_charcoal",
+          "conditions": [
+            { "field": "flags.cash", "op": ">=", "value": 15 },
+            { "field": "flags.boughtCharcoal", "op": "!=", "value": true }
+          ],
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -15 },
+            { "type": "set", "field": "flags.boughtCharcoal", "value": true },
+            { "type": "set", "field": "flags.grillStatus", "value": "supplies_bought" }
+          ]
+        },
+        {
+          "text": "Ice — $5",
+          "nextNode": "buy_ice",
+          "conditions": [
+            { "field": "flags.cash", "op": ">=", "value": 5 },
+            { "field": "flags.boughtIce", "op": "!=", "value": true }
+          ],
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -5 },
+            { "type": "set", "field": "flags.boughtIce", "value": true }
+          ]
+        },
+        {
+          "text": "30-rack of beer — $40",
+          "nextNode": "buy_beer",
+          "conditions": [
+            { "field": "flags.cash", "op": ">=", "value": 40 },
+            { "field": "flags.has30Rack", "op": "!=", "value": true }
+          ],
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -40 },
+            { "type": "set", "field": "flags.has30Rack", "value": true },
+            { "type": "set", "field": "flags.beersRemaining", "value": 30 }
+          ]
+        },
+        {
+          "text": "Lottery ticket — $2",
+          "nextNode": "buy_lotto",
+          "conditions": [
+            { "field": "flags.cash", "op": ">=", "value": 2 }
+          ],
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -2 }
+          ]
+        },
+        {
+          "text": "Pack of smokes — $10 (and light one up)",
+          "nextNode": "buy_smokes",
+          "conditions": [
+            { "field": "flags.cash", "op": ">=", "value": 10 }
+          ],
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -10 },
+            { "type": "set", "field": "flags.hasCigs", "value": true },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "animate", "value": "cigarette" }
+          ]
+        }
+      ]
+    },
+
+    "buy_smokes": {
+      "id": "buy_smokes",
+      "text": "",
+      "beats": [
+        { "speaker": "Clerk", "text": "Marlboro Reds. Thought you quit.", "mouth": "smirk" },
+        { "speaker": "Dad", "text": "I did. This is a... relapse.", "mouth": "frown" },
+        { "text": "You light one up on the way out. Your lungs remember.", "mouth": "sleepy" }
+      ],
+      "next": "menu"
+    },
+
+    "buy_charcoal": {
+      "id": "buy_charcoal",
+      "text": "",
+      "beats": [
+        { "speaker": "Clerk", "text": "Kingsford. Good choice. BBQ today?", "mouth": "smile" },
+        { "speaker": "Dad", "text": "Yep. 5pm. Karen would kill me if I showed up without it.", "mouth": "smile" },
+        { "speaker": "Clerk", "text": "She'll kill you anyway, chief. It's Saturday.", "mouth": "smirk", "eyebrows": "raised" }
+      ],
+      "next": "menu"
+    },
+
+    "buy_ice": {
+      "id": "buy_ice",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Bag of ice.", "mouth": "neutral" },
+        { "speaker": "Clerk", "text": "Cooler weather, cooler beers. That's what my dad used to say.", "mouth": "smile" },
+        { "speaker": "Dad", "text": "That's... that's not a saying.", "mouth": "frown", "eyebrows": "raised" }
+      ],
+      "next": "menu"
+    },
+
+    "buy_beer": {
+      "id": "buy_beer",
+      "text": "",
+      "beats": [
+        { "text": "A 30-rack of Busch Light. Eighteen pounds of questionable decisions.", "mouth": "sleepy" },
+        { "speaker": "Clerk", "text": "That's a lot of beer for one man.", "mouth": "neutral", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "It's for the BBQ.", "mouth": "smile" },
+        { "speaker": "Clerk", "text": "Sure it is, chief.", "mouth": "smirk" },
+        { "text": "You put the 30-rack in the minivan. Its weight shifts the chassis. Something in your soul shifts with it.", "mouth": "sleepy" }
+      ],
+      "next": "menu"
+    },
+
+    "buy_lotto": {
+      "id": "buy_lotto",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Give me the Powerball quick-pick.", "mouth": "neutral" },
+        { "speaker": "Clerk", "text": "You never win, chief.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "Today I feel different.", "mouth": "smile" },
+        { "text": "He does not feel different.", "mouth": "sleepy" }
+      ],
+      "next": "menu"
+    },
+
+    "leave": {
+      "id": "leave",
+      "text": "",
+      "beats": [
+        { "speaker": "Clerk", "text": "Come back now, chief.", "mouth": "smile" }
+      ]
+    }
+  }
+}

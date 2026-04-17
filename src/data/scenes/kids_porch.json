@@ -1,0 +1,22 @@
+{
+  "id": "kids_porch",
+  "name": "The Kid's Porch",
+  "description": "A modest porch. Laptop glow. Energy drink cans. A teenager who knows too much.",
+  "background": "kids_porch",
+  "isHome": false,
+  "enterDialogue": "kids_porch_hub",
+  "hotspots": [
+    {
+      "id": "the_kid",
+      "label": "The Kid",
+      "x": 45,
+      "y": 50,
+      "width": 12,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "kids_digital"
+      }
+    }
+  ]
+}

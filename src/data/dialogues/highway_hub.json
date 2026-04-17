@@ -1,0 +1,10 @@
+{
+  "id": "highway_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "The highway. Asphalt shimmer. Mountains you'll never reach. The minivan idles at a pulloff. For thirty seconds you consider just... driving. Then you remember the charcoal."
+    }
+  }
+}

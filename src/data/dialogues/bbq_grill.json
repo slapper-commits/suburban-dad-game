@@ -1,0 +1,91 @@
+{
+  "id": "bbq_grill",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "done" }],
+          "nextNode": "plate_ready"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "burnt" }],
+          "nextNode": "plate_burnt"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "cooking" }],
+          "nextNode": "still_cooking"
+        }
+      ],
+      "next": "no_food"
+    },
+    "plate_ready": {
+      "id": "plate_ready",
+      "text": "The platter goes out. Golden-brown perfection. Guests descend like they haven't eaten in days.",
+      "choices": [
+        {
+          "text": "Bask in the glory",
+          "nextNode": "bask",
+          "timeCost": 30
+        }
+      ]
+    },
+    "plate_burnt": {
+      "id": "plate_burnt",
+      "text": "You present the... burgers. Karen's face does something you'll see in your nightmares.",
+      "choices": [
+        {
+          "text": "\"They're rustic!\"",
+          "nextNode": "bask",
+          "timeCost": 30
+        }
+      ]
+    },
+    "still_cooking": {
+      "id": "still_cooking",
+      "text": "Still cooking. Guests are getting hungry. The pressure mounts.",
+      "choices": [
+        {
+          "text": "Flip attentively",
+          "nextNode": "emergency_flip",
+          "timeCost": 15,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "done" },
+            { "type": "flag", "field": "grilledPerfectly", "value": true }
+          ]
+        },
+        {
+          "text": "Get distracted by guests",
+          "nextNode": "emergency_burn",
+          "timeCost": 20,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "burnt" },
+            { "type": "flag", "field": "burnedBurgers", "value": true }
+          ]
+        }
+      ]
+    },
+    "no_food": {
+      "id": "no_food",
+      "text": "There are no burgers. There is no charcoal. The grill is cold. The guests are ordering pizza.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 20 },
+        { "type": "add", "field": "reputation", "value": -20 }
+      ]
+    },
+    "emergency_flip": {
+      "id": "emergency_flip",
+      "text": "You save the burgers just in time. Crisis averted."
+    },
+    "emergency_burn": {
+      "id": "emergency_burn",
+      "text": "By the time you look back, it's too late. Smoke signals."
+    },
+    "bask": {
+      "id": "bask",
+      "text": "It's nearly 8. Karen is watching you from across the patio with an expression you can't quite read."
+    }
+  }
+}

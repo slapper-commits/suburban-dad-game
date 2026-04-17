@@ -1,0 +1,52 @@
+{
+  "id": "frontyard_drive",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{"field": "sobriety", "op": "<", "value": 30}], "nextNode": "drunk_warning" }
+      ],
+      "next": "menu"
+    },
+    "drunk_warning": {
+      "id": "drunk_warning",
+      "text": "You stand at the minivan door, keys in hand. The driveway swims. Maybe... maybe you should walk? Nah. Suburban dads drive.",
+      "next": "menu"
+    },
+    "menu": {
+      "id": "menu",
+      "speaker": "",
+      "text": "Where to?",
+      "choices": [
+        { "text": "Drive home (7 min)",                   "nextNode": "drive_home_launch",        "conditions": [{"field": "currentLocation", "op": "!=", "value": "frontyard"}] },
+        { "text": "Drive to Quik Stop (5 min)",           "nextNode": "drive_quikstop_launch",    "conditions": [{"field": "currentLocation", "op": "!=", "value": "quikstop"}] },
+        { "text": "Drive to Gas Station (8 min)",         "nextNode": "drive_gas_launch",         "conditions": [{"field": "currentLocation", "op": "!=", "value": "gas_station"}] },
+        { "text": "Drive to Strip Mall (10 min)",         "nextNode": "drive_strip_mall_launch",  "conditions": [{"field": "currentLocation", "op": "!=", "value": "strip_mall"}] },
+        { "text": "Drive to Sketchy End of Town (15 min)","nextNode": "drive_sketchy_launch",     "conditions": [{"field": "currentLocation", "op": "!=", "value": "sketchy"}] },
+        { "text": "Mountains beer run (60 min)",  "nextNode": "drive_mountains_launch",   "conditions": [
+          {"field": "flags.has30Rack", "op": "==", "value": true},
+          {"field": "currentLocation", "op": "!=", "value": "highway"}
+        ] },
+        { "text": "Never mind, I'll walk", "nextNode": "cancel" }
+      ]
+    },
+    "drive_home_launch":     { "id": "drive_home_launch", "text": "You turn the key. Time to head home.", "exitScene": "MINIGAME:drive_frontyard" },
+    "drive_quikstop_launch": { "id": "drive_quikstop_launch", "text": "You turn the key. The minivan wheezes to life.", "exitScene": "MINIGAME:drive_quikstop" },
+    "drive_gas_launch": { "id": "drive_gas_launch", "text": "You turn the key. The minivan wheezes to life.", "exitScene": "MINIGAME:drive_gas_station" },
+    "drive_strip_mall_launch": { "id": "drive_strip_mall_launch", "text": "You turn the key. The minivan wheezes to life.", "exitScene": "MINIGAME:drive_strip_mall" },
+    "drive_sketchy_launch": { "id": "drive_sketchy_launch", "text": "You turn the key. You immediately regret this.", "exitScene": "MINIGAME:drive_sketchy" },
+    "drive_mountains_launch": {
+      "id": "drive_mountains_launch",
+      "text": "",
+      "beats": [
+        { "text": "You crack the 30-rack open on the passenger seat. The ice slides in a cooler. The mountains are an hour north.", "mouth": "smile" },
+        { "speaker": "Dad", "text": "Just a quick cruise. Be back before Karen even notices.", "mouth": "grin", "eyebrows": "raised" },
+        { "text": "Karen will notice.", "mouth": "sleepy" }
+      ],
+      "exitScene": "MINIGAME:drive_mountains"
+    },
+    "cancel": { "id": "cancel", "text": "Maybe walking is healthier anyway." }
+  }
+}

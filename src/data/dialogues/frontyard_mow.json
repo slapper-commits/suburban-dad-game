@@ -1,0 +1,121 @@
+{
+  "id": "frontyard_mow",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 95 }],
+          "nextNode": "done"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 60 }],
+          "nextNode": "pass3"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 30 }],
+          "nextNode": "pass2"
+        }
+      ],
+      "next": "pass1"
+    },
+    "pass1": {
+      "id": "pass1",
+      "text": "Engine pulls on the third try. You carve the first stripe. God's own line of chlorophyll.",
+      "choices": [
+        {
+          "text": "Keep going (+33%)",
+          "nextNode": "mow_result",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "flags.lawnStatus", "value": 33 },
+            { "type": "add", "field": "energy", "value": -10 }
+          ]
+        },
+        {
+          "text": "\"I deserve a break\" \u2014 Doug's",
+          "nextNode": "exit_dougs",
+          "timeCost": 8
+        },
+        {
+          "text": "Hydrate. Garage fridge.",
+          "nextNode": "exit_garage",
+          "timeCost": 5
+        }
+      ]
+    },
+    "pass2": {
+      "id": "pass2",
+      "text": "More stripes. The sound of a two-stroke engine is the sound of a man at peace.",
+      "choices": [
+        {
+          "text": "Keep going (+33%)",
+          "nextNode": "mow_result",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "flags.lawnStatus", "value": 33 },
+            { "type": "add", "field": "energy", "value": -10 }
+          ]
+        },
+        {
+          "text": "\"I deserve a break\" \u2014 Doug's",
+          "nextNode": "exit_dougs",
+          "timeCost": 8
+        },
+        {
+          "text": "Hydrate. Garage fridge.",
+          "nextNode": "exit_garage",
+          "timeCost": 5
+        }
+      ]
+    },
+    "pass3": {
+      "id": "pass3",
+      "text": "Sweat on your brow. One more strip and the Hendersons will SEE this lawn.",
+      "choices": [
+        {
+          "text": "Final pass! (+33%)",
+          "nextNode": "mow_complete",
+          "timeCost": 30,
+          "effects": [
+            { "type": "set", "field": "flags.lawnStatus", "value": 99 },
+            { "type": "add", "field": "energy", "value": -10 }
+          ]
+        },
+        {
+          "text": "Almost done. Break first.",
+          "nextNode": "exit_dougs",
+          "timeCost": 8
+        }
+      ]
+    },
+    "mow_result": {
+      "id": "mow_result",
+      "text": "Another pass done. Lawn is {{flags.lawnStatus}}% mowed. Sweat runs. The mower idles."
+    },
+    "mow_complete": {
+      "id": "mow_complete",
+      "speaker": "Dave",
+      "text": "Final pass. You trim the last patch near the fence. It is complete. You are, for one moment, every dad who ever lived.",
+      "effects": [
+        { "type": "set", "field": "flags.lawnStatus", "value": 100 }
+      ]
+    },
+    "done": {
+      "id": "done",
+      "text": "The lawn is already done. Perfection needs no revision."
+    },
+    "exit_dougs": {
+      "id": "exit_dougs",
+      "text": "You hear a cooler crack open down the street.",
+      "exitScene": "dougs"
+    },
+    "exit_garage": {
+      "id": "exit_garage",
+      "text": "Garage fridge. Hydration. Definitely just hydration.",
+      "exitScene": "garage"
+    }
+  }
+}

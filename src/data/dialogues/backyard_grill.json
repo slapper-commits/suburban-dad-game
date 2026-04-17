@@ -1,0 +1,153 @@
+{
+  "id": "backyard_grill",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "done" }],
+          "nextNode": "done"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "burnt" }],
+          "nextNode": "burnt"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "cooking" }],
+          "nextNode": "cooking"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "prepped" }],
+          "nextNode": "prepped"
+        },
+        {
+          "conditions": [{ "field": "flags.grillStatus", "op": "==", "value": "supplies_bought" }],
+          "nextNode": "supplies"
+        }
+      ],
+      "next": "no_charcoal"
+    },
+    "no_charcoal": {
+      "id": "no_charcoal",
+      "text": "Cold grates. You need charcoal first. Kingsford. Karen was very specific.",
+      "choices": [
+        {
+          "text": "Drive to the store for charcoal",
+          "nextNode": "buy_charcoal",
+          "timeCost": 30,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "supplies_bought" },
+            { "type": "add", "field": "flags.cash", "value": -15 }
+          ]
+        }
+      ]
+    },
+    "buy_charcoal": {
+      "id": "buy_charcoal",
+      "text": "You grab Kingsford (the GOOD stuff), lighter fluid, and buns. $15. Karen would be proud. Would be."
+    },
+    "supplies": {
+      "id": "supplies",
+      "text": "Charcoal bag sitting there. Time to build the pyramid.",
+      "choices": [
+        {
+          "text": "Build the fire (prep the grill)",
+          "nextNode": "fire_built",
+          "timeCost": 20,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "prepped" }
+          ]
+        }
+      ]
+    },
+    "fire_built": {
+      "id": "fire_built",
+      "text": "Lighter fluid. Match. Whoomph. The coals catch. Now we wait for them to ash over."
+    },
+    "prepped": {
+      "id": "prepped",
+      "text": "Coals are ready. White ash edges. Perfect grilling temperature.",
+      "choices": [
+        {
+          "text": "Lay burgers on the grate",
+          "nextNode": "burgers_on",
+          "timeCost": 5,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "cooking" }
+          ]
+        }
+      ]
+    },
+    "burgers_on": {
+      "id": "burgers_on",
+      "text": "Six patties hit the grate. The sizzle is primal. You are providing for your family. Kind of."
+    },
+    "cooking": {
+      "id": "cooking",
+      "text": "Burgers are cooking. Grease pops. The smell is calling to the neighborhood.",
+      "choices": [
+        {
+          "text": "Flip attentively (stay and watch)",
+          "nextNode": "flip_good",
+          "timeCost": 15,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "done" },
+            { "type": "add", "field": "reputation", "value": 15 },
+            { "type": "flag", "field": "grilledPerfectly", "value": true }
+          ]
+        },
+        {
+          "text": "Walk away for a minute",
+          "nextNode": "flip_burnt",
+          "timeCost": 20,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "burnt" },
+            { "type": "add", "field": "reputation", "value": -10 },
+            { "type": "add", "field": "suspicion", "value": 10 },
+            { "type": "flag", "field": "burnedBurgers", "value": true }
+          ]
+        }
+      ]
+    },
+    "flip_good": {
+      "id": "flip_good",
+      "speaker": "Dave",
+      "text": "Perfect char. Pink centers. You are a craftsman. The platter looks professional. Karen might actually smile."
+    },
+    "flip_burnt": {
+      "id": "flip_burnt",
+      "text": "Hockey pucks. Smoke alarm inside. Karen screams your name from the kitchen window.",
+      "choices": [
+        {
+          "text": "\"They're blackened! It's a technique!\"",
+          "nextNode": "burnt_excuse"
+        }
+      ]
+    },
+    "burnt_excuse": {
+      "id": "burnt_excuse",
+      "speaker": "Dave",
+      "text": "Nobody buys it. The smoke cloud is visible from Doug's."
+    },
+    "done": {
+      "id": "done",
+      "text": "The burgers are done. Plattered. Ready for the BBQ. You did it, Dave.",
+      "choices": [
+        {
+          "text": "Admire your work",
+          "nextNode": "admire"
+        }
+      ]
+    },
+    "admire": {
+      "id": "admire",
+      "text": "Golden-brown perfection. Even the cheese melted right."
+    },
+    "burnt": {
+      "id": "burnt",
+      "text": "The charcoal remains of what were once burgers sit on the grate. A monument to distraction."
+    }
+  }
+}

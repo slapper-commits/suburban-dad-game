@@ -1,0 +1,108 @@
+{
+  "id": "kids_digital_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.digital", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.digital", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "The Kid",
+      "text": "The Kid looks alarmed. 'Mr., you're going to break my laptop. Please go home.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "The Kid",
+      "text": "The Kid closes his laptop. 'I'm going offline for a while. You should too.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "The Kid sends you a Discord message. It's just a salute emoji. You are now apparently a legend in whatever underground community this is. Your username is 'KhakiPhantom.' You didn't choose it."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "The Kid",
+      "text": "OK boomer \u2014 I mean, Mr. Dad \u2014 I need a getaway driver. Just around the block. While I... acquire some data. Your minivan is PERFECT. Nobody suspects the Odyssey.",
+      "choices": [
+        {
+          "text": "\"A getaway driver? For a... drive?\"",
+          "nextNode": "t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 300 },
+            { "type": "add", "field": "vices.digital", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        },
+        {
+          "text": "\"I'm not a getaway anything\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "You drive The Kid around the block three times while he types furiously on his laptop. He's muttering things like 'firewall down' and 'we're in' and 'I love Monster Energy.' He Venmos you three hundred dollars. You don't know what he did. You're afraid to ask. The Venmo memo says 'lawn care services.' Smart kid."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "The Kid shrugs. 'Respect the boundary, Mr. Dad. Very healthy. My therapist would approve.' He pauses. 'My therapist is an AI chatbot. But still.'"
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "The Kid",
+      "text": "The big hack. Corporate building downtown. I need someone who looks like they belong in a lobby. You're PERFECT. Khakis? Polo? You're basically camouflage for corporate America.",
+      "choices": [
+        {
+          "text": "\"I DO look like I belong in lobbies\"",
+          "nextNode": "t3",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 500 },
+            { "type": "add", "field": "vices.digital", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 20 },
+            { "type": "set", "field": "flags.injury", "value": true }
+          ]
+        },
+        {
+          "text": "\"We should report the fraud\"",
+          "nextNode": "heroic",
+          "timeCost": 60,
+          "effects": [
+            { "type": "set", "field": "flags.heroicFlag", "value": true }
+          ]
+        },
+        {
+          "text": "\"Too far, kid\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "You walk into a corporate lobby wearing khakis and a polo. Nobody questions you. A receptionist offers you coffee. You plug in a USB drive while pretending to charge your phone. Fifteen minutes later The Kid has exposed a massive insurance fraud scheme. You're technically a vigilante hero? It doesn't feel heroic. It feels like your heart is going to explode. The coffee was good though."
+    },
+    "heroic": {
+      "id": "heroic",
+      "text": "You call the FBI tip line. The Kid is annoyed but respects it. 'Doing the right thing. Very boomer of you. But like... good boomer.' He gives you a fist bump. His knuckles are covered in Cheeto dust. Justice is complicated."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "The Kid nods slowly. 'Corporate espionage IS a big step up from driving around the block. I respect the self-awareness, Mr. Dad.' He goes back to his laptop. You hear him whisper 'KhakiPhantom has gone dark' into what appears to be a Discord call."
+    }
+  }
+}

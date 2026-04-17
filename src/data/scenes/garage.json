@@ -1,0 +1,41 @@
+{
+  "id": "garage",
+  "name": "The Garage",
+  "description": "Your sanctuary. Smells like motor oil and bad decisions. The wife never comes in here.",
+  "background": "garage",
+  "isHome": true,
+  "hotspots": [
+    {
+      "id": "workbench",
+      "label": "Workbench",
+      "x": 25, "y": 50, "width": 20, "height": 30,
+      "action": { "type": "dialogue", "treeId": "garage_workbench" }
+    },
+    {
+      "id": "mini_fridge",
+      "label": "Mini Fridge",
+      "x": 70, "y": 60, "width": 15, "height": 25,
+      "action": { "type": "dialogue", "treeId": "garage_fridge" },
+      "visibleWhen": [{ "field": "flags.foundFridge", "op": "==", "value": true }]
+    },
+    {
+      "id": "door_house",
+      "label": "Back to House",
+      "x": 90, "y": 50, "width": 10, "height": 40,
+      "action": { "type": "scene", "sceneId": "frontyard", "timeCost": 5 }
+    },
+    {
+      "id": "door_backyard",
+      "label": "Backyard",
+      "x": 50, "y": 85, "width": 20, "height": 15,
+      "action": { "type": "scene", "sceneId": "backyard", "timeCost": 5 }
+    },
+    {
+      "id": "toolbox",
+      "label": "Suspicious Toolbox",
+      "x": 15, "y": 75, "width": 12, "height": 12,
+      "action": { "type": "inspect", "text": "A toolbox that hasn't been opened in years. There's something rattling inside..." }
+    }
+  ],
+  "enterDialogue": "garage_enter"
+}

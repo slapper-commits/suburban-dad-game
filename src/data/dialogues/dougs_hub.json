@@ -1,0 +1,10 @@
+{
+  "id": "dougs_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "Doug's driveway. Lawn chair deployed. Cooler sweating in the sun. Doug raises a can in salute."
+    }
+  }
+}

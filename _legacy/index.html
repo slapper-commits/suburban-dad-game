@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATURDAY</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0a10; min-height: 100vh; font-family: 'Courier New', monospace; color: #fff; }
+  body { display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+  #root { width: 100%; max-width: 800px; }
+  /* simple loading state while Babel compiles */
+  #root:empty::before {
+    content: "Loading SATURDAY...";
+    display: block; text-align: center; padding: 60px 0;
+    color: #6a7a9a; letter-spacing: 3px; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel" src="cartoon.jsx" data-presets="react"></script>
+<script type="text/babel" src="game.jsx" data-presets="react"></script>
+</body>
+</html>

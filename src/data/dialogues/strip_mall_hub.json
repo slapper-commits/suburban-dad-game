@@ -1,0 +1,10 @@
+{
+  "id": "strip_mall_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "The strip mall. Parking lot heat waves. A karate dojo next to a check-cashing place next to a nail salon. The Girls wave from behind the dumpster."
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "quikstop",
+  "name": "QuikStop",
+  "description": "Fluorescent lights. Rotating hot dogs. The American dream in miniature.",
+  "background": "quikstop",
+  "isHome": false,
+  "enterDialogue": "quikstop_hub",
+  "hotspots": [
+    {
+      "id": "store",
+      "label": "Store",
+      "x": 40,
+      "y": 45,
+      "width": 20,
+      "height": 30,
+      "action": {
+        "type": "dialogue",
+        "treeId": "quikstop_buy"
+      }
+    },
+    {
+      "id": "dumpster",
+      "label": "Dumpster",
+      "x": 80,
+      "y": 60,
+      "width": 10,
+      "height": 15,
+      "action": {
+        "type": "dialogue",
+        "treeId": "quikstop_theft"
+      }
+    },
+    {
+      "id": "teen",
+      "label": "Teen",
+      "x": 15,
+      "y": 50,
+      "width": 10,
+      "height": 25,
+      "action": {
+        "type": "inspect",
+        "text": "A teenager on a skateboard. Earbuds in. Zero interest in you."
+      }
+    }
+  ]
+}

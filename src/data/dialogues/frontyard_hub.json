@@ -1,0 +1,49 @@
+{
+  "id": "frontyard_hub",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 95 }],
+          "nextNode": "lawn_done"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 60 }],
+          "nextNode": "lawn_most"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">=", "value": 30 }],
+          "nextNode": "lawn_half"
+        },
+        {
+          "conditions": [{ "field": "flags.lawnStatus", "op": ">", "value": 0 }],
+          "nextNode": "lawn_started"
+        }
+      ],
+      "next": "lawn_none"
+    },
+    "lawn_none": {
+      "id": "lawn_none",
+      "text": "Your lawn. Shaggy. Mailbox leans slightly. Down the street: Doug's already got a beer. At 7 AM."
+    },
+    "lawn_started": {
+      "id": "lawn_started",
+      "text": "A few stripes down. The rest: shaggy. Mower's still warm. Lawn is {{flags.lawnStatus}}% done."
+    },
+    "lawn_half": {
+      "id": "lawn_half",
+      "text": "Half a lawn. A stark visible line where you stopped. The mown side smells like summer. The other side smells like guilt. {{flags.lawnStatus}}% done."
+    },
+    "lawn_most": {
+      "id": "lawn_most",
+      "text": "Most of the lawn is stripes. The last stretch sits there like unfinished homework. {{flags.lawnStatus}}% done."
+    },
+    "lawn_done": {
+      "id": "lawn_done",
+      "text": "Lawn: immaculate. Stripes like a Rothko. Karen's face in the window is unreadable in a good way."
+    }
+  }
+}

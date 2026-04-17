@@ -1,0 +1,16 @@
+{
+  "id": "garage_enter",
+  "startNode": "enter",
+  "nodes": {
+    "enter": {
+      "id": "enter",
+      "text": "The garage. Your kingdom. It smells like WD-40 and freedom. The wife never comes in here — which is exactly the point.",
+      "next": "survey"
+    },
+    "survey": {
+      "id": "survey",
+      "speaker": "Dave",
+      "text": "Alright. Lawn needs mowing, burgers need grilling by 8. Plenty of time. Plenty of time..."
+    }
+  }
+}

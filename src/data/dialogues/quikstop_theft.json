@@ -1,0 +1,113 @@
+{
+  "id": "quikstop_theft",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.theft", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.theft", "op": ">=", "value": 1 }],
+          "nextNode": "already_found"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "text": "You stare at the dumpster. The dumpster stares back. Your judgment is severely compromised. You grab the duffel bag without reading the room AT ALL. You also hurt yourself somehow.",
+      "next": "t1_drunk"
+    },
+    "t1_drunk": {
+      "id": "t1_drunk",
+      "text": "You emerge bruised and flush. The cash is real. Your ribs are not happy. Future-you will have SO many questions about this bruise.",
+      "effects": [
+        { "type": "add", "field": "cash", "value": 150 },
+        { "type": "add", "field": "vices.theft", "value": 1 },
+        { "type": "set", "field": "flags.cash_bulge", "value": true },
+        { "type": "set", "field": "flags.injury", "value": true }
+      ]
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "text": "Liquid courage makes the duffel bag look EXTRA inviting.",
+      "next": "t1"
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "text": "You notice a security camera you didn't see before. It's pointing RIGHT at the dumpster. Maybe not today."
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "text": "A QuikStop clerk is standing right outside the dumpster, smoking a cig. Bad timing."
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "text": "",
+      "next": "intro"
+    },
+    "already_found": {
+      "id": "already_found",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "already_found_heat" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "already_found_cash" }
+      ],
+      "next": "already_found_default"
+    },
+    "already_found_heat": {
+      "id": "already_found_heat",
+      "text": "Security guard leaning on the dumpster smoking. Not today."
+    },
+    "already_found_cash": {
+      "id": "already_found_cash",
+      "text": "'You've got resources now. The fence has VIP jobs if you're interested.'"
+    },
+    "already_found_default": {
+      "id": "already_found_default",
+      "text": "The dumpster area is clean now. But you remember what was in that bag. So does your wallet."
+    },
+    "intro": {
+      "id": "intro",
+      "text": "Behind the dumpster. A duffel bag, half-hidden under cardboard. It's unzipped just enough to see green.",
+      "choices": [
+        {
+          "text": "\"Look inside\"",
+          "nextNode": "t1",
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 150 },
+            { "type": "add", "field": "vices.theft", "value": 1 },
+            { "type": "set", "field": "flags.cash_bulge", "value": true }
+          ]
+        },
+        {
+          "text": "\"None of my business\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "You edge toward the dumpster. The smell is a personality.", "mouth": "frown", "eyes": "sleepy", "eyebrows": "worried" },
+        { "speaker": "Dad", "text": "Left. Right. Security camera? No. Witnesses? A pigeon. It judges silently.", "mouth": "neutral", "eyes": "wide", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "You snatch the duffel. Tuck it under one arm. Walk-not-run toward the minivan.", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" },
+        { "text": "The bag is heavier than it should be. The weight has opinions. You will have opinions later.", "mouth": "sleepy" }
+      ]
+    },
+    "decline": {
+      "id": "decline",
+      "text": "You walk away. The responsible choice. It feels terrible."
+    }
+  }
+}

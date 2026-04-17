@@ -1,0 +1,382 @@
+{
+  "id": "dougs_alcohol",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.dilated_pupils", "op": "==", "value": true }], "nextNode": "doug_notices_drugs" },
+        { "conditions": [
+            { "field": "flags.cash_bulge", "op": "==", "value": true },
+            { "field": "vices.gambling", "op": ">=", "value": 1 }
+          ], "nextNode": "doug_wants_big_stakes" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.alcohol", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.alcohol", "op": ">=", "value": 3 }],
+          "nextNode": "aftermath"
+        },
+        {
+          "conditions": [{ "field": "vices.alcohol", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        },
+        {
+          "conditions": [{ "field": "vices.alcohol", "op": ">=", "value": 1 }],
+          "nextNode": "t2_offer"
+        }
+      ],
+      "next": "intro"
+    },
+    "doug_notices_drugs": {
+      "id": "doug_notices_drugs",
+      "speaker": "Doug",
+      "text": "\"Brother. Your eyes. You been hanging out with the PTA moms? Doug KNOWS those PTA moms. Doug doesn't JUDGE. Doug OBSERVES.\" He hands you a beer anyway.",
+      "choices": [
+        {
+          "text": "Take the beer",
+          "nextNode": "doug_pity_beer",
+          "effects": [
+            {"type": "add", "field": "sobriety", "value": -8},
+            {"type": "add", "field": "vices.alcohol", "value": 1}
+          ]
+        }
+      ]
+    },
+    "doug_pity_beer": {
+      "id": "doug_pity_beer",
+      "text": "Doug cracks his own beer. 'We all got demons, brother. Mine's just... this fridge.'"
+    },
+    "doug_wants_big_stakes": {
+      "id": "doug_wants_big_stakes",
+      "speaker": "Doug",
+      "text": "Doug sees the bulge in your pocket. His eyes LIGHT UP. \"BROTHER. Tonight. The garage. High stakes table. Bring that roll. This is FATE.\"",
+      "choices": [
+        {
+          "text": "\"I'm in.\"",
+          "nextNode": "doug_big_stakes_accept",
+          "effects": [{"type": "set", "field": "flags.doug_high_stakes_game", "value": true}]
+        },
+        {
+          "text": "\"Maybe next time, Doug.\"",
+          "nextNode": "doug_big_stakes_decline"
+        }
+      ]
+    },
+    "doug_big_stakes_accept": {
+      "id": "doug_big_stakes_accept",
+      "text": "Doug claps your shoulder hard enough to reset your vertebrae. 'DONE. 8pm. Tonight. Garage.'"
+    },
+    "doug_big_stakes_decline": {
+      "id": "doug_big_stakes_decline",
+      "text": "Doug looks crestfallen. 'Your loss, brother. Your LITERAL loss.'"
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "speaker": "Doug",
+      "text": "'Saturday, brother! Bit early for a beer, but... it's 5 o'clock somewhere, and that somewhere is Doug's garage.'",
+      "next": "intro"
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "Doug",
+      "text": "'BBQ's in an hour, brother. One more for the road?'",
+      "next": "intro"
+    },
+    "intro": {
+      "id": "intro",
+      "speaker": "Doug",
+      "text": "Saturday, brother. Sun's out, beers are cold. Don't start on me.",
+      "choices": [
+        {
+          "text": "\"Just one \u2014 it IS Saturday\"",
+          "nextNode": "t1",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -10 },
+            { "type": "add", "field": "vices.alcohol", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"Maybe later, Doug\"",
+          "nextNode": "decline"
+        },
+        {
+          "text": "\"He mentioned poker?\"",
+          "nextNode": "poker_hint",
+          "timeCost": 5
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "speaker": "Doug", "text": "\"Catch.\" He lobs a cold one at your chest.", "mouth": "grin", "eyebrows": "raised" },
+        { "speaker": "Brenda", "text": "She waves from the kitchen window. The wave is technically a wave.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "\"...is Brenda okay?\"", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "The Geneva Convention has opinions about that expression.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "\"One more \u2014 it's basically water\"",
+          "nextNode": "t2",
+          "timeCost": 40,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "add", "field": "vices.alcohol", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I gotta mow\"",
+          "nextNode": "exit_home"
+        },
+        {
+          "text": "\"Doug nods toward the garage...\"",
+          "nextNode": "poker_intro",
+          "timeCost": 5
+        }
+      ]
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Doug",
+      "text": "Day drinking. Official. The words 'let me show you something' leave Doug's mouth and your spine goes still.",
+      "choices": [
+        {
+          "text": "Follow Doug in",
+          "nextNode": "t3",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "add", "field": "vices.alcohol", "value": 1 }
+          ]
+        },
+        {
+          "text": "Stumble home",
+          "nextNode": "exit_home_drunk",
+          "timeCost": 10
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "",
+      "beats": [
+        { "speaker": "Doug", "text": "\"Brother. Lean in.\" He cracks another. Foam on his chin.", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"...why are we whispering?\"", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Doug", "text": "\"Garage. I gotta show you a thing. It's a THING, brother.\"", "mouth": "grin", "eyes": "wide" },
+        { "text": "Nothing good has ever been shown in a garage at 2pm.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Follow Doug in",
+          "nextNode": "t3",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "add", "field": "vices.alcohol", "value": 1 }
+          ]
+        },
+        {
+          "text": "Stumble home",
+          "nextNode": "exit_home_drunk",
+          "timeCost": 10
+        }
+      ]
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Doug",
+      "text": "Doug's already several deep. 'Come on, one more round won't hurt.'",
+      "choices": [
+        {
+          "text": "\"Why not\"",
+          "nextNode": "t3",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 }
+          ]
+        },
+        {
+          "text": "\"I need to get home\"",
+          "nextNode": "exit_home_drunk",
+          "timeCost": 10
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "",
+      "beats": [
+        { "text": "Cheek on linoleum. A sock that isn't yours, six inches from your face.", "mouth": "sleepy", "eyes": "sleepy" },
+        { "text": "The cooler is open. The cooler is empty. The cooler has been through things.", "mouth": "frown", "eyes": "sleepy" },
+        { "speaker": "Dad", "text": "\"...my phone.\" It buzzes. It keeps buzzing. Fourteen missed things.", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Doug", "text": "Snoring. Off-panel. Deeply. Majestically.", "mouth": "sleepy", "eyes": "sleepy" },
+        { "speaker": "Dad", "text": "\"Oh no. Oh NO. The BBQ.\"", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 25 }
+      ],
+      "choices": [
+        {
+          "text": "Crawl home",
+          "nextNode": "exit_home_wrecked",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "aftermath": {
+      "id": "aftermath",
+      "speaker": "Doug",
+      "text": "Doug gives you a look. 'Maybe sit this round out, brother.' Even Doug has limits.",
+      "choices": [
+        {
+          "text": "He's probably right",
+          "nextNode": "exit_home"
+        }
+      ]
+    },
+    "poker_hint": {
+      "id": "poker_hint",
+      "speaker": "Doug",
+      "text": "Doug grins. 'Folding table's in the garage. Few guys coming over later. Bring cash.'",
+      "choices": [
+        {
+          "text": "\"I'm in\"",
+          "nextNode": "poker_intro",
+          "timeCost": 5
+        },
+        {
+          "text": "\"Just the beer for now\"",
+          "nextNode": "intro"
+        }
+      ]
+    },
+    "poker_intro": {
+      "id": "poker_intro",
+      "text": "Folding table. Six chairs. Chips already stacked. Someone you don't know nurses a bourbon in the corner.",
+      "choices": [
+        {
+          "text": "Play a few hands ($20 buy-in)",
+          "nextNode": "poker_t1",
+          "timeCost": 45,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -20 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "Watch one round",
+          "nextNode": "intro",
+          "timeCost": 15
+        }
+      ]
+    },
+    "poker_t1": {
+      "id": "poker_t1",
+      "text": "You're up $30. Table laughs. Stranger doesn't. Stranger raises. Pot swells like a bruise.",
+      "effects": [
+        { "type": "add", "field": "flags.cash", "value": 50 }
+      ],
+      "choices": [
+        {
+          "text": "\"I'm feeling lucky\"",
+          "nextNode": "poker_t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -100 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I'm out\" (pocket the $30)",
+          "nextNode": "poker_exit",
+          "timeCost": 10
+        }
+      ]
+    },
+    "poker_t2": {
+      "id": "poker_t2",
+      "text": "Stranger slides a card across the felt. 'If you need a bigger game, talk to me after.' His eyes don't blink enough.",
+      "choices": [
+        {
+          "text": "\"Where is it?\"",
+          "nextNode": "poker_t3",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "Cash out. Leave.",
+          "nextNode": "poker_exit",
+          "timeCost": 10
+        }
+      ]
+    },
+    "poker_t3": {
+      "id": "poker_t3",
+      "text": "Basement. Real money. You're wearing khakis in a room that smells like smoke and decisions.",
+      "choices": [
+        {
+          "text": "Go all in",
+          "nextNode": "poker_win",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": 600 },
+            { "type": "set", "field": "flags.cash_bulge", "value": true }
+          ]
+        },
+        {
+          "text": "Fold and walk",
+          "nextNode": "poker_lose",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -200 }
+          ]
+        }
+      ]
+    },
+    "poker_win": {
+      "id": "poker_win",
+      "text": "Six hundred dollars in a suburban dad's cargo shorts. This is not who you were this morning.",
+      "next": "exit_home"
+    },
+    "poker_lose": {
+      "id": "poker_lose",
+      "text": "Two hundred gone. The stranger doesn't say goodbye. You don't either.",
+      "next": "exit_home"
+    },
+    "poker_exit": {
+      "id": "poker_exit",
+      "text": "You push back from the table. Smart money knows when to walk."
+    },
+    "decline": {
+      "id": "decline",
+      "speaker": "Doug",
+      "text": "Doug shrugs. 'Your loss, brother. I'll be here.' He will definitely be here."
+    },
+    "exit_home": {
+      "id": "exit_home",
+      "text": "You head back toward your place.",
+      "exitScene": "frontyard"
+    },
+    "exit_home_drunk": {
+      "id": "exit_home_drunk",
+      "text": "You weave back toward your place. The sidewalk has opinions about your trajectory.",
+      "exitScene": "frontyard"
+    },
+    "exit_home_wrecked": {
+      "id": "exit_home_wrecked",
+      "text": "The walk home is an odyssey. Your lawn looks judgy. Karen's car is in the driveway. Deep breaths.",
+      "exitScene": "frontyard"
+    }
+  }
+}

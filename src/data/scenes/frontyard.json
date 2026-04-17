@@ -1,0 +1,73 @@
+{
+  "id": "frontyard",
+  "name": "Front Yard",
+  "description": "Your lawn. The neighborhood. The day stretches ahead.",
+  "background": "frontyard",
+  "isHome": true,
+  "enterDialogue": "frontyard_hub",
+  "hotspots": [
+    {
+      "id": "mower",
+      "label": "Lawn Mower",
+      "x": 55,
+      "y": 75,
+      "width": 12,
+      "height": 15,
+      "action": {
+        "type": "dialogue",
+        "treeId": "frontyard_mow"
+      }
+    },
+    {
+      "id": "go_dougs",
+      "label": "Doug's Place",
+      "x": 90,
+      "y": 50,
+      "width": 10,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "dougs",
+        "timeCost": 10
+      }
+    },
+    {
+      "id": "go_backyard",
+      "label": "Backyard",
+      "x": 5,
+      "y": 60,
+      "width": 8,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "backyard",
+        "timeCost": 3
+      }
+    },
+    {
+      "id": "go_garage",
+      "label": "Garage",
+      "x": 5,
+      "y": 80,
+      "width": 10,
+      "height": 15,
+      "action": {
+        "type": "scene",
+        "sceneId": "garage",
+        "timeCost": 3
+      }
+    },
+    {
+      "id": "car",
+      "label": "Car",
+      "x": 30,
+      "y": 80,
+      "width": 12,
+      "height": 10,
+      "action": {
+        "type": "inspect",
+        "text": "The car sits in the driveway. You could drive to the store for charcoal..."
+      }
+    }
+  ]
+}

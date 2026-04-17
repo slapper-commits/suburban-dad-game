@@ -1,0 +1,141 @@
+{
+  "id": "gas_racing_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.racing", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.racing", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "speaker": "Modded Car Guy",
+      "text": "'Normally I'd say yes but even I have limits, man. Sleep it off.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "speaker": "Modded Car Guy",
+      "text": "'Too many patrol cars this week. Rain check.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "The racing scene has heard of you. 'Minivan Man,' they call you. There are stickers. Someone made a T-shirt. You've peaked. There's nowhere to go from here but a reasonable speed on residential roads."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Modded Car Guy",
+      "text": "Parking lot meet tonight. Real races. Hundred dollar buy-in. Your minivan against actual cars. The crowd wants it. YOU'RE the underdog story they crave.",
+      "choices": [
+        {
+          "text": "\"The minivan has HEART\"",
+          "nextNode": "t2_race",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "vices.racing", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"A hundred dollars? For embarrassment?\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2_race": {
+      "id": "t2_race",
+      "text": "The parking lot. Neon lights. Bass-heavy music. Your minivan sits among Civics and Mustangs like a librarian at a nightclub. The engine idles with the confidence of 180 horsepower and a 'My Kid Is An Honor Student' bumper sticker.",
+      "choices": [
+        {
+          "text": "\"Floor it and pray\" (aggressive)",
+          "nextNode": "t2_win",
+          "effects": [
+            { "type": "add", "field": "cash", "value": 100 }
+          ]
+        },
+        {
+          "text": "\"Steady and strategic\" (safe)",
+          "nextNode": "t2_lose",
+          "effects": [
+            { "type": "add", "field": "cash", "value": -100 }
+          ]
+        }
+      ]
+    },
+    "t2_win": {
+      "id": "t2_win",
+      "text": "The minivan somehow wins. The crowd goes silent, then erupts. You've done the impossible. A man with a neck tattoo hugs you. 'MINIVAN MAN!' he screams. Someone is filming. This will be on TikTok by morning. Karen must never see TikTok."
+    },
+    "t2_lose": {
+      "id": "t2_lose",
+      "text": "Third place out of four. But the crowd respects the audacity. A kid yells 'MINIVAN MAN!' and others join in. You lost money but gained a street name. The economics of cool are baffling."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "Modded Car Guy shrugs. 'The minivan thing was gonna be legendary, man. LEGENDARY.' He revs his engine sadly and drives away at a reasonable speed because the cops are nearby."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Modded Car Guy",
+      "text": "Pink slips. Your car against mine. Winner takes both. My Civic versus your minivan. The internet DEMANDS this. There's a livestream. Twelve thousand people are watching.",
+      "choices": [
+        {
+          "text": "\"Karen's going to kill me either way\"",
+          "nextNode": "t3_race",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "vices.racing", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I can't bet the minivan\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3_race": {
+      "id": "t3_race",
+      "text": "Pink slips. The crowd chants 'MINIVAN MAN.' Twelve thousand people on a livestream watch a suburban father in khakis rev a Honda Odyssey. This is either the peak of human civilization or its nadir. Possibly both.",
+      "choices": [
+        {
+          "text": "\"SEND IT\" (all or nothing)",
+          "nextNode": "t3_win",
+          "effects": [
+            { "type": "add", "field": "cash", "value": 500 },
+            { "type": "set", "field": "flags.wonCar", "value": true }
+          ]
+        },
+        {
+          "text": "\"Nice and easy\" (play it cool)",
+          "nextNode": "t3_lose",
+          "effects": [
+            { "type": "add", "field": "cash", "value": -200 },
+            { "type": "set", "field": "flags.lostCar", "value": true }
+          ]
+        }
+      ]
+    },
+    "t3_win": {
+      "id": "t3_win",
+      "text": "YOU WIN THE CIVIC. You now own a modded Honda Civic and a minivan. Peak suburban existence. The crowd carries you on their shoulders. You are a god among men. A dad among boys. The Civic has underglow. Karen is going to have SO many questions about the underglow."
+    },
+    "t3_lose": {
+      "id": "t3_lose",
+      "text": "You lost the minivan. You have to WALK to the BBQ. Explaining this to Karen will require therapy. Couples therapy. Maybe individual therapy. Definitely the kind of therapy where someone asks 'and how did losing your family vehicle in an illegal street race make you FEEL?'"
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "'I respect that,' Modded Car Guy says. He does not respect that. The chat is typing 'L' and 'ratio' and 'Minivan Man is WASHED.' You don't know what most of these words mean and you're grateful."
+    }
+  }
+}

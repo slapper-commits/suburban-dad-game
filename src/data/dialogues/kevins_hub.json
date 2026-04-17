@@ -1,0 +1,10 @@
+{
+  "id": "kevins_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "Kevin's garage. The whiteboard has more arrows than a medieval battlefield. An ELEVAT\u00c9 banner flutters in the breeze. Kevin spots you immediately."
+    }
+  }
+}

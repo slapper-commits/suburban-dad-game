@@ -1,0 +1,120 @@
+{
+  "id": "kids_digital",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [{ "field": "vices.guns", "op": ">=", "value": 1 }], "nextNode": "knows_craig" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.digital", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.digital", "op": ">=", "value": 1 }],
+          "nextNode": "already_hacking"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "speaker": "The Kid",
+      "text": "Uh. Mr.? You okay? You smell like my uncle at Thanksgiving. He's... not doing great these days."
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "The Kid",
+      "text": "You seem... chill. That's cool I guess."
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "speaker": "The Kid",
+      "text": "Mr., there's been a weird car driving by a lot. Maybe log off for a while? I'm gonna log off."
+    },
+    "knows_craig": {
+      "id": "knows_craig",
+      "speaker": "The Kid",
+      "text": "Wait. You know Craig? The truck guy? Dude. I can get into his security cameras. Just saying."
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "speaker": "The Kid",
+      "text": "'Oh hey Mr. Want to see what I'm building? Been up since 4.'",
+      "next": "intro"
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "The Kid",
+      "text": "'I've been up since 4am, Mr. Hands shaking. Could be caffeine. Could be adrenaline. Hard to tell.'",
+      "next": "intro"
+    },
+    "already_hacking": {
+      "id": "already_hacking",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 40 }], "nextNode": "already_hacking_drunk" },
+        { "conditions": [{ "field": "flags.injury", "op": "==", "value": true }], "nextNode": "already_hacking_injury" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "already_hacking_late" }
+      ],
+      "next": "already_hacking_default"
+    },
+    "already_hacking_drunk": {
+      "id": "already_hacking_drunk",
+      "speaker": "The Kid",
+      "text": "The Kid is nervous. 'Mr., maybe come back when you're... stabler.'"
+    },
+    "already_hacking_injury": {
+      "id": "already_hacking_injury",
+      "speaker": "The Kid",
+      "text": "'Dude, you okay? What happened to your arm?'"
+    },
+    "already_hacking_late": {
+      "id": "already_hacking_late",
+      "speaker": "The Kid",
+      "text": "'I'm crashing from the Monsters, can we make this quick, Mr.?'"
+    },
+    "already_hacking_default": {
+      "id": "already_hacking_default",
+      "text": "The Kid pushes the laptop toward you. 'Check this out. Their security is literally the word password.'"
+    },
+    "intro": {
+      "id": "intro",
+      "speaker": "The Kid",
+      "text": "Hey Mr. You know anything about computers? Like... network stuff?",
+      "choices": [
+        {
+          "text": "\"I used to do IT support, actually\"",
+          "nextNode": "t1",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "vices.digital", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I can barely work the TV remote\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "speaker": "The Kid", "text": "Fingers blurring on the keyboard. Monster Energy to the left. No blinking.", "mouth": "neutral", "eyes": "wide" },
+        { "text": "On screen: green text, a scroll of IP addresses, a live feed of SOMEONE'S LIVING ROOM.", "mouth": "shock" },
+        { "speaker": "The Kid", "text": "\"Yeah that's the Hendersons. They never changed the default password. Want me to flip their lights?\"", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"Uh. Cool. Very... cool.\" Nodding. Pretending. Horrified. Curious.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" }
+      ]
+    },
+    "decline": {
+      "id": "decline",
+      "text": "The Kid shrugs. 'Boomer energy.' You are 38."
+    }
+  }
+}

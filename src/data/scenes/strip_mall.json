@@ -1,0 +1,9 @@
+{
+  "id": "strip_mall",
+  "name": "Strip Mall",
+  "description": "A strip mall parking lot. Nail salon, check cashing, karate dojo. The American dream, strip-mined.",
+  "background": "strip_mall",
+  "isHome": false,
+  "enterDialogue": "strip_mall_hub",
+  "hotspots": []
+}

@@ -1,0 +1,78 @@
+{
+  "id": "confrontation",
+  "startNode": "karen_arrives",
+  "nodes": {
+    "karen_arrives": {
+      "id": "karen_arrives",
+      "text": "Karen is in the driveway. Arms crossed. The posture that ends marriages.",
+      "speaker": "Karen",
+      "next": "karen_speaks"
+    },
+    "karen_speaks": {
+      "id": "karen_speaks",
+      "speaker": "Karen",
+      "text": "\"Where have you BEEN? I've been texting you for hours. You smell like... what is that? Is that BEER?\"",
+      "choices": [
+        {
+          "text": "\"I can explain.\"",
+          "nextNode": "explain",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": -10 }
+          ]
+        },
+        {
+          "text": "Go in for the hug",
+          "nextNode": "hug",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": -5 }
+          ]
+        },
+        {
+          "text": "Mumble incoherently",
+          "nextNode": "mumble",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "explain": {
+      "id": "explain",
+      "speaker": "Dave",
+      "text": "\"I was at Doug's. We were just talking. I lost track of time. The lawn's mostly done. The grill's... I'm handling it.\"",
+      "next": "karen_reacts"
+    },
+    "hug": {
+      "id": "hug",
+      "text": "You wrap your arms around her. She's stiff at first. Then slightly less stiff. \"You still smell like beer.\" But she doesn't pull away.",
+      "next": "karen_softens"
+    },
+    "mumble": {
+      "id": "mumble",
+      "speaker": "Dave",
+      "text": "\"I was... the thing is... Doug had this...\" You trail off. She's already walking back inside.",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 5 }
+      ]
+    },
+    "karen_reacts": {
+      "id": "karen_reacts",
+      "speaker": "Karen",
+      "text": "\"Doug. Of course it's Doug. My mother is here in an HOUR. Get it together.\"",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": -5 }
+      ]
+    },
+    "karen_softens": {
+      "id": "karen_softens",
+      "speaker": "Karen",
+      "text": "\"Just... finish the lawn. And shower. Please shower.\"",
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": -5 }
+      ]
+    }
+  }
+}

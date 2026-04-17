@@ -1,0 +1,22 @@
+{
+  "id": "craigs",
+  "name": "Craig's Driveway",
+  "description": "Pickup truck. Stacked boxes. Chain-link fence. Craig doesn't wave.",
+  "background": "craigs",
+  "isHome": false,
+  "enterDialogue": "craigs_hub",
+  "hotspots": [
+    {
+      "id": "craig",
+      "label": "Craig",
+      "x": 45,
+      "y": 50,
+      "width": 12,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "craigs_guns"
+      }
+    }
+  ]
+}

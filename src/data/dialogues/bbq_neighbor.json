@@ -1,0 +1,162 @@
+{
+  "id": "bbq_neighbor",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        {
+          "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }],
+          "nextNode": "cash"
+        },
+        {
+          "conditions": [{ "field": "flags.injury", "op": "==", "value": true }],
+          "nextNode": "injury"
+        },
+        {
+          "conditions": [{ "field": "flags.crooked_mow", "op": "==", "value": true }],
+          "nextNode": "lawn"
+        },
+        {
+          "conditions": [{ "field": "flags.dilated_pupils", "op": "==", "value": true }],
+          "nextNode": "eyes"
+        }
+      ],
+      "next": "normal"
+    },
+    "cash": {
+      "id": "cash",
+      "speaker": "Neighbor",
+      "text": "\"Business must be good, Dave!\" He glances down, then quickly back up. \"That's quite a... bulge in your pocket.\" He laughs too loud. You laugh too loud. Everyone within earshot is now looking at your pocket.",
+      "choices": [
+        {
+          "text": "\"Just my phone. Big case.\"",
+          "nextNode": "cash_phone",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        },
+        {
+          "text": "Casually shift the wad deeper into your pocket",
+          "nextNode": "cash_shift",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "cash_phone": {
+      "id": "cash_phone",
+      "text": "\"Must be one of those OtterBox deals!\" He's still looking at your pocket. He knows that's not a phone. You know he knows. The social contract demands you both pretend."
+    },
+    "cash_shift": {
+      "id": "cash_shift",
+      "text": "You push the roll deeper. It doesn't help. He watches you do it. His smile doesn't waver but his eyes are doing math. Suburban eyes are always doing math."
+    },
+    "injury": {
+      "id": "injury",
+      "speaker": "Neighbor",
+      "text": "\"Dave, what happened to your—\" He stops. Looks at your face. Looks at his beer. Decides the beer is more interesting. \"Never mind.\"",
+      "choices": [
+        {
+          "text": "\"Walked into a door.\"",
+          "nextNode": "injury_door",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 2 }
+          ]
+        },
+        {
+          "text": "\"You should see the other guy.\" Laugh it off.",
+          "nextNode": "injury_joke",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 2 }
+          ]
+        }
+      ]
+    },
+    "injury_door": {
+      "id": "injury_door",
+      "text": "\"A door. Sure.\" He nods slowly. Takes a long sip. Somewhere in the yard, someone drops a plate and you both flinch. He notices you flinch. You notice him notice."
+    },
+    "injury_joke": {
+      "id": "injury_joke",
+      "text": "He laughs. You laugh. It's the kind of laugh where nobody thinks anything is funny. \"Good one, Dave.\" He excuses himself to refill a drink that's still half full."
+    },
+    "lawn": {
+      "id": "lawn",
+      "speaker": "Neighbor",
+      "text": "\"I see you went with the... abstract approach on the lawn.\" He gestures at the zigzag mow lines with his hot dog. \"Very avant-garde. Postmodern, even.\"",
+      "choices": [
+        {
+          "text": "\"I'm making a statement.\"",
+          "nextNode": "lawn_statement"
+        },
+        {
+          "text": "\"The mower's been drinking.\"",
+          "nextNode": "lawn_mower"
+        }
+      ]
+    },
+    "lawn_statement": {
+      "id": "lawn_statement",
+      "text": "\"A statement. About what?\" You have no answer. He has no follow-up. Two men stare at a badly mowed lawn in companionable silence. Somewhere, a crow lands on the uneven patch. Even the crow looks confused."
+    },
+    "lawn_mower": {
+      "id": "lawn_mower",
+      "text": "He snorts. \"The mower. Right.\" He looks at you, then at the lawn, then back at you. \"My mower does the same thing when I've had a few.\" He winks. You've been seen. But gently."
+    },
+    "eyes": {
+      "id": "eyes",
+      "speaker": "Neighbor",
+      "text": "\"You feeling alright there, Dave? Your eyes look a little...\" He trails off, making a vague circular gesture near his own face. The universal suburban signal for 'you look messed up but I'm too polite to say it.'",
+      "choices": [
+        {
+          "text": "\"Allergies. Brutal this year.\"",
+          "nextNode": "eyes_allergies",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        },
+        {
+          "text": "\"New eye drops. They're really something.\"",
+          "nextNode": "eyes_drops",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 }
+          ]
+        }
+      ]
+    },
+    "eyes_allergies": {
+      "id": "eyes_allergies",
+      "text": "\"Allergies! Yeah. Pollen count is... high.\" He doesn't check the pollen count. Nobody checks the pollen count. But 'allergies' is the Geneva Convention of suburban excuses and he's honor-bound to accept it."
+    },
+    "eyes_drops": {
+      "id": "eyes_drops",
+      "text": "\"Eye drops. Okay.\" He looks at you the way a dog looks at a ceiling fan. Bewildered but committed to not understanding. \"Well. They're working.\" They are not working."
+    },
+    "normal": {
+      "id": "normal",
+      "speaker": "Neighbor",
+      "text": "\"Great party, Dave! Love what you've done with the place.\" He raises his Solo cup. Genuine smile. No subtext. Sometimes a Saturday is just a Saturday.",
+      "choices": [
+        {
+          "text": "\"Thanks! Glad you could make it.\"",
+          "nextNode": "normal_thanks"
+        },
+        {
+          "text": "\"Wait till you try the burgers.\"",
+          "nextNode": "normal_burgers"
+        }
+      ]
+    },
+    "normal_thanks": {
+      "id": "normal_thanks",
+      "text": "He claps you on the shoulder. \"Wouldn't miss it.\" And he means it. For one moment, everything is exactly what it looks like. Just neighbors. Just a BBQ. Just Saturday."
+    },
+    "normal_burgers": {
+      "id": "normal_burgers",
+      "text": "\"Oh, I've been eyeing that grill. Smells incredible.\" It does smell incredible. Some things you can't fake. Charcoal and meat and a late afternoon that doesn't want to end."
+    }
+  }
+}

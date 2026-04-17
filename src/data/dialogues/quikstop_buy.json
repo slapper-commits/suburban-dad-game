@@ -1,0 +1,46 @@
+{
+  "id": "quikstop_buy",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "The QuikStop. Overpriced everything. But they have Kingsford.",
+      "choices": [
+        {
+          "text": "\"Buy charcoal ($15)\"",
+          "nextNode": "buy_charcoal",
+          "timeCost": 10,
+          "effects": [
+            { "type": "add", "field": "cash", "value": -15 },
+            { "type": "set", "field": "flags.hasCharcoal", "value": true }
+          ]
+        },
+        {
+          "text": "\"Buy ice ($5)\"",
+          "nextNode": "buy_ice",
+          "timeCost": 5,
+          "effects": [
+            { "type": "add", "field": "cash", "value": -5 },
+            { "type": "set", "field": "flags.hasIce", "value": true }
+          ]
+        },
+        {
+          "text": "\"Just browsing\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "buy_charcoal": {
+      "id": "buy_charcoal",
+      "text": "Kingsford. The good stuff. Karen specified. Karen always specifies."
+    },
+    "buy_ice": {
+      "id": "buy_ice",
+      "text": "A bag of ice. For the cooler. For civilization."
+    },
+    "decline": {
+      "id": "decline",
+      "text": "You browse the chip aisle with the intensity of a man avoiding responsibilities."
+    }
+  }
+}

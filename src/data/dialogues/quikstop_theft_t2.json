@@ -1,0 +1,104 @@
+{
+  "id": "quikstop_theft_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.theft", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.theft", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "text": "The fence shakes his head. 'I don't do business with drunks. Come back sober.'"
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "text": "'Cops been watching the swap meet. We're done for the week.'"
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "The tracksuit guy nods at you from across the parking lot. You nod back. You've become a regular at the QuikStop for all the wrong reasons. The cashier knows your face. This is fine. Everything is fine."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "text": "Behind the QuikStop again. A guy in a tracksuit nods at you. 'You're the duffel bag guy. I got more work if you want it. You got a face people trust. It's the khakis.'",
+      "choices": [
+        {
+          "text": "\"What kind of work?\"",
+          "nextNode": "t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 400 },
+            { "type": "add", "field": "vices.theft", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 15 }
+          ]
+        },
+        {
+          "text": "\"I'm just here for a Slurpee\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "You fence stolen electronics at a swap meet. You sell three laptops and a 'decorative vase' that is definitely not a decorative vase. Your sales skills from the 2019 fiscal quarter are finally being applied. A woman tries to haggle. You counter-offer. She accepts. You feel alive in a way that quarterly reviews never provided."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "The tracksuit guy respects it. 'A man who knows his limits. Rare quality.' He adjusts his tracksuit. It's Adidas. Three stripes of questionable life decisions."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "text": "The tracksuit guy is back. He's wearing a NICER tracksuit. Things are going well for him, apparently. 'The job. A real one. Suburban dad heist. You walk in, you walk out, nobody suspects the khakis.'",
+      "choices": [
+        {
+          "text": "\"The khakis ARE pretty disarming\"",
+          "nextNode": "t3",
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "cash", "value": 800 },
+            { "type": "add", "field": "vices.theft", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 25 }
+          ]
+        },
+        {
+          "text": "\"A heist? I have a 401k\"",
+          "nextNode": "t3_decline"
+        },
+        {
+          "text": "\"No. I'm done. I'm putting it all back.\"",
+          "nextNode": "t3_heroic",
+          "timeCost": 60,
+          "effects": [
+            { "type": "set", "field": "flags.heroicFlag", "value": true },
+            { "type": "add", "field": "reputation", "value": 10 }
+          ]
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "The heist. It's a storage unit complex. Your job is to stand by the truck and look like a dad picking up lawn furniture. Because you ARE a dad picking up lawn furniture. Just... not YOUR lawn furniture. A security guard walks by. You wave. He waves back. 'Moving day?' he asks. 'Yep,' you say. It goes flawlessly. Being boring is a superpower. You've never been more grateful for your complete lack of distinguishing features."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "The tracksuit guy shrugs. 'Your loss, khaki man. The last suburban dad who did this bought a boat.' He pauses. 'It was Doug's boat, actually.' Wait. Doug has a boat?"
+    },
+    "t3_heroic": {
+      "id": "t3_heroic",
+      "text": "The tracksuit guy stares at you. 'You're serious.' You are. You drive back to the swap meet in the minivan. You find the woman who bought the 'decorative vase.' You buy it back for twice what she paid. You return the laptops to the QuikStop lost and found with a Post-it note that says 'Found these. — A Concerned Citizen.' The cashier watches you do it. She doesn't say anything. She doesn't have to. You walk out into the parking lot. The sun is setting over the strip mall and it's painting the Arby's sign gold and for one stupid, fleeting moment, the suburbs are beautiful. You feel ten pounds lighter. Your khakis have never fit better. This isn't who you are. This was never who you were."
+    }
+  }
+}

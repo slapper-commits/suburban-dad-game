@@ -1,0 +1,124 @@
+{
+  "id": "sidewalk_drugs",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "cash_noticed" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.drugs", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.drugs", "op": ">=", "value": 1 }],
+          "nextNode": "already_in"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "speaker": "The Girls",
+      "text": "The Girls look you up and down. 'Oh honey. You're already halfway there. We can work with that.' One of them smiles in a way that is NOT comforting."
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "The Girls",
+      "text": "Head start, huh, Dave? Wanna keep the party going?"
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "speaker": "The Girls",
+      "text": "The Girls look past you nervously. 'Not today. Too many eyes on the street.' They scatter."
+    },
+    "cash_noticed": {
+      "id": "cash_noticed",
+      "speaker": "The Girls",
+      "text": "The Girls clock the bulge in your pocket. 'Nice bankroll. The book club has a VIP chapter, you know.'"
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "speaker": "The Girls",
+      "text": "The Girls are doing yoga on someone's lawn. 'It's early, Dave. This is just yoga. The OTHER kind comes later.'",
+      "next": "intro"
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "The Girls",
+      "text": "'Last chance, Dave. The book club closes at sundown and we have PLANS.'",
+      "next": "intro"
+    },
+    "already_in": {
+      "id": "already_in",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "already_in_drunk" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "already_in_cash" },
+        { "conditions": [{ "field": "vices.pyramid", "op": ">=", "value": 1 }], "nextNode": "already_in_pyramid" }
+      ],
+      "next": "already_in_default"
+    },
+    "already_in_drunk": {
+      "id": "already_in_drunk",
+      "speaker": "The Girls",
+      "text": "Look who's back! And pre-loaded!"
+    },
+    "already_in_cash": {
+      "id": "already_in_cash",
+      "speaker": "The Girls",
+      "text": "They eye the bulge in your pocket. 'Book club just got VIP tier.'"
+    },
+    "already_in_pyramid": {
+      "id": "already_in_pyramid",
+      "speaker": "The Girls",
+      "text": "'Saw you talking to Kevin. That poor man. Come, we have real medicine.'"
+    },
+    "already_in_default": {
+      "id": "already_in_default",
+      "text": "The Girls wave. You nod back like you're in a secret club. You kind of are. 'We're heading to the strip mall later,' one whispers. 'Book club, chapter two.'"
+    },
+    "intro": {
+      "id": "intro",
+      "speaker": "The Girls",
+      "text": "Hey! You're Karen's husband, right? We're heading behind the strip mall. It's... a book club. Kind of.",
+      "choices": [
+        {
+          "text": "\"See what all the fuss is about\"",
+          "nextNode": "t1",
+          "timeCost": 30,
+          "effects": [
+            { "type": "add", "field": "sobriety", "value": -20 },
+            { "type": "add", "field": "vices.drugs", "value": 1 },
+            { "type": "set", "field": "flags.dilated_pupils", "value": true },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "animate", "value": "bong" }
+          ]
+        },
+        {
+          "text": "\"I'm good, thanks\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "beats": [
+        { "speaker": "The Girls", "text": "\"Come on, Dave. Follow us.\"", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "\"I... my name isn't Dave.\"", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "The Girls", "text": "\"It is now.\"", "mouth": "grin", "eyes": "shades" },
+        { "text": "They start walking. You follow. Obviously you follow. You think about Karen. Briefly. Then the laundromat goes by, and you don't.", "mouth": "sleepy" }
+      ],
+      "exitScene": "strip_mall"
+    },
+    "decline": {
+      "id": "decline",
+      "text": "The Girls shrug in perfect synchronization. 'Your loss, Dave.' Your name isn't Dave."
+    }
+  }
+}

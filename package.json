@@ -1,0 +1,19 @@
+{
+  "name": "suburban-dad-game",
+  "version": "0.1.0",
+  "description": "A suburban dad's secret Saturday — branching narrative RPG with mini-games",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:steam": "tsc && vite build --config vite.steam.config.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "phaser": "^3.80.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vite": "^5.4.0"
+  }
+}

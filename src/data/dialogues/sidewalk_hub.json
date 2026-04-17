@@ -1,0 +1,10 @@
+{
+  "id": "sidewalk_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "The sidewalk. Joggers pass. Sprinklers hiss. Someone's dog is judging you. The neighborhood stretches in both directions."
+    }
+  }
+}

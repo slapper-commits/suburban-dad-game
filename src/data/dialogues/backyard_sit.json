@@ -1,0 +1,33 @@
+{
+  "id": "backyard_sit",
+  "startNode": "sit",
+  "nodes": {
+    "sit": {
+      "id": "sit",
+      "text": "The chair creaks. A squirrel stares at you. You stare back. Nobody wins.",
+      "choices": [
+        {
+          "text": "Get up. Do something.",
+          "nextNode": "getup"
+        },
+        {
+          "text": "Sit longer",
+          "nextNode": "sit_more",
+          "timeCost": 20,
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 3 },
+            { "type": "add", "field": "energy", "value": 5 }
+          ]
+        }
+      ]
+    },
+    "sit_more": {
+      "id": "sit_more",
+      "text": "Twenty minutes. The squirrel left. You're still here. Time is doing that thing where it both crawls and evaporates."
+    },
+    "getup": {
+      "id": "getup",
+      "text": "You heave yourself up. The patio awaits your leadership."
+    }
+  }
+}

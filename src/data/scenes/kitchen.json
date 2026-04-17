@@ -1,0 +1,48 @@
+{
+  "id": "kitchen",
+  "name": "Kitchen",
+  "description": "Smells like yesterday's coffee. Karen's note on the fridge.",
+  "background": "kitchen",
+  "isHome": true,
+  "enterDialogue": "kitchen_hub",
+  "hotspots": [
+    {
+      "id": "fridge_note",
+      "label": "Fridge Note",
+      "x": 75,
+      "y": 40,
+      "width": 10,
+      "height": 15,
+      "action": {
+        "type": "inspect",
+        "text": "CHARCOAL (KINGSFORD!), BUNS, LAWN. PARTY AT 5. \u2665 \u2014K"
+      }
+    },
+    {
+      "id": "door_frontyard",
+      "label": "Front Door",
+      "x": 10,
+      "y": 50,
+      "width": 8,
+      "height": 40,
+      "action": {
+        "type": "scene",
+        "sceneId": "frontyard",
+        "timeCost": 5
+      }
+    },
+    {
+      "id": "door_garage",
+      "label": "Garage Door",
+      "x": 90,
+      "y": 50,
+      "width": 8,
+      "height": 40,
+      "action": {
+        "type": "scene",
+        "sceneId": "garage",
+        "timeCost": 3
+      }
+    }
+  ]
+}

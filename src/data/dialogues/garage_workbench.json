@@ -1,0 +1,130 @@
+{
+  "id": "garage_workbench",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.foundWeed", "op": "==", "value": true }], "nextNode": "revisit" }
+      ],
+      "next": "first_look"
+    },
+
+    "first_look": {
+      "id": "first_look",
+      "text": "",
+      "beats": [
+        { "text": "The workbench is covered in half-finished projects. A birdhouse from three Christmases ago. A broken sprinkler head. A red Craftsman toolbox missing half its sockets.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "Where did I put that 9/16... let me dig around.", "mouth": "neutral", "eyebrows": "raised" }
+      ],
+      "choices": [
+        { "text": "Rummage around", "nextNode": "rummage", "timeCost": 2 },
+        { "text": "Walk away", "nextNode": "close" }
+      ]
+    },
+
+    "rummage": {
+      "id": "rummage",
+      "text": "",
+      "beats": [
+        { "text": "You push aside the paint cans, open the toolbox, dig under the tray liner — something's back there.", "mouth": "neutral", "eyes": "wide" },
+        { "speaker": "Dad", "text": "...what is this.", "mouth": "shock", "eyes": "wide", "eyebrows": "raised" },
+        { "text": "A small ziplock. A glass piece shaped like a tiny mountain. A lighter with a cartoon frog on it.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "Oh. OH. That's... huh.", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "College You left a present for Suburban Dad You. College You always had your back.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "set", "field": "flags.foundWeed", "value": true }
+      ],
+      "choices": [
+        { "text": "Take a hit right now (5 min)", "nextNode": "smoke", "timeCost": 5 },
+        { "text": "Put it back. For now.", "nextNode": "stash" }
+      ]
+    },
+
+    "smoke": {
+      "id": "smoke",
+      "text": "",
+      "beats": [
+        { "text": "*click* *bubble bubble bubble* *cough*", "mouth": "shock" },
+        { "speaker": "Dad", "text": "OH that's — *cough cough* — that's still good.", "mouth": "grin", "eyes": "stoned", "eyebrows": "raised" },
+        { "text": "A deep calm descends. The garage is suddenly interesting. The pegboard holds SO many shapes.", "mouth": "sleepy", "eyes": "stoned" },
+        { "speaker": "Dad", "text": "I forgot how much I liked the garage.", "mouth": "smile", "eyes": "stoned" },
+        { "text": "The minivan hums. Probably. It's parked. It can't hum. But it is humming.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "sobriety", "value": -20 },
+        { "type": "add", "field": "vices.drugs", "value": 1 },
+        { "type": "set", "field": "flags.weedSmoked", "value": true },
+        { "type": "set", "field": "flags.smell", "value": true },
+        { "type": "set", "field": "flags.dilated_pupils", "value": true },
+        { "type": "animate", "value": "bong" }
+      ]
+    },
+
+    "stash": {
+      "id": "stash",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Not now. Later. Definitely later.", "mouth": "smirk", "eyebrows": "raised" },
+        { "text": "You slide the ziplock back under the tray liner. It waits patiently. It has all the time in the world.", "mouth": "sleepy" }
+      ]
+    },
+
+    "revisit": {
+      "id": "revisit",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.weedSmoked", "op": "==", "value": true }], "nextNode": "revisit_smoked" }
+      ],
+      "next": "revisit_stashed"
+    },
+
+    "revisit_stashed": {
+      "id": "revisit_stashed",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "The workbench. And... the OTHER thing on the workbench.", "mouth": "smirk", "eyebrows": "raised" }
+      ],
+      "choices": [
+        { "text": "Take a hit (5 min)", "nextNode": "smoke", "timeCost": 5 },
+        { "text": "Close it up", "nextNode": "close" }
+      ]
+    },
+
+    "revisit_smoked": {
+      "id": "revisit_smoked",
+      "text": "",
+      "beats": [
+        { "text": "The bong sits on the workbench like a proud little green trophy. The lighter is right there.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "One more. For the BBQ. For the VIBE.", "mouth": "grin", "eyes": "stoned", "eyebrows": "raised" }
+      ],
+      "choices": [
+        { "text": "Another hit (5 min)", "nextNode": "smoke_again", "timeCost": 5 },
+        { "text": "Leave it alone", "nextNode": "close" }
+      ]
+    },
+
+    "smoke_again": {
+      "id": "smoke_again",
+      "text": "",
+      "beats": [
+        { "text": "*bubble bubble* *hold* *HACK*", "mouth": "shock" },
+        { "speaker": "Dad", "text": "I can HEAR the pegboard.", "mouth": "smile", "eyes": "stoned" },
+        { "text": "Karen's car pulls into the driveway in your head, ominously, even though she's at the store. Paranoia is a side effect.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "sobriety", "value": -15 },
+        { "type": "add", "field": "vices.drugs", "value": 1 },
+        { "type": "add", "field": "suspicion", "value": 5 },
+        { "type": "animate", "value": "bong" }
+      ]
+    },
+
+    "close": {
+      "id": "close",
+      "text": "You step back from the workbench. A socket falls behind the bench. You will never find it."
+    }
+  }
+}

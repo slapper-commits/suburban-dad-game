@@ -1,0 +1,45 @@
+{
+  "id": "mountain_view",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "wasted_view" },
+        { "conditions": [{ "field": "flags.has30Rack", "op": "==", "value": true }], "nextNode": "mountain_run_view" }
+      ],
+      "next": "normal_view"
+    },
+
+    "normal_view": {
+      "id": "normal_view",
+      "text": "",
+      "beats": [
+        { "text": "You stand at the foot of the mountains. A cold wind comes down through the pines.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "I should come up here more.", "mouth": "neutral", "eyebrows": "raised" },
+        { "text": "He will not come up here more.", "mouth": "sleepy" }
+      ]
+    },
+
+    "mountain_run_view": {
+      "id": "mountain_run_view",
+      "text": "",
+      "beats": [
+        { "text": "The peaks stand indifferent. The minivan creaks in the parking lot, full of beer.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "This is exactly what Saturday is for. For... this.", "mouth": "smile" },
+        { "text": "A hawk circles. It is not impressed.", "mouth": "sleepy" }
+      ]
+    },
+
+    "wasted_view": {
+      "id": "wasted_view",
+      "text": "",
+      "beats": [
+        { "text": "The mountains sway gently. You are not sure whether they or you are moving.", "mouth": "sleepy", "eyes": "drunk" },
+        { "speaker": "Dad", "text": "If a tree falls in the forest and I'm real drunk — did it even fall?", "mouth": "grin", "eyes": "drunk", "eyebrows": "raised" },
+        { "text": "Karen is calling. The phone is ringing inside the minivan. You cannot hear the phone. You can only hear the wind. And the wind is a phone.", "mouth": "sleepy" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "bbq_doug",
+  "startNode": "nod",
+  "nodes": {
+    "nod": {
+      "id": "nod",
+      "text": "Doug gives you the nod. The one that says 'I know.' You nod back. The ancient suburban treaty.",
+      "choices": [
+        {
+          "text": "\"Thanks for... earlier\"",
+          "nextNode": "thanks",
+          "timeCost": 10
+        },
+        {
+          "text": "Just nod and move on",
+          "nextNode": "move_on"
+        }
+      ]
+    },
+    "thanks": {
+      "id": "thanks",
+      "speaker": "Doug",
+      "text": "\"Saturday, brother.\" He raises his beer. Some bonds are forged in lawn chairs."
+    },
+    "move_on": {
+      "id": "move_on",
+      "text": "Some things don't need words. Doug understands. Doug always understands."
+    }
+  }
+}

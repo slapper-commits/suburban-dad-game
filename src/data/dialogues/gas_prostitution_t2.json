@@ -1,0 +1,94 @@
+{
+  "id": "gas_prostitution_t2",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 20 }], "nextNode": "too_wasted" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 70 }], "nextNode": "heat_too_high" },
+        {
+          "conditions": [{ "field": "vices.prostitution", "op": ">=", "value": 3 }],
+          "nextNode": "maxed"
+        },
+        {
+          "conditions": [{ "field": "vices.prostitution", "op": ">=", "value": 2 }],
+          "nextNode": "t3_offer"
+        }
+      ],
+      "next": "t2_offer"
+    },
+    "too_wasted": {
+      "id": "too_wasted",
+      "text": "Sharon isn't there. 'She saw you coming and left,' someone says."
+    },
+    "heat_too_high": {
+      "id": "heat_too_high",
+      "text": "Empty phone booth. She's not coming back today."
+    },
+    "maxed": {
+      "id": "maxed",
+      "text": "Sharon texts you a thumbs up emoji. You text back a thumbs up emoji. This is the most emotionally complex relationship you've had since college. It's conducted entirely in thumbs."
+    },
+    "t2_offer": {
+      "id": "t2_offer",
+      "speaker": "Sharon",
+      "text": "So listen. There's this motel. It's not what you think. OK it's a little what you think. But mostly it's just... nice to have someone listen. Room 12. The one with the working ice machine.",
+      "choices": [
+        {
+          "text": "\"I... OK\"",
+          "nextNode": "t2",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "vices.prostitution", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 20 },
+            { "type": "set", "field": "flags.lipstick", "value": true },
+            { "type": "set", "field": "flags.perfume", "value": true }
+          ]
+        },
+        {
+          "text": "\"Sharon, I'm married\"",
+          "nextNode": "t2_decline"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "text": "The motel. Room 12. Sharon talks about her ex-husband, her dog, her dream of opening a bakery. You talk about Karen, the lawn, the existential weight of suburbia. It's weirdly therapeutic. Like couples counseling but with someone who actually listens. The lipstick on your collar is NOT therapeutic. The perfume clinging to your polo is NOT going to be easy to explain. You smell like regret and vanilla body spray."
+    },
+    "t2_decline": {
+      "id": "t2_decline",
+      "text": "Sharon nods. 'Married. Right. The good ones always are.' She lights a cigarette. 'Go home to your lawn, khakis.' There's no malice in it. Just a bone-deep tiredness that makes you want to fix everything, but you can't fix everything. You can barely fix the garbage disposal."
+    },
+    "t3_offer": {
+      "id": "t3_offer",
+      "speaker": "Sharon",
+      "text": "Dave. I'm in a situation. My ex found me. I need help moving my stuff. Tonight. I know this is a lot. I know we're... whatever we are. But you're the only person I trust. Which says a lot about my life.",
+      "choices": [
+        {
+          "text": "\"Sharon, I'll help\"",
+          "nextNode": "t3",
+          "timeCost": 90,
+          "effects": [
+            { "type": "add", "field": "vices.prostitution", "value": 1 },
+            { "type": "add", "field": "suspicion", "value": 10 },
+            { "type": "set", "field": "flags.heroicFlag", "value": true }
+          ]
+        },
+        {
+          "text": "\"I can't get more involved\"",
+          "nextNode": "t3_decline"
+        }
+      ]
+    },
+    "t3": {
+      "id": "t3",
+      "text": "You help Sharon move out of a bad situation. Her ex shows up. He's bigger than you. Angrier than you. But you stand your ground in your khakis and polo. He looks at you \u2014 really looks at you \u2014 and sees a suburban dad who has absolutely nothing to lose on a Saturday afternoon. He leaves. Sharon hugs you. 'You're a good guy, Dave.' Your name still isn't Dave. But tonight, Dave is the bravest man in the suburbs."
+    },
+    "t3_decline": {
+      "id": "t3_decline",
+      "text": "'I can't get more involved.' Sharon nods. 'I get it, khakis. Go mow your lawn.' She's crying. You feel like garbage. Worse than garbage. You feel like the garbage that garbage looks down on. The kind of garbage that doesn't even get recycled."
+    }
+  }
+}

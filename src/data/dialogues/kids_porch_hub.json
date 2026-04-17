@@ -1,0 +1,10 @@
+{
+  "id": "kids_porch_hub",
+  "startNode": "arrive",
+  "nodes": {
+    "arrive": {
+      "id": "arrive",
+      "text": "A modest porch. The Kid sits cross-legged behind a laptop, surrounded by energy drink cans like aluminum sentinels. He doesn't look up."
+    }
+  }
+}

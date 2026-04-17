@@ -1,0 +1,119 @@
+{
+  "id": "gas_racing",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
+        { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
+        { "conditions": [
+            { "field": "currentTime", "op": "<", "value": 600 },
+            { "field": "vices.racing", "op": "<", "value": 1 }
+          ], "nextNode": "morning_intro" },
+        { "conditions": [{ "field": "currentTime", "op": ">=", "value": 900 }], "nextNode": "late_afternoon_intro" },
+        {
+          "conditions": [{ "field": "vices.racing", "op": ">=", "value": 1 }],
+          "nextNode": "race_again"
+        }
+      ],
+      "next": "intro"
+    },
+    "very_drunk": {
+      "id": "very_drunk",
+      "speaker": "Modded Car Guy",
+      "text": "DUDE. You can barely STAND. Let's DO THIS. This is gonna be LEGENDARY. Or you'll die. Either way, content."
+    },
+    "buzzed": {
+      "id": "buzzed",
+      "speaker": "Modded Car Guy",
+      "text": "You've got THE LOOK. The look of a man who needs SPEED."
+    },
+    "too_hot": {
+      "id": "too_hot",
+      "speaker": "Modded Car Guy",
+      "text": "Cops have been all over the boulevard this week. Rain check, man."
+    },
+    "morning_intro": {
+      "id": "morning_intro",
+      "speaker": "Modded Car Guy",
+      "text": "The Modded Car guy shakes his head. 'Too many cops this time of day. Come back when shift changes.'"
+    },
+    "late_afternoon_intro": {
+      "id": "late_afternoon_intro",
+      "speaker": "Modded Car Guy",
+      "text": "'One last race before sundown, suburban dad. DOUBLE stakes. Let's SEND IT.'",
+      "next": "intro"
+    },
+    "race_again": {
+      "id": "race_again",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "race_again_drunk" },
+        { "conditions": [{ "field": "flags.injury", "op": "==", "value": true }], "nextNode": "race_again_injury" },
+        { "conditions": [{ "field": "flags.cash_bulge", "op": "==", "value": true }], "nextNode": "race_again_cash" }
+      ],
+      "next": "race_again_default"
+    },
+    "race_again_drunk": {
+      "id": "race_again_drunk",
+      "speaker": "Modded Car Guy",
+      "text": "He GRINS. 'One more? You're a LEGEND.'"
+    },
+    "race_again_injury": {
+      "id": "race_again_injury",
+      "speaker": "Modded Car Guy",
+      "text": "'You heal fast, bro. Respect. Double or nothing?'"
+    },
+    "race_again_cash": {
+      "id": "race_again_cash",
+      "speaker": "Modded Car Guy",
+      "text": "'Big shot today, huh? Let's raise the stakes.'"
+    },
+    "race_again_default": {
+      "id": "race_again_default",
+      "text": "The guy with the Civic revs his engine. 'Double or nothing?'"
+    },
+    "intro": {
+      "id": "intro",
+      "speaker": "Modded Car Guy",
+      "text": "",
+      "beats": [
+        { "speaker": "Modded Car Guy", "text": "VRRROOOM. He revs. The exhaust is louder than his personality.", "mouth": "grin", "eyes": "shades" },
+        { "speaker": "Modded Car Guy", "text": "\"Nice minivan, bro. Bet it MOVES. Bet it's got that HEMI soul.\"", "mouth": "smirk", "eyebrows": "raised" },
+        { "speaker": "Modded Car Guy", "text": "\"Stoplight to stoplight. Thirty bucks. Unless the car seat's too heavy.\"", "mouth": "grin", "eyes": "shades", "eyebrows": "raised" },
+        { "speaker": "Dad", "text": "The cheerios rattle in the cupholder. I am a father of two. I will destroy this man.", "mouth": "frown", "eyes": "angry", "eyebrows": "angry" }
+      ],
+      "choices": [
+        {
+          "text": "\"You're on\"",
+          "nextNode": "t1",
+          "timeCost": 15,
+          "effects": [
+            { "type": "add", "field": "vices.racing", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I'm a responsible adult\"",
+          "nextNode": "decline"
+        }
+      ]
+    },
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "speaker": "Modded Car Guy", "text": "He lines up beside the minivan. Tinted windows. Fuzzy dice. Menace.", "mouth": "smirk", "eyes": "shades" },
+        { "text": "Red. Yellow. The engine coughs like it's been smoking for forty years.", "mouth": "sleepy" },
+        { "speaker": "Dad", "text": "\"GREEN. GO GO GO.\"", "mouth": "shock", "eyes": "wide", "eyebrows": "angry" }
+      ],
+      "exitScene": "MINIGAME:drive_race"
+    },
+    "decline": {
+      "id": "decline",
+      "text": "He revs the engine. 'That's what they all say. Before they race.'"
+    }
+  }
+}

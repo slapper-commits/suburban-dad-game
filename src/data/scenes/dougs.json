@@ -1,0 +1,47 @@
+{
+  "id": "dougs",
+  "name": "Doug's Driveway",
+  "description": "Lawn chair. Cooler. The sound of a man with no plans.",
+  "background": "dougs",
+  "isHome": false,
+  "enterDialogue": "dougs_hub",
+  "hotspots": [
+    {
+      "id": "doug",
+      "label": "Doug",
+      "x": 42,
+      "y": 55,
+      "width": 12,
+      "height": 25,
+      "action": {
+        "type": "dialogue",
+        "treeId": "dougs_alcohol"
+      }
+    },
+    {
+      "id": "cooler",
+      "label": "Cooler",
+      "x": 55,
+      "y": 70,
+      "width": 8,
+      "height": 10,
+      "action": {
+        "type": "inspect",
+        "text": "Blue cooler. Ice visible. At least six cold ones floating in there."
+      }
+    },
+    {
+      "id": "go_home",
+      "label": "Head Home",
+      "x": 90,
+      "y": 50,
+      "width": 10,
+      "height": 20,
+      "action": {
+        "type": "scene",
+        "sceneId": "frontyard",
+        "timeCost": 10
+      }
+    }
+  ]
+}

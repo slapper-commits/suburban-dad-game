@@ -1,0 +1,237 @@
+[
+  {
+    "id": "perfect_dad",
+    "title": "World's Greatest Dad",
+    "description": "You stayed clean, prepped early, grilled perfectly. The neighborhood thinks you're a saint.",
+    "grade": "A+",
+    "priority": 100,
+    "conditions": [
+      { "field": "sobriety", "op": ">=", "value": 80 },
+      { "field": "suspicion", "op": "<=", "value": 20 },
+      { "field": "flags.lawnStatus", "op": ">=", "value": 95 },
+      { "field": "flags.grillStatus", "op": "==", "value": "done" }
+    ],
+    "epilogue": "The burgers were perfect. The lawn was mowed. Your wife gave you That Look — the good one. For one shining evening, you were the man you pretend to be on Facebook."
+  },
+  {
+    "id": "neighborhood_hero",
+    "title": "The Legend",
+    "description": "Somehow, despite everything, you pulled off the greatest BBQ this cul-de-sac has ever seen.",
+    "grade": "A",
+    "priority": 95,
+    "conditions": [
+      { "field": "reputation", "op": ">=", "value": 85 },
+      { "field": "flags.grillStatus", "op": "==", "value": "done" },
+      { "field": "flags.lawnStatus", "op": ">=", "value": 80 }
+    ],
+    "epilogue": "They're still talking about it. The brisket was transcendent. Even your mother-in-law said something nice. You peaked tonight, Dave."
+  },
+  {
+    "id": "passed_out",
+    "title": "The Long Nap",
+    "description": "You never made it to the BBQ. Found unconscious in the garage.",
+    "grade": "F",
+    "priority": 98,
+    "conditions": [
+      { "field": "sobriety", "op": "<=", "value": 15 },
+      { "field": "energy", "op": "<=", "value": 15 }
+    ],
+    "epilogue": "Your wife found you at 8:30 PM, asleep on the garage floor. The guests grilled their own burgers. Your 8-year-old told the neighbors 'Daddy's taking a nap.' Nobody believed her."
+  },
+  {
+    "id": "divorce_papers",
+    "title": "The Last BBQ",
+    "description": "This was the final straw. She's calling her lawyer Monday.",
+    "grade": "F",
+    "priority": 96,
+    "conditions": [
+      { "field": "suspicion", "op": ">=", "value": 90 }
+    ],
+    "epilogue": "You showed up in a Hawaiian shirt with a stain on it, knocked over the dessert table, and called your mother-in-law by the wrong name. She's been Googling divorce attorneys since 9 PM."
+  },
+  {
+    "id": "caught_red_handed",
+    "title": "Busted",
+    "description": "Wife found the evidence. The BBQ became an intervention.",
+    "grade": "D",
+    "priority": 90,
+    "conditions": [
+      { "field": "suspicion", "op": ">=", "value": 70 },
+      { "field": "sobriety", "op": "<", "value": 50 }
+    ],
+    "epilogue": "She found the empties behind the lawnmower. The BBQ went quiet. The neighbors suddenly remembered they had somewhere else to be. You'll be sleeping on the couch tonight."
+  },
+  {
+    "id": "grill_disaster",
+    "title": "The Great Burger Incident",
+    "description": "The burgers are charcoal. The grill is on fire. This is fine.",
+    "grade": "D",
+    "priority": 85,
+    "conditions": [
+      { "field": "flags.grillStatus", "op": "==", "value": "burnt" }
+    ],
+    "epilogue": "The fire department arrived at 8:47 PM. Your neighbor Greg filmed the whole thing. It got 200k views on TikTok. Your wife hasn't spoken to you since."
+  },
+  {
+    "id": "secret_gambler",
+    "title": "Down Bad",
+    "description": "You lost the grocery money in Doug's garage. The BBQ was a blur.",
+    "grade": "D",
+    "priority": 82,
+    "conditions": [
+      { "field": "vices.gambling", "op": ">=", "value": 2 },
+      { "field": "flags.cash", "op": "<=", "value": 0 }
+    ],
+    "epilogue": "You smiled through the whole BBQ but your mind was on the money. The trip to Hawaii is now a trip to your in-laws' house in Ohio."
+  },
+  {
+    "id": "functional_drunk",
+    "title": "The Functioning Professional",
+    "description": "Buzzed but holding it together. Nobody noticed. Probably.",
+    "grade": "B-",
+    "priority": 80,
+    "conditions": [
+      { "field": "sobriety", "op": ">=", "value": 40 },
+      { "field": "sobriety", "op": "<", "value": 80 },
+      { "field": "suspicion", "op": "<=", "value": 50 }
+    ],
+    "epilogue": "You had a few. Maybe more than a few. But the burgers got flipped and when your wife asked if you'd been drinking, you said 'just one' with the confidence of a man who'd had four."
+  },
+  {
+    "id": "good_enough_dad",
+    "title": "Good Enough",
+    "description": "The lawn's done. The burgers are edible. Karen's suspicious but can't prove anything.",
+    "grade": "B",
+    "priority": 75,
+    "conditions": [
+      { "field": "flags.lawnStatus", "op": ">=", "value": 60 },
+      { "field": "flags.grillStatus", "op": "==", "value": "done" },
+      { "field": "suspicion", "op": "<=", "value": 60 }
+    ],
+    "epilogue": "Not perfect. Not terrible. The lawn has some crooked lines. The burgers were a touch overdone. But the party happened and nobody cried. B-plus parenting, Dave."
+  },
+  {
+    "id": "lawn_disaster",
+    "title": "The Jungle",
+    "description": "You forgot the lawn entirely. Karen's mom made a comment.",
+    "grade": "C",
+    "priority": 70,
+    "conditions": [
+      { "field": "flags.lawnStatus", "op": "<", "value": 30 }
+    ],
+    "epilogue": "The lawn was a disgrace. Your mother-in-law said 'interesting choice' which in her dialect means 'grounds for annulment.' The Hendersons pretended not to notice."
+  },
+  {
+    "id": "no_grill",
+    "title": "Cold Plates",
+    "description": "You never even fired up the grill. Guests ate potato salad and left early.",
+    "grade": "C-",
+    "priority": 68,
+    "conditions": [
+      { "field": "flags.grillStatus", "op": "==", "value": "not_started" }
+    ],
+    "epilogue": "A BBQ with no burgers. Greg ordered pizza. Your wife stared at the cold grill for a solid minute. No one said anything. Everyone thought everything."
+  },
+  {
+    "id": "hero_flip",
+    "title": "The Hero Flip",
+    "description": "You went deep into the darkness. Then you did the right thing. And still grilled burgers.",
+    "grade": "B",
+    "priority": 92,
+    "conditions": [
+      { "field": "flags.heroicFlag", "op": "==", "value": true },
+      { "field": "flags.grillStatus", "op": "==", "value": "done" }
+    ],
+    "epilogue": "You saw things today. Did things. But when it mattered, you called the cops / tipped the FBI / helped someone escape. Then you came home and grilled. Nobody will ever know how interesting your Saturday really was. And that's okay."
+  },
+  {
+    "id": "duffel_bag",
+    "title": "The Duffel Bag",
+    "description": "You came home with unexplained cash. The grill is hot. Questions will be asked later.",
+    "grade": "B-",
+    "priority": 84,
+    "conditions": [
+      { "field": "cash", "op": ">=", "value": 500 },
+      { "field": "flags.grillStatus", "op": "==", "value": "done" }
+    ],
+    "epilogue": "The burgers sizzle. Your pockets bulge. Karen asks how your day was and you say 'productive.' You've never been more honest. The offshore account can wait until Monday."
+  },
+  {
+    "id": "kingpin",
+    "title": "The Kingpin",
+    "description": "Guns, gambling, and a grill. You're the most dangerous dad in the cul-de-sac.",
+    "grade": "D+",
+    "priority": 88,
+    "conditions": [
+      { "field": "vices.guns", "op": ">=", "value": 3 },
+      { "field": "vices.gambling", "op": ">=", "value": 2 },
+      { "field": "cash", "op": ">=", "value": 300 }
+    ],
+    "epilogue": "Craig nods at you across the yard. Doug deals you in under the patio table. Kevin tries to recruit your gun contacts into ELEVATÉ. You are the suburban underworld, and your cover is a Weber Genesis and a polo shirt."
+  },
+  {
+    "id": "enlightenment",
+    "title": "The Enlightenment",
+    "description": "You tried everything. Saw everything. Understand nothing. But you feel... free?",
+    "grade": "C",
+    "priority": 86,
+    "conditions": [
+      { "field": "sobriety", "op": "<", "value": 40 }
+    ],
+    "epilogue": "Three vices deep and running on fumes. You arrive at the BBQ with the serene calm of a man who has stared into the suburban abyss. Karen asks if you're okay. 'I've never been better,' you say. You mean it. She's terrified."
+  },
+  {
+    "id": "the_arrest",
+    "title": "Arrested Development",
+    "description": "The cops showed up. At the BBQ. In front of everyone.",
+    "grade": "F",
+    "priority": 97,
+    "conditions": [
+      { "field": "suspicion", "op": ">=", "value": 85 },
+      { "field": "vices.guns", "op": ">=", "value": 2 }
+    ],
+    "epilogue": "Two squad cars. Your mother-in-law filming on her phone. Karen standing on the porch, arms crossed, lips thin as paper. The neighbors will talk about this for YEARS. At least the burgers were done."
+  },
+  {
+    "id": "won_the_civic",
+    "title": "Two Cars Dave",
+    "description": "You came home with a second car. A modded Honda Civic. Karen has questions.",
+    "grade": "C+",
+    "priority": 83,
+    "conditions": [
+      { "field": "flags.wonCar", "op": "==", "value": true }
+    ],
+    "epilogue": "You park the Civic next to the minivan. The underglow pulses purple in the driveway. Your 8-year-old thinks it's the coolest thing ever. Karen does not. 'Explain,' she says. You cannot."
+  },
+  {
+    "id": "lost_the_van",
+    "title": "Walking Home",
+    "description": "You lost the minivan in a street race. You walked to the BBQ.",
+    "grade": "D",
+    "priority": 87,
+    "conditions": [
+      { "field": "flags.lostCar", "op": "==", "value": true }
+    ],
+    "epilogue": "You arrive at the BBQ on foot, sweating, thirty minutes late. 'Where's the car?' Karen asks. 'It's a long story,' you say. It is not a long story. You bet it on a stoplight race and lost. The Uber home costs $23."
+  },
+  {
+    "id": "pyramid_king",
+    "title": "The Regional Ambassador",
+    "description": "You are now fully invested in ELEVATÉ. The garage is full of boxes.",
+    "grade": "C-",
+    "priority": 81,
+    "conditions": [
+      { "field": "vices.pyramid", "op": ">=", "value": 3 }
+    ],
+    "epilogue": "You pitch ELEVATÉ to every guest at the BBQ. Your mother-in-law buys a starter kit out of pity. Kevin shows up uninvited and weeps with pride. 'He's one of us now,' Kevin whispers to Doug. Doug finishes his beer in silence."
+  },
+  {
+    "id": "default_mediocre",
+    "title": "Just Another Saturday",
+    "description": "Nothing spectacular. Nothing disastrous. Peak suburban existence.",
+    "grade": "C+",
+    "priority": 1,
+    "conditions": [],
+    "epilogue": "The burgers were fine. The conversation was fine. Everything was fine. Your wife asked if you had fun and you said 'yeah' while staring at your phone. Another Saturday in the books."
+  }
+]

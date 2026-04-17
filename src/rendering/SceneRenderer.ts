@@ -1187,10 +1187,7 @@ export function drawGasStation(gfx: Phaser.GameObjects.Graphics, state: DadState
   const time = state.currentTime;
   drawOutdoorBase(gfx, time, 0x444444);  // asphalt ground
 
-  // Player's minivan parked on the left (zone at x=75)
-  drawMinivan(gfx, 75, GROUND_Y);
-
-  // Convenience store
+  // Convenience store (drawn BEFORE the minivan so it's behind it)
   gfx.fillStyle(0xc8b890);
   gfx.fillRect(30, GROUND_Y - 110, 180, 110);
   gfx.fillStyle(0x87ceeb, 0.6);
@@ -1200,6 +1197,9 @@ export function drawGasStation(gfx: Phaser.GameObjects.Graphics, state: DadState
   // Store sign
   gfx.fillStyle(0x3a7bc8);
   gfx.fillRect(50, GROUND_Y - 115, 140, 12);
+
+  // Player's minivan — parked to the right of the store (zone at x=250)
+  drawMinivan(gfx, 250, GROUND_Y);
 
   // Gas pump canopy
   gfx.fillStyle(0xdddddd);
@@ -1501,6 +1501,26 @@ export function drawGasStationStore(gfx: Phaser.GameObjects.Graphics, state: Dad
   // Walls — cheap beige linoleum
   gfx.fillStyle(0xe8dcb0);
   gfx.fillRect(0, 0, SCREEN_W, FLOOR);
+
+  // Storefront WINDOW on the left — shows the minivan parked outside
+  const winX = 80, winY = 50, winW = 170, winH = 140;
+  // Sky beyond
+  gfx.fillStyle(0x87ceeb);
+  gfx.fillRect(winX, winY, winW, winH * 0.55);
+  // Ground beyond
+  gfx.fillStyle(0x444444);
+  gfx.fillRect(winX, winY + winH * 0.55, winW, winH * 0.45);
+  // Minivan through the window
+  drawMinivan(gfx, winX + 80, winY + winH - 8);
+  // Window frame
+  gfx.lineStyle(3, 0x6a4a2a);
+  gfx.strokeRect(winX, winY, winW, winH);
+  // Cross mullion
+  gfx.lineBetween(winX, winY + winH / 2, winX + winW, winY + winH / 2);
+  gfx.lineBetween(winX + winW / 2, winY, winX + winW / 2, winY + winH);
+  // Subtle glass reflection
+  gfx.fillStyle(0xffffff, 0.08);
+  gfx.fillTriangle(winX + 6, winY + 6, winX + 60, winY + 6, winX + 6, winY + 60);
 
   // Ceiling panels
   gfx.fillStyle(0xc8bc90);
@@ -1862,6 +1882,153 @@ export function drawStripClub(gfx: Phaser.GameObjects.Graphics, _state: DadState
   gfx.fillRect(670, 250, 18, 6);  // decorative
   // Pink glow spilling from behind curtain
   drawMoodLight(gfx, 664, 330, 0xff3377, 28);
+}
+
+export function drawMotelExterior(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
+  const time = state.currentTime;
+  drawOutdoorBase(gfx, time, 0x444444);  // parking lot asphalt
+
+  // Dusty motel building — long 2-story beige
+  gfx.fillStyle(0xc4a878);
+  gfx.fillRect(200, GROUND_Y - 180, 560, 180);
+  // Second-story trim
+  gfx.fillStyle(0x8a6a4a);
+  gfx.fillRect(200, GROUND_Y - 95, 560, 6);
+  // Row of doors (3 on ground)
+  for (let i = 0; i < 6; i++) {
+    const dx = 240 + i * 90;
+    gfx.fillStyle(0x5a2a1a);
+    gfx.fillRect(dx, GROUND_Y - 60, 30, 60);
+    // Door number plate
+    gfx.fillStyle(0xd4a020);
+    gfx.fillRect(dx + 8, GROUND_Y - 52, 14, 6);
+  }
+  // Room 12 door — highlighted at x=660 (match the zone)
+  gfx.fillStyle(0x7a1a1a);
+  gfx.fillRect(645, GROUND_Y - 66, 34, 66);
+  gfx.fillStyle(0xffd040);
+  gfx.fillRect(655, GROUND_Y - 58, 14, 8);
+  // Door knob glint
+  gfx.fillStyle(0xffe080);
+  gfx.fillCircle(676, GROUND_Y - 34, 1.5);
+
+  // Upper-story windows
+  for (let i = 0; i < 6; i++) {
+    const wx = 240 + i * 90;
+    gfx.fillStyle(0x87ceeb, 0.5);
+    gfx.fillRect(wx, GROUND_Y - 150, 30, 40);
+    gfx.lineStyle(1, 0x444444);
+    gfx.strokeRect(wx, GROUND_Y - 150, 30, 40);
+  }
+
+  // Large "MOTEL" neon sign on pole (left side)
+  gfx.fillStyle(0x444444);
+  gfx.fillRect(130, GROUND_Y - 170, 4, 170);
+  // Sign board red
+  gfx.fillStyle(0xcc2233);
+  gfx.fillRect(85, GROUND_Y - 180, 94, 38);
+  // Neon letters (animated blink)
+  const blink = Math.floor(time * 3) % 3 !== 0;
+  gfx.fillStyle(0xffffaa, blink ? 0.95 : 0.4);
+  gfx.fillRect(93, GROUND_Y - 175, 76, 6);
+  gfx.fillStyle(0xffffaa, blink ? 0.9 : 0.3);
+  gfx.fillRect(99, GROUND_Y - 162, 66, 5);
+  gfx.fillStyle(0x66cc66);
+  gfx.fillRect(95, GROUND_Y - 150, 76, 4);
+
+  // Taco cart (center-left) — metallic cart + yellow canopy + steam
+  const cx = 300;
+  gfx.fillStyle(0xbbbbbb);
+  gfx.fillRect(cx - 40, GROUND_Y - 50, 80, 40);
+  // Wheels
+  gfx.fillStyle(0x111111);
+  gfx.fillCircle(cx - 28, GROUND_Y - 6, 6);
+  gfx.fillCircle(cx + 28, GROUND_Y - 6, 6);
+  // Yellow canopy
+  gfx.fillStyle(0xd4a020);
+  gfx.fillTriangle(cx - 50, GROUND_Y - 50, cx + 50, GROUND_Y - 50, cx, GROUND_Y - 100);
+  // Canopy fringe
+  gfx.fillRect(cx - 50, GROUND_Y - 50, 100, 4);
+  // TACOS sign (black letters block)
+  gfx.fillStyle(0x222222);
+  gfx.fillRect(cx - 30, GROUND_Y - 78, 60, 12);
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(cx - 25, GROUND_Y - 74, 4, 4);
+  gfx.fillRect(cx - 17, GROUND_Y - 74, 4, 4);
+  gfx.fillRect(cx - 9, GROUND_Y - 74, 4, 4);
+  gfx.fillRect(cx - 1, GROUND_Y - 74, 4, 4);
+  gfx.fillRect(cx + 7, GROUND_Y - 74, 4, 4);
+  // Steam puffs (animated)
+  const puffT = time * 2;
+  for (let i = 0; i < 3; i++) {
+    const px = cx + Math.sin(puffT + i * 0.7) * 3;
+    const py = GROUND_Y - 54 - i * 10 - (puffT * 3 % 12);
+    gfx.fillStyle(0xeeeeee, 0.45 - i * 0.1);
+    gfx.fillCircle(px, py, 4 + i);
+  }
+  // Griddle
+  gfx.fillStyle(0x333333);
+  gfx.fillRect(cx - 30, GROUND_Y - 56, 60, 6);
+
+  // Player's minivan parked (zone at x=75)
+  drawMinivan(gfx, 75, GROUND_Y);
+
+  // Sharon waiting by Room 12
+  drawNpc(gfx, 'sharon', 520, GROUND_Y);
+
+  // Taco Vendor — use generic clerk config (silhouette behind cart)
+  drawTinyPerson(gfx, cx, GROUND_Y - 60, 0xc89878, 0.8);
+}
+
+export function drawTeenAlley(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
+  const time = state.currentTime;
+  // Dim alley — brick walls close in
+  drawDimInterior(gfx, { wall: 0x3a3a2a, floor: 0x2a2a1a, vignetteAlpha: 0.55 });
+
+  // Brick pattern on walls
+  gfx.fillStyle(0x4a3a2a, 0.5);
+  for (let y = 40; y < 280; y += 22) {
+    for (let x = 0; x < SCREEN_W; x += 60) {
+      const offset = (Math.floor(y / 22) % 2) * 30;
+      gfx.fillRect(x + offset, y, 54, 3);
+    }
+  }
+
+  // Dumpster (right side)
+  gfx.fillStyle(0x2a5a3a);
+  gfx.fillRect(560, 260, 160, 80);
+  gfx.fillStyle(0x3a6a4a);
+  gfx.fillRect(560, 250, 160, 12);
+  gfx.fillStyle(0x1a3a2a);
+  gfx.fillRect(580, 275, 120, 8);
+
+  // Spray paint tag on far wall
+  gfx.fillStyle(0xcc2266);
+  gfx.fillRect(120, 100, 90, 12);
+  gfx.fillRect(130, 116, 60, 10);
+  gfx.lineStyle(2, 0x66ff33);
+  gfx.lineBetween(200, 140, 240, 100);
+
+  // Flickering single alley light
+  const flicker = Math.floor(time * 4) % 4 !== 0;
+  gfx.fillStyle(0x555555);
+  gfx.fillRect(396, 60, 4, 80);
+  gfx.fillStyle(0x888888);
+  gfx.fillRect(384, 52, 28, 12);
+  gfx.fillStyle(0xffffaa, flicker ? 0.7 : 0.15);
+  gfx.fillCircle(398, 58, 8);
+  drawMoodLight(gfx, 398, 80, 0xffffaa, flicker ? 120 : 40);
+
+  // Milk crate
+  gfx.fillStyle(0xcc2233);
+  gfx.fillRect(480, 310, 34, 30);
+  gfx.lineStyle(1, 0x880011);
+  for (let i = 0; i < 4; i++) {
+    gfx.lineBetween(480 + i * 8, 310, 480 + i * 8, 340);
+  }
+
+  // Teen sitting on milk crate
+  drawNpc(gfx, 'quikstop_teen', 500, GROUND_Y);
 }
 
 export function drawMotelRoom(gfx: Phaser.GameObjects.Graphics, state: DadState): void {

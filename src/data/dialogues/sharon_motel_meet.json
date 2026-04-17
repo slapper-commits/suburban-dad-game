@@ -1,0 +1,66 @@
+{
+  "id": "sharon_motel_meet",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Sharon", "text": "Hey khakis. Came anyway.", "mouth": "smirk", "eyes": "lidded" },
+        { "speaker": "Dad", "text": "I — yeah. I did. I — do you have a coaster or something, I don't want to put my keys on —", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Sharon", "text": "Dave. Breathe. Room's on me — for now.", "mouth": "smile", "eyes": "sultry" },
+        { "text": "The neon VACANCY sign buzzes overhead. A moth dies in it. Loudly.", "mouth": "neutral" }
+      ],
+      "choices": [
+        {
+          "text": "\"Let's... go inside\"",
+          "nextNode": "inside",
+          "timeCost": 2,
+          "effects": [
+            { "type": "set", "field": "flags.sharon_invited_in", "value": true }
+          ]
+        },
+        {
+          "text": "\"Not today, Sharon\"",
+          "nextNode": "decline",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        {
+          "text": "\"You look hungry, want tacos?\"",
+          "nextNode": "tacos",
+          "conditions": [
+            { "field": "flags.boughtTacos", "op": "==", "value": true }
+          ],
+          "effects": [
+            { "type": "set", "field": "flags.sharon_friend", "value": true }
+          ]
+        }
+      ]
+    },
+    "inside": {
+      "id": "inside",
+      "text": "Sharon pulls a keycard from her bra. The door clicks. You follow like a man being led to a nice, warm trap.",
+      "exitScene": "motel_room"
+    },
+    "decline": {
+      "id": "decline",
+      "text": "",
+      "beats": [
+        { "speaker": "Sharon", "text": "Your loss. Tell Karen I said hi. Or don't.", "mouth": "smirk", "eyes": "lidded" },
+        { "text": "You walk back to the car faster than a man with nothing to hide would walk.", "mouth": "frown" }
+      ],
+      "exitScene": "gas_station"
+    },
+    "tacos": {
+      "id": "tacos",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "I — I got these. From the cart. Carne asada. I think.", "mouth": "smile", "eyes": "wide" },
+        { "speaker": "Sharon", "text": "Dave. You brought me motel tacos. That's the nicest thing a married man has done for me this month.", "mouth": "smile", "eyes": "sultry" }
+      ],
+      "exitScene": "motel_exterior"
+    }
+  }
+}

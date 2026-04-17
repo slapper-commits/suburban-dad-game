@@ -1,0 +1,8 @@
+{
+  "id": "motel_exterior",
+  "name": "The Motel Parking Lot",
+  "description": "Flickering neon. A taco cart. Sharon waves from Room 12's window.",
+  "background": "motel_exterior",
+  "isHome": false,
+  "hotspots": []
+}

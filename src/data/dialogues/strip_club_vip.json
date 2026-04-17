@@ -32,12 +32,8 @@
         },
         {
           "text": "Break a rule — pay extra",
-          "nextNode": "rule_broken",
+          "nextNode": "vip_autoplay",
           "effects": [
-            { "type": "add", "field": "flags.cash", "value": -200 },
-            { "type": "add", "field": "vices.prostitution", "value": 1 },
-            { "type": "set", "field": "flags.lipstick", "value": true },
-            { "type": "set", "field": "flags.perfume", "value": true },
             { "type": "set", "field": "flags.amber_private", "value": true },
             { "type": "add", "field": "suspicion", "value": 25 }
           ]
@@ -98,6 +94,70 @@
       ],
       "effects": [
         { "type": "add", "field": "suspicion", "value": 5 }
+      ],
+      "exitScene": "strip_mall"
+    },
+
+    "vip_autoplay": {
+      "id": "vip_autoplay",
+      "text": "",
+      "beats": [
+        { "text": "The curtain sways. Pink light smears across the wall like a wound.", "mouth": "neutral" },
+        { "speaker": "Amber", "text": "Don't say anything. Just breathe.", "mouth": "pouty", "eyes": "sultry" },
+        { "text": "Bass thumps through the floor. Your pulse picks up its tempo without asking permission.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "*internal* What am I doing. What am I DOING. Karen's yoga schedule is on the fridge. I KNOW her yoga schedule.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        {
+          "text": "*knock knock* — 'TIME'S UP, SIR.'",
+          "mouth": "shock",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -200 },
+            { "type": "set", "field": "flags.lipstick", "value": true },
+            { "type": "set", "field": "flags.perfume", "value": true },
+            { "type": "add", "field": "vices.prostitution", "value": 1 }
+          ]
+        }
+      ],
+      "next": "vip_outcome"
+    },
+
+    "vip_outcome": {
+      "id": "vip_outcome",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.cash", "op": "<", "value": 0 }], "nextNode": "vip_bouncer" }
+      ],
+      "next": "vip_pay"
+    },
+
+    "vip_pay": {
+      "id": "vip_pay",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Here. Two — two hundred. Yeah.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Amber", "text": "Get home to your wife, khakis.", "mouth": "smile", "eyes": "lidded" },
+        { "text": "You back out through the curtain. Your collar smells like a perfume counter exploded on you.", "mouth": "neutral" }
+      ],
+      "exitScene": "strip_mall"
+    },
+
+    "vip_bouncer": {
+      "id": "vip_bouncer",
+      "text": "",
+      "beats": [
+        { "speaker": "Bouncer", "text": "Sir. The money.", "mouth": "frown", "eyebrows": "angry" },
+        { "speaker": "Dad", "text": "I — I thought — the ATM said — my wife has the — it's a JOINT account —", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "A hand the size of a small turkey closes around your collar. Your feet leave the carpet briefly.", "mouth": "shock" },
+        { "text": "The bouncer walks you through the curtain like a man returning a defective appliance.", "mouth": "neutral" },
+        {
+          "text": "The back door bangs open. You land in the strip_mall lot on your hip. A plastic bag scuttles past you in the wind, judging.",
+          "mouth": "frown",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 30 },
+            { "type": "add", "field": "reputation", "value": -20 },
+            { "type": "add", "field": "sobriety", "value": -10 },
+            { "type": "set", "field": "flags.thrown_out_club", "value": true }
+          ]
+        }
       ],
       "exitScene": "strip_mall"
     }

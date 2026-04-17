@@ -41,6 +41,14 @@
             { "type": "flag", "field": "grillStatus", "value": "prepped" }
           ]
         },
+        {
+          "text": "Light 'em fast and cook NOW — FLIP MINIGAME",
+          "nextNode": "grill_launch",
+          "timeCost": 5,
+          "effects": [
+            { "type": "flag", "field": "grillStatus", "value": "prepped" }
+          ]
+        },
         { "text": "Leave it for later", "nextNode": "leave" }
       ]
     },

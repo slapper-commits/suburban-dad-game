@@ -1,0 +1,35 @@
+{
+  "id": "taco_cart",
+  "startNode": "intro",
+  "nodes": {
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Taco Vendor", "text": "Best tacos in the mall lot. $10 for three. Cash. No Venmo. Don't ask.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "I — is the meat, uh, inspected, or —", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" }
+      ],
+      "choices": [
+        {
+          "text": "\"Buy tacos ($10)\"",
+          "nextNode": "buy",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -10 },
+            { "type": "add", "field": "sobriety", "value": 25 },
+            { "type": "add", "field": "energy", "value": 10 },
+            { "type": "set", "field": "flags.boughtTacos", "value": true }
+          ]
+        },
+        { "text": "\"Walk by\"", "nextNode": "walk" }
+      ]
+    },
+    "buy": {
+      "id": "buy",
+      "text": "You eat the tacos. The world refocuses. The carne asada has healing properties."
+    },
+    "walk": {
+      "id": "walk",
+      "text": "The vendor watches you go. He does not care."
+    }
+  }
+}

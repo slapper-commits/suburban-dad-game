@@ -1,0 +1,93 @@
+{
+  "id": "teen_alley_smoke",
+  "startNode": "smoke",
+  "nodes": {
+    "smoke": {
+      "id": "smoke",
+      "text": "",
+      "beats": [
+        {
+          "text": "The teen produces a bong shaped like a dragon from inside a milk crate. You are too far in to turn back.",
+          "mouth": "neutral",
+          "effects": [
+            { "type": "add", "field": "vices.drugs", "value": 1 },
+            { "type": "add", "field": "sobriety", "value": -15 },
+            { "type": "set", "field": "flags.smell", "value": true },
+            { "type": "set", "field": "flags.dilated_pupils", "value": true },
+            { "type": "animate", "value": "bong" }
+          ]
+        },
+        { "speaker": "Quikstop Teen", "text": "Okay okay okay you first, you FIRST, dude.", "mouth": "grin", "eyes": "wide" },
+        { "speaker": "Dad", "text": "*cough* — oh god. Oh GOD. That is — is that supposed to —", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Quikstop Teen", "text": "Bro bro bro so my band? We're called Suburban Dads. IRONICALLY. Like. Our drummer's dad left and mine is a cop so —", "mouth": "grin", "eyes": "stoned" },
+        { "speaker": "Quikstop Teen", "text": "— and the SINGER is a GIRL, which is WILD, and our EP drops on Bandcamp, dude, BANDCAMP, nobody uses Bandcamp, that's the POINT —", "mouth": "grin", "eyes": "stoned" },
+        { "speaker": "Dad", "text": "I think my legs are asleep. I think my SOUL is asleep.", "mouth": "sleepy", "eyes": "stoned" },
+        { "text": "Footsteps. A woman's voice. 'KYLE! Kyle are you back here with someone's DAD?'", "mouth": "shock" }
+      ],
+      "next": "mom"
+    },
+    "mom": {
+      "id": "mom",
+      "text": "",
+      "beats": [
+        { "speaker": "Teen's Mom", "text": "Are you SERIOUSLY smoking with my SEVENTEEN YEAR OLD SON? In an ALLEY?", "mouth": "shock", "eyebrows": "angry" },
+        { "speaker": "Quikstop Teen", "text": "Mom he offered, he OFFERED —", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Dad", "text": "Ma'am I — I can explain — I cannot explain —", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" }
+      ],
+      "next": "mom_router"
+    },
+    "mom_router": {
+      "id": "mom_router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.cash", "op": ">=", "value": 50 }], "nextNode": "bribe_choice" }
+      ],
+      "next": "run"
+    },
+    "bribe_choice": {
+      "id": "bribe_choice",
+      "text": "",
+      "beats": [
+        { "speaker": "Teen's Mom", "text": "You better START explaining before I find a COP, Khakis.", "mouth": "frown", "eyebrows": "angry" }
+      ],
+      "choices": [
+        {
+          "text": "\"Bribe her ($50)\"",
+          "nextNode": "bribe",
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -50 },
+            { "type": "add", "field": "suspicion", "value": 5 }
+          ]
+        },
+        { "text": "\"Just run\"", "nextNode": "run" }
+      ]
+    },
+    "bribe": {
+      "id": "bribe",
+      "text": "",
+      "beats": [
+        { "speaker": "Teen's Mom", "text": "...this is fifty dollars. This doesn't FIX anything. But it is fifty dollars.", "mouth": "frown", "eyebrows": "raised" },
+        { "text": "She pockets it. Stomps off muttering about her book club, Kyle's report card, and 'the MORAL DECLINE of this CUL-DE-SAC.'", "mouth": "neutral" }
+      ],
+      "exitScene": "quikstop"
+    },
+    "run": {
+      "id": "run",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "I have to — I have a thing — GOODBYE —", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "You panic-walk out of the alley. Arms stiff. Not running. Definitely not running. A man power-walking from justice.", "mouth": "frown" },
+        {
+          "text": "Behind you: 'I'M CALLING THE POLICE, KHAKIS! I GOT YOUR LICENSE PLATE!' She did not get your license plate. Probably.",
+          "mouth": "shock",
+          "effects": [
+            { "type": "add", "field": "suspicion", "value": 30 },
+            { "type": "add", "field": "reputation", "value": -15 },
+            { "type": "set", "field": "flags.mom_called_cops", "value": true }
+          ]
+        }
+      ],
+      "exitScene": "quikstop"
+    }
+  }
+}

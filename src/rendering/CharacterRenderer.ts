@@ -61,6 +61,8 @@ export interface CharacterConfig {
   cashBulge?: boolean;
   /** Body tilt in radians (drunk sway). */
   tilt?: number;
+  /** Torso rendered as bare skin (Dad got robbed of his shirt). */
+  shirtless?: boolean;
 
   // BACKWARD COMPAT (mapped to eyes field internally)
   shades?: boolean;
@@ -98,7 +100,10 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     animSeed = 0,
     talking = false,
     tilt = 0,
+    shirtless = false,
   } = config;
+  // When shirtless, draw torso/arms as bare skin (Dad is pantless-free but shirtless)
+  const effectiveShirt = shirtless ? (config.skin ?? 0xf0c89a) : config.shirt ?? 0x4a90d9;
   let { mouth = 'neutral' } = config;
 
   // Resolve eyes: backward compat for shades/sleepy booleans
@@ -351,14 +356,14 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
   }
 
   // ── Torso ─────────────────────────────────────────────────
-  gfx.fillStyle(shirt);
+  gfx.fillStyle(effectiveShirt);
   gfx.fillRect(cx - torsoW / 2, torsoY, torsoW, torsoH);
   // Female: subtle chest line + slight flare to suggest silhouette
   if (isFemale) {
     gfx.lineStyle(0.5 * s, 0x000000, 0.35);
     gfx.lineBetween(cx - 2 * s, torsoY + 4 * s, cx + 2 * s, torsoY + 4 * s);
     // Hip flare triangles at the bottom of the torso
-    gfx.fillStyle(shirt);
+    gfx.fillStyle(effectiveShirt);
     gfx.fillTriangle(
       cx - torsoW / 2, torsoY + torsoH - 2 * s,
       cx - hipW / 2, torsoY + torsoH,
@@ -389,7 +394,7 @@ export function drawCharacter(gfx: Phaser.GameObjects.Graphics, config: Characte
     leftArmOffY = idle * 0.4 * s;
     rightArmOffY = -idle * 0.4 * s;
   }
-  gfx.fillStyle(shirt);
+  gfx.fillStyle(effectiveShirt);
   // Left arm
   gfx.fillRect(
     cx - torsoW / 2 - armW + leftArmOffX,
@@ -848,6 +853,10 @@ export function getDadDishevelment(
   // Cash bulge
   if (flags.cash_bulge === true) {
     out.cashBulge = true;
+  }
+  // Shirtless — got robbed by the Girls
+  if (flags.shirtless === true) {
+    out.shirtless = true;
   }
   // Drunk sway — slow sinusoidal tilt that worsens below 50 sobriety
   if (state.sobriety < 50) {

@@ -425,13 +425,10 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
       {
         id: 'quikstop_teen_talk',
-        label: 'Teen',
+        label: 'Vaping Teen',
         x: 470,
-        radius: 30,
-        action: {
-          type: 'inspect',
-          text: "A teenager vaping with the confidence of a man who has seen things. 'Sup.' He does not elaborate.",
-        },
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'quikstop_teen' },
       },
       {
         id: 'quikstop_kevin',
@@ -455,7 +452,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       {
         id: 'minivan_gas',
         label: 'Minivan',
-        x: 75,
+        x: 250,
         radius: 35,
         action: { type: 'dialogue', treeId: 'frontyard_drive' },
       },
@@ -499,7 +496,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         label: 'The Motel (Room 12)',
         x: 550,
         radius: 40,
-        action: { type: 'scene', sceneId: 'motel_room', timeCost: 10 },
+        action: { type: 'scene', sceneId: 'motel_exterior', timeCost: 10 },
         visibleWhen: [
           { field: 'vices.prostitution', op: '>=', value: 1 },
           { field: 'suspicion', op: '<', value: 70 },
@@ -543,7 +540,18 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         id: 'alley',
         label: 'Alley',
         x: 710,
-        action: { type: 'dialogue', treeId: 'sidewalk_drugs_t2' },
+        radius: 35,
+        action: {
+          type: 'conditional_inspect',
+          routes: [
+            {
+              conditions: [{ field: 'vices.drugs', op: '>=', value: 1 }],
+              text: "You could cut through the back alley... but the real party is at the Girls' apartment. They aren't out here today.",
+            },
+          ],
+          fallback:
+            "Empty alley. A dumpster, a humming vent, a pigeon with terrible opinions. Nobody's here.",
+        },
       },
       {
         id: 'karate_dojo',
@@ -797,6 +805,68 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         x: 100,
         radius: 40,
         action: { type: 'scene', sceneId: 'gas_station', timeCost: 1 },
+      },
+    ],
+    edges: {
+      right: { sceneId: 'strip_mall', timeCost: 5 },
+    },
+  },
+
+  motel_exterior: {
+    groundY: 337,
+    walkBounds: { minX: 30, maxX: 770 },
+    dadEntryX: 100,
+    zones: [
+      {
+        id: 'motel_sharon',
+        label: 'Sharon',
+        x: 520,
+        radius: 50,
+        action: { type: 'dialogue', treeId: 'sharon_motel_meet' },
+      },
+      {
+        id: 'taco_cart',
+        label: 'Taco Cart',
+        x: 300,
+        radius: 45,
+        action: { type: 'dialogue', treeId: 'taco_cart' },
+      },
+      {
+        id: 'motel_door_12',
+        label: 'Room 12',
+        x: 660,
+        radius: 40,
+        action: { type: 'scene', sceneId: 'motel_room', timeCost: 2 },
+        visibleWhen: [{ field: 'flags.sharon_invited_in', op: '==', value: true }],
+      },
+      {
+        id: 'motel_lot_exit',
+        label: 'Leave',
+        x: 60,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'gas_station', timeCost: 5 },
+      },
+    ],
+  },
+
+  teen_alley: {
+    groundY: 337,
+    walkBounds: { minX: 30, maxX: 770 },
+    dadEntryX: 200,
+    zones: [
+      {
+        id: 'teen_alley_teen',
+        label: 'The Teen',
+        x: 500,
+        radius: 50,
+        action: { type: 'dialogue', treeId: 'teen_alley_smoke' },
+      },
+      {
+        id: 'teen_alley_exit',
+        label: 'Exit',
+        x: 70,
+        radius: 30,
+        action: { type: 'scene', sceneId: 'quikstop', timeCost: 5 },
       },
     ],
   },

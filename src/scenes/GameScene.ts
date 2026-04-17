@@ -10,6 +10,7 @@ import {
   drawKitchen, drawFrontYard, drawGarage, drawBackyard, drawDougs, drawBBQ,
   drawSidewalk, drawCraigs, drawKevins, drawKidsPorch, drawQuikstop, drawGasStation,
   drawStripMall, drawSketchy, drawHighway, drawGasStationStore, drawMotelRoom,
+  drawMotelExterior, drawTeenAlley,
   drawStripClub, drawStripClubVip, drawGirlsApartment, drawTrapHouse,
   drawIntoxOverlay, setSceneAnimTime,
 } from '../rendering/SceneRenderer';
@@ -115,6 +116,12 @@ import pawnShop from '../data/dialogues/pawn_shop.json';
 import dougsPoker from '../data/dialogues/dougs_poker.json';
 import motelRoomData from '../data/scenes/motel_room.json';
 import motelEncounter from '../data/dialogues/motel_encounter.json';
+import motelExteriorData from '../data/scenes/motel_exterior.json';
+import teenAlleyData from '../data/scenes/teen_alley.json';
+import sharonMotelMeet from '../data/dialogues/sharon_motel_meet.json';
+import tacoCart from '../data/dialogues/taco_cart.json';
+import quikstopTeen from '../data/dialogues/quikstop_teen.json';
+import teenAlleySmoke from '../data/dialogues/teen_alley_smoke.json';
 import girlsApartmentHub from '../data/dialogues/girls_apartment_hub.json';
 import trapHouseHub from '../data/dialogues/trap_house_hub.json';
 import trapDealer from '../data/dialogues/trap_dealer.json';
@@ -237,6 +244,8 @@ export class GameScene extends Phaser.Scene {
       highway: highwayData as unknown as SceneData,
       gas_station_store: gasStationStoreData as unknown as SceneData,
       motel_room: motelRoomData as unknown as SceneData,
+      motel_exterior: motelExteriorData as unknown as SceneData,
+      teen_alley: teenAlleyData as unknown as SceneData,
       strip_club: stripClubData as unknown as SceneData,
       strip_club_vip: stripClubVipData as unknown as SceneData,
       girls_apartment: girlsApartmentData as unknown as SceneData,
@@ -287,6 +296,10 @@ export class GameScene extends Phaser.Scene {
       quikstop_theft_t2: quikstopTheftT2 as unknown as DialogueTree,
       gas_racing_t2: gasRacingT2 as unknown as DialogueTree,
       gas_prostitution_t2: gasProstitutionT2 as unknown as DialogueTree,
+      sharon_motel_meet: sharonMotelMeet as unknown as DialogueTree,
+      taco_cart: tacoCart as unknown as DialogueTree,
+      quikstop_teen: quikstopTeen as unknown as DialogueTree,
+      teen_alley_smoke: teenAlleySmoke as unknown as DialogueTree,
       kevin_pitch: kevinPitch as unknown as DialogueTree,
       bbq_craig: bbqCraig as unknown as DialogueTree,
       bbq_neighbor: bbqNeighbor as unknown as DialogueTree,
@@ -700,6 +713,8 @@ export class GameScene extends Phaser.Scene {
       highway: drawHighway,
       gas_station_store: drawGasStationStore,
       motel_room: drawMotelRoom,
+      motel_exterior: drawMotelExterior,
+      teen_alley: drawTeenAlley,
       strip_club: drawStripClub,
       strip_club_vip: drawStripClubVip,
       girls_apartment: drawGirlsApartment,
@@ -815,7 +830,36 @@ export class GameScene extends Phaser.Scene {
         parentSceneKey: 'GameScene',
         items,
       });
+    } else if (gameId === 'grill') {
+      console.debug('[launchMinigame] grill launching', {
+        grillStatus: this.reg.playerState.state.flags.grillStatus,
+        boughtCharcoal: this.reg.playerState.state.flags.boughtCharcoal,
+      });
+      const config: MiniGameConfig = {
+        id: 'grill',
+        type: 'timing',
+        name: 'Grill Game',
+        description: 'Flip the burgers at the right time!',
+        difficulty: { speed: 0.5, precision: 0.4, duration: 15, wobble: 0.2 },
+        rewards: [
+          { type: 'flag', field: 'grillStatus', value: 'done' },
+          { type: 'flag', field: 'grilledPerfectly', value: true },
+          { type: 'add', field: 'reputation', value: 15 },
+        ],
+        penalties: [
+          { type: 'flag', field: 'grillStatus', value: 'burnt' },
+          { type: 'flag', field: 'burnedBurgers', value: true },
+          { type: 'add', field: 'reputation', value: -10 },
+        ],
+      };
+      this.scene.pause();
+      this.scene.launch('GrillGame', {
+        config,
+        playerState: this.reg.playerState,
+        parentSceneKey: 'GameScene',
+      });
     } else {
+      console.warn('[launchMinigame] fallback to GrillGame for unknown gameId:', gameId);
       const config: MiniGameConfig = {
         id: gameId,
         type: 'timing',

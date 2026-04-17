@@ -1,0 +1,66 @@
+{
+  "id": "quikstop_teen",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.teen_weed_invite", "op": "==", "value": true }], "nextNode": "already_asked" },
+        { "conditions": [{ "field": "flags.foundWeed", "op": "==", "value": true }], "nextNode": "has_weed" }
+      ],
+      "next": "intro"
+    },
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Quikstop Teen", "text": "Sup.", "mouth": "neutral", "eyes": "lidded" },
+        { "text": "He rips his vape. The cloud smells like a pancake factory on fire.", "mouth": "neutral" }
+      ],
+      "choices": [
+        { "text": "\"Just... nodding\"", "nextNode": "close" }
+      ]
+    },
+    "close": {
+      "id": "close",
+      "text": "You nod. He nods. Neither of you says anything else. This is a language."
+    },
+    "has_weed": {
+      "id": "has_weed",
+      "text": "",
+      "beats": [
+        { "speaker": "Dad", "text": "Hey. Uh. You ever... yeah.", "mouth": "frown", "eyes": "wide", "eyebrows": "worried" },
+        { "speaker": "Quikstop Teen", "text": "Yo for real? For REAL real?", "mouth": "grin", "eyes": "wide" },
+        { "speaker": "Quikstop Teen", "text": "Dude my mom like, literally would KILL me. Let's go.", "mouth": "grin", "eyes": "wide" }
+      ],
+      "choices": [
+        {
+          "text": "\"Wanna smoke in the alley?\"",
+          "nextNode": "to_alley",
+          "effects": [
+            { "type": "set", "field": "flags.teen_weed_invite", "value": true }
+          ]
+        },
+        { "text": "\"Nvm\"", "nextNode": "nvm" }
+      ]
+    },
+    "to_alley": {
+      "id": "to_alley",
+      "text": "He's already walking. You follow a man-child toward a dumpster.",
+      "exitScene": "teen_alley"
+    },
+    "nvm": {
+      "id": "nvm",
+      "text": "'Oh. OK. Cool cool cool.' He goes back to his vape. You die a little."
+    },
+    "already_asked": {
+      "id": "already_asked",
+      "text": "",
+      "beats": [
+        { "speaker": "Quikstop Teen", "text": "Yo. Khaki bro.", "mouth": "smirk", "eyes": "lidded" },
+        { "text": "He gives you a knowing nod. You are, somehow, in a club now.", "mouth": "neutral" }
+      ]
+    }
+  }
+}

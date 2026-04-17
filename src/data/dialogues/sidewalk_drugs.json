@@ -6,6 +6,10 @@
       "id": "router",
       "text": "",
       "routes": [
+        { "conditions": [
+            { "field": "sobriety", "op": "<", "value": 30 },
+            { "field": "vices.drugs", "op": "<", "value": 1 }
+          ], "nextNode": "robbed" },
         { "conditions": [{ "field": "sobriety", "op": "<", "value": 30 }], "nextNode": "very_drunk" },
         { "conditions": [{ "field": "sobriety", "op": "<", "value": 50 }], "nextNode": "buzzed" },
         { "conditions": [{ "field": "suspicion", "op": ">=", "value": 60 }], "nextNode": "too_hot" },
@@ -119,6 +123,24 @@
     "decline": {
       "id": "decline",
       "text": "The Girls shrug in perfect synchronization. 'Your loss, Dave.' Your name isn't Dave."
+    },
+    "robbed": {
+      "id": "robbed",
+      "text": "",
+      "effects": [
+        { "type": "set", "field": "flags.cash", "value": 0 },
+        { "type": "add", "field": "suspicion", "value": 15 },
+        { "type": "add", "field": "reputation", "value": -10 },
+        { "type": "set", "field": "flags.shirtless", "value": true },
+        { "type": "add", "field": "sobriety", "value": 20 }
+      ],
+      "beats": [
+        { "speaker": "The Girls", "text": "Aww. Look at him. He's SWAYING.", "mouth": "smirk", "eyes": "lidded" },
+        { "text": "They circle. One puts a hand on your shoulder. Another slides her arm around your waist. It almost feels nice. Almost.", "mouth": "neutral" },
+        { "speaker": "The Girls", "text": "Shhh shhh shhh — we're just making sure you don't have a tail, Dave. Cops everywhere tonight.", "mouth": "smirk", "eyes": "sultry" },
+        { "speaker": "Dad", "text": "I — my wallet's — hey that's my — why are you taking my SHIRT —", "mouth": "shock", "eyes": "wide", "eyebrows": "worried" },
+        { "text": "You wake up on the sidewalk. Cold. Shirtless. No wallet. A jogger steps over you without looking.", "mouth": "sleepy", "eyes": "vacant" }
+      ]
     }
   }
 }

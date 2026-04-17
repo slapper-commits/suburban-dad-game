@@ -4,6 +4,7 @@ import type { SceneData, DialogueTree, DialogueNode, DialogueChoice, MiniGameCon
 import type { WifeMessage } from '../systems/WifeTexts';
 import { PlayerCharacter } from '../entities/PlayerCharacter';
 import { InteractionZone } from '../entities/InteractionZone';
+import { DebugHud } from '../ui/DebugHud';
 import { sceneZones } from '../data/scene-zones';
 import {
   drawKitchen, drawFrontYard, drawGarage, drawBackyard, drawDougs, drawBBQ,
@@ -189,6 +190,7 @@ export class GameScene extends Phaser.Scene {
 
   // Confrontation tracking
   private confrontationFired = false;
+  private debugHud!: DebugHud;
   private forcedBBQ = false;
 
   // Track which scenes have had their enter dialogue fired
@@ -370,6 +372,10 @@ export class GameScene extends Phaser.Scene {
     // Build HUD
     this.createHUD();
 
+    // Debug HUD (F9 toggles)
+    this.debugHud = new DebugHud(this);
+    this.input.keyboard!.addKey('F9').on('down', () => this.debugHud.toggle());
+
     // Build dialogue overlay (hidden initially)
     this.createDialogueOverlay();
 
@@ -446,6 +452,13 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.updateHUD();
+    this.debugHud.update(
+      this.reg.playerState,
+      this.reg.timeClock,
+      this.reg.dialogueEngine,
+      this.interactionZones,
+      this.player.x,
+    );
   }
 
   // ── Interaction zones ─────────────────────────────────────

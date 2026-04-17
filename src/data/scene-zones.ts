@@ -156,6 +156,14 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         action: { type: 'dialogue', treeId: 'dougs_alcohol' },
       },
       {
+        id: 'doug_poker_t2',
+        label: 'Poker Table',
+        x: 560,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'dougs_gambling_t2' },
+        visibleWhen: [{ field: 'vices.gambling', op: '>=', value: 1 }],
+      },
+      {
         id: 'cooler',
         label: 'Cooler',
         x: 355,
@@ -332,6 +340,14 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
           text: "A whiteboard covered in arrows. All arrows point up. 'YOU' is written at the bottom of a triangle. This is a pyramid.",
         },
       },
+      {
+        id: 'kevin_upline',
+        label: 'Meet the Upline',
+        x: 540,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'kevins_pyramid_t2' },
+        visibleWhen: [{ field: 'vices.pyramid', op: '>=', value: 1 }],
+      },
     ],
     edges: {
       left: { sceneId: 'sidewalk', timeCost: 5 },
@@ -366,6 +382,17 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
           fallback:
             "Six empty energy drink cans. Four different brands. It's 7 AM. This kid is operating on another plane of existence.",
         },
+      },
+      {
+        id: 'kid_big_hack',
+        label: 'The Big One',
+        x: 500,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'kids_digital_t2' },
+        visibleWhen: [
+          { field: 'vices.digital', op: '>=', value: 1 },
+          { field: 'currentTime', op: '>=', value: 780 },
+        ],
       },
     ],
     edges: {
@@ -465,6 +492,17 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         label: 'Phone Booth',
         x: 500,
         action: { type: 'dialogue', treeId: 'gas_prostitution' },
+      },
+      {
+        id: 'sharon_motel',
+        label: 'The Motel',
+        x: 550,
+        radius: 40,
+        action: { type: 'dialogue', treeId: 'gas_prostitution_t2' },
+        visibleWhen: [
+          { field: 'vices.prostitution', op: '>=', value: 1 },
+          { field: 'suspicion', op: '<', value: 70 },
+        ],
       },
       {
         id: 'gas_store',

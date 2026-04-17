@@ -782,6 +782,39 @@ export function drawDougs(gfx: Phaser.GameObjects.Graphics, state: DadState): vo
 
   // Doug NPC (from registry)
   drawNpc(gfx, 'doug', 335, GROUND_Y);
+
+  // Poker Table — back corner of the "garage," visible always
+  const pt = 560;
+  // Table shadow
+  gfx.fillStyle(0x000000, 0.3);
+  gfx.fillEllipse(pt, GROUND_Y + 2, 80, 8);
+  // Green felt
+  gfx.fillStyle(0x2a6a3a);
+  gfx.fillRect(pt - 36, GROUND_Y - 22, 72, 20);
+  // Trim
+  gfx.fillStyle(0x1a4a2a);
+  gfx.fillRect(pt - 36, GROUND_Y - 24, 72, 2);
+  // Stacked chips
+  gfx.fillStyle(0xcc3333);
+  gfx.fillRect(pt - 28, GROUND_Y - 28, 10, 6);
+  gfx.fillStyle(0x3333cc);
+  gfx.fillRect(pt - 16, GROUND_Y - 28, 10, 6);
+  gfx.fillStyle(0x33cc33);
+  gfx.fillRect(pt - 4, GROUND_Y - 28, 10, 6);
+  gfx.fillStyle(0x333333);
+  gfx.fillRect(pt + 8, GROUND_Y - 28, 10, 6);
+  // Playing cards (fan)
+  gfx.fillStyle(0xffffff);
+  gfx.fillRect(pt - 10, GROUND_Y - 12, 8, 10);
+  gfx.fillRect(pt, GROUND_Y - 12, 8, 10);
+  // Red suit dots
+  gfx.fillStyle(0xcc2222);
+  gfx.fillRect(pt - 7, GROUND_Y - 9, 2, 2);
+  gfx.fillRect(pt + 3, GROUND_Y - 9, 2, 2);
+  // Legs
+  gfx.fillStyle(0x444444);
+  gfx.fillRect(pt - 30, GROUND_Y - 2, 2, 16);
+  gfx.fillRect(pt + 28, GROUND_Y - 2, 2, 16);
 }
 
 export function drawBBQ(gfx: Phaser.GameObjects.Graphics, state: DadState): void {
@@ -1203,11 +1236,30 @@ export function drawGasStation(gfx: Phaser.GameObjects.Graphics, state: DadState
   // Modded Car Guy NPC
   drawNpc(gfx, 'modded_car_guy', 600, GROUND_Y);
 
-  // Sharon at the phone booth (hidden in morning and in high-heat)
+  // Sharon at the phone booth (visible from 10 AM when she's working)
   const tNow = state.currentTime;
   const suspicion = state.suspicion ?? 0;
-  if (tNow >= 720 && suspicion < 60) {
+  if (tNow >= 600 && suspicion < 60) {
     drawNpc(gfx, 'sharon', 500, GROUND_Y);
+  }
+
+  // Motel sign (right side) — visible once prostitution vice started
+  if ((state.vices.prostitution ?? 0) >= 1 && suspicion < 70) {
+    // Sign post
+    gfx.fillStyle(0x444444);
+    gfx.fillRect(547, GROUND_Y - 120, 4, 120);
+    // Sign — red background
+    gfx.fillStyle(0xcc2233);
+    gfx.fillRect(525, GROUND_Y - 130, 50, 22);
+    // Neon "MOTEL"
+    const blink = Math.floor(tNow * 3) % 3 !== 0;
+    gfx.fillStyle(0xffffaa, blink ? 0.95 : 0.4);
+    gfx.fillRect(528, GROUND_Y - 125, 44, 4);
+    gfx.fillStyle(0xffffaa, blink ? 0.9 : 0.3);
+    gfx.fillRect(530, GROUND_Y - 117, 40, 4);
+    // "VACANCY" hint below
+    gfx.fillStyle(0x66cc66);
+    gfx.fillRect(530, GROUND_Y - 105, 40, 3);
   }
 
   // Kevin pitches everyone, even at gas stations

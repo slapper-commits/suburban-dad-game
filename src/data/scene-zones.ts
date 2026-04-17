@@ -156,12 +156,11 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         action: { type: 'dialogue', treeId: 'dougs_alcohol' },
       },
       {
-        id: 'doug_poker_t2',
+        id: 'doug_poker',
         label: 'Poker Table',
         x: 560,
         radius: 40,
-        action: { type: 'dialogue', treeId: 'dougs_gambling_t2' },
-        visibleWhen: [{ field: 'vices.gambling', op: '>=', value: 1 }],
+        action: { type: 'dialogue', treeId: 'dougs_poker' },
       },
       {
         id: 'cooler',
@@ -489,9 +488,11 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
       {
         id: 'phone_booth',
-        label: 'Phone Booth',
+        label: 'Sharon (phone booth)',
         x: 500,
+        radius: 45,
         action: { type: 'dialogue', treeId: 'gas_prostitution' },
+        visibleWhen: [{ field: 'currentTime', op: '>=', value: 600 }],
       },
       {
         id: 'sharon_motel',

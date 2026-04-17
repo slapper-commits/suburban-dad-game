@@ -1,0 +1,191 @@
+{
+  "id": "dougs_poker",
+  "startNode": "router",
+  "nodes": {
+    "router": {
+      "id": "router",
+      "text": "",
+      "routes": [
+        { "conditions": [{ "field": "flags.cash", "op": "<", "value": 20 }], "nextNode": "broke" },
+        { "conditions": [{ "field": "vices.gambling", "op": ">=", "value": 2 }], "nextNode": "t3_intro" },
+        { "conditions": [{ "field": "vices.gambling", "op": ">=", "value": 1 }], "nextNode": "t2_intro" }
+      ],
+      "next": "intro"
+    },
+
+    "broke": {
+      "id": "broke",
+      "text": "",
+      "beats": [
+        { "speaker": "Doug", "text": "\"Brother. You need cash to sit down.\"", "mouth": "smirk", "eyes": "shades" },
+        { "speaker": "Dad", "text": "\"Yeah... yeah.\"", "mouth": "frown", "eyebrows": "worried" },
+        { "text": "The chips glitter. You do not have chip money. You hate chip money for this.", "mouth": "sleepy" }
+      ]
+    },
+
+    "intro": {
+      "id": "intro",
+      "text": "",
+      "beats": [
+        { "text": "Folding table. Six chairs. Chips already stacked. Someone you don't know nurses a bourbon in the corner.", "mouth": "neutral" },
+        { "speaker": "Doug", "text": "\"$20 buy-in, brother. Low stakes. Just for fun.\"", "mouth": "grin", "eyes": "shades" },
+        { "text": "The stranger does not think it's just for fun.", "mouth": "sleepy" }
+      ],
+      "choices": [
+        {
+          "text": "Sit down. $20 buy-in.",
+          "nextNode": "t1",
+          "timeCost": 45,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -20 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        { "text": "Watch one hand and leave.", "nextNode": "leave" }
+      ]
+    },
+
+    "t1": {
+      "id": "t1",
+      "text": "",
+      "beats": [
+        { "text": "You're up $30. Table laughs. Stranger doesn't.", "mouth": "grin" },
+        { "speaker": "Dad", "text": "\"Maybe I AM good at this.\"", "mouth": "smirk" },
+        { "text": "Stranger raises. Pot swells like a bruise.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "flags.cash", "value": 50 }
+      ],
+      "choices": [
+        {
+          "text": "\"I'm feeling lucky\" — push for big pot",
+          "nextNode": "t1_big",
+          "timeCost": 60,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -100 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "Pocket the $30 and walk",
+          "nextNode": "leave",
+          "timeCost": 5
+        }
+      ]
+    },
+
+    "t1_big": {
+      "id": "t1_big",
+      "text": "",
+      "beats": [
+        { "text": "All in. You draw cards. The stranger has a face the Mona Lisa would envy.", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Dad", "text": "\"...flush?\"", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Stranger", "text": "\"Full house.\"", "mouth": "neutral", "eyes": "shades" },
+        { "text": "Doug winces. \"Brutal. Brutal stuff. One more?\"", "mouth": "sleepy" },
+        { "speaker": "Stranger", "text": "\"If you need a bigger game, talk to me after.\"", "mouth": "neutral", "eyes": "shades" }
+      ],
+      "choices": [
+        { "text": "Walk. Cut losses.", "nextNode": "leave" },
+        {
+          "text": "\"Where is the bigger game?\"",
+          "nextNode": "t2_intro",
+          "effects": [{ "type": "set", "field": "flags.invited_big_game", "value": true }]
+        }
+      ]
+    },
+
+    "t2_intro": {
+      "id": "t2_intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Stranger", "text": "\"Dentist's office. After hours. $500 minimum.\"", "mouth": "smirk", "eyes": "shades" },
+        { "speaker": "Dad", "text": "\"A dentist's office.\"", "mouth": "frown", "eyebrows": "worried" },
+        { "speaker": "Stranger", "text": "\"There's a reason they scream when they pull teeth.\"", "mouth": "neutral" }
+      ],
+      "choices": [
+        {
+          "text": "Buy in at $500 (timed, 2 hrs)",
+          "nextNode": "t2_play",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 500 }],
+          "timeCost": 120,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -500 },
+            { "type": "add", "field": "vices.gambling", "value": 1 }
+          ]
+        },
+        {
+          "text": "\"I don't have $500.\"",
+          "nextNode": "t2_broke",
+          "conditions": [{ "field": "flags.cash", "op": "<", "value": 500 }]
+        },
+        { "text": "Leave.", "nextNode": "leave" }
+      ]
+    },
+
+    "t2_play": {
+      "id": "t2_play",
+      "text": "",
+      "beats": [
+        { "text": "Four men, one woman, one folding chair too few. Cigar smoke. A vending machine that only takes $100s.", "mouth": "sleepy" },
+        { "text": "You read the table. Woman to your left is tired. Stranger never blinks. Man in cowboy hat has never bluffed once in his life.", "mouth": "neutral" },
+        { "speaker": "Dad", "text": "\"All in.\"", "mouth": "grin", "eyebrows": "raised" },
+        { "text": "The room goes quiet. The dentist chair creaks. Cowboy hat folds. Tired lady folds. Stranger calls.", "mouth": "shock", "eyes": "wide" },
+        { "text": "You flip your cards. He flips his. You win.", "mouth": "grin" }
+      ],
+      "effects": [
+        { "type": "add", "field": "flags.cash", "value": 1500 },
+        { "type": "set", "field": "flags.cash_bulge", "value": true },
+        { "type": "set", "field": "flags.won_big_game", "value": true }
+      ]
+    },
+
+    "t2_broke": {
+      "id": "t2_broke",
+      "text": "",
+      "beats": [
+        { "speaker": "Stranger", "text": "\"Come back when you're serious.\"", "mouth": "smirk" },
+        { "text": "He closes the matchbook he was writing the address on. You walk away feeling somehow judged by a man who bankrolls underground card games.", "mouth": "sleepy" }
+      ]
+    },
+
+    "t3_intro": {
+      "id": "t3_intro",
+      "text": "",
+      "beats": [
+        { "speaker": "Doug", "text": "\"Brother. The table tonight is SERIOUS. Real estate guys. A dentist. Someone named Gary.\"", "mouth": "grin", "eyes": "shades" },
+        { "speaker": "Dad", "text": "\"Who's Gary?\"", "mouth": "frown" },
+        { "speaker": "Doug", "text": "\"You don't ask about Gary.\"", "mouth": "neutral", "eyes": "shades" }
+      ],
+      "choices": [
+        {
+          "text": "Buy in at $1000",
+          "nextNode": "t3_play",
+          "conditions": [{ "field": "flags.cash", "op": ">=", "value": 1000 }],
+          "timeCost": 150,
+          "effects": [
+            { "type": "add", "field": "flags.cash", "value": -1000 }
+          ]
+        },
+        { "text": "Pass. You're not there yet.", "nextNode": "leave" }
+      ]
+    },
+
+    "t3_play": {
+      "id": "t3_play",
+      "text": "",
+      "beats": [
+        { "text": "You lose everything in 40 minutes. Gary doesn't even look at you.", "mouth": "shock", "eyes": "wide" },
+        { "speaker": "Doug", "text": "\"Brutal. Brutal stuff.\"", "mouth": "frown" },
+        { "text": "You walk back to the minivan. You practice what you'll tell Karen. None of it holds up.", "mouth": "sleepy" }
+      ],
+      "effects": [
+        { "type": "add", "field": "suspicion", "value": 20 }
+      ]
+    },
+
+    "leave": {
+      "id": "leave",
+      "text": "You stand up. Doug nods. 'Any time, brother.' The stranger does not nod."
+    }
+  }
+}

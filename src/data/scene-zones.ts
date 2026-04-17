@@ -570,7 +570,8 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
     ],
     edges: {
-      left: { sceneId: 'sidewalk', timeCost: 10 },
+      left: { sceneId: 'motel_exterior', timeCost: 10 },
+      right: { sceneId: 'sketchy', timeCost: 10 },
     },
   },
 
@@ -746,7 +747,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
       },
     ],
     edges: {
-      left: { sceneId: 'quikstop', timeCost: 15 },
+      left: { sceneId: 'strip_mall', timeCost: 10 },
     },
   },
 
@@ -832,6 +833,7 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
     ],
     edges: {
       left: { sceneId: 'gas_station', timeCost: 5 },
+      right: { sceneId: 'strip_mall', timeCost: 10 },
     },
   },
 
@@ -846,13 +848,6 @@ export const sceneZones: Record<string, SceneZoneConfig> = {
         x: 500,
         radius: 50,
         action: { type: 'dialogue', treeId: 'teen_alley_smoke' },
-      },
-      {
-        id: 'teen_alley_exit',
-        label: 'Exit',
-        x: 70,
-        radius: 30,
-        action: { type: 'scene', sceneId: 'quikstop', timeCost: 5 },
       },
     ],
   },
